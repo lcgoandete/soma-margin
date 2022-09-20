@@ -1,0 +1,21 @@
+apps:
+- name: app-back-end
+  cwd: /home/luis/sistema-soma/back-end
+  script: npm
+  args: "start"
+  exec_mode: fork
+  max_restarts: 3
+  max_memory_restart: 200M
+  watch: true
+  env:
+    PORT: 5000
+- name: app-front-end
+  cwd: /home/luis/sistema-soma/front-end
+  script: npm
+  args: "run start:prod"
+  exec_mode: fork
+  max_restarts: 3
+  max_memory_restart: 200M
+  watch: true
+  env:
+    PORT: 3000
