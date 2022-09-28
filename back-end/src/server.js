@@ -3,6 +3,7 @@ const moment = require('moment');
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const complementaryWithdrawal = require('./banks/bmg/rotes');
 const portalConsignadoRoutes = require('./portalConsignado/rotes');
 const portalConsignadoMunicipioRoutes = require('./portalConsignadoMunicipio/rotes');
 
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
+app.use(complementaryWithdrawal);
 app.use(portalConsignadoRoutes);
 app.use(portalConsignadoMunicipioRoutes);
 

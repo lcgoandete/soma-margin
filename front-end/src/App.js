@@ -1,13 +1,9 @@
-import ConsultCpf from './pages/consultCpf/ConsultCpf';
-
 import './App.css';
 
+import PageRoutes from './pages/PageRoutes';
+
 function App() {
-  return (
-    <>
-    <ConsultCpf />
-    </>
-  );
+  return (<PageRoutes />);
 }
 
 export default App;

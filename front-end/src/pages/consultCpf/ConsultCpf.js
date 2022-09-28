@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import Header from '../../components/header/Header';
 import * as cpfTest from 'cpf-cnpj-validator'; 
 
-import Loading from '../../components/loading/Loading'
 import useConsultCpf from '../../hooks/useConsultCpf';
+import Loading from '../../components/loading/Loading'
+import PageTitle from '../../components/pageTitle/PageTitle';
 
 import './style.css'
 
@@ -51,7 +51,7 @@ const ConsultCpf = () => {
 
   return (
     <>
-      <Header />
+      <PageTitle title="Pesquisar Margem" />
       <form onSubmit={ consultCpf }>
         <div className="queryTypeContainer">
           <label htmlFor="queryType">

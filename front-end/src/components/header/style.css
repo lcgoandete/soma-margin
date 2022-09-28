@@ -7,3 +7,22 @@ header {
 .logo {
   width: 9%;
 }
+
+nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+ul {
+  width: 360px;
+  display: flex;
+  justify-content: space-between;
+}
+
+a {
+  font-family: arial, sans-serif;
+  font-size: 18px;
+  text-decoration: none;
+  list-style: none;
+}
