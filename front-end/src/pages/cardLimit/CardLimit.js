@@ -11,7 +11,7 @@ const cardLimitDefault = {
   cardLimit: 0,
   availableLimit: 0,
   maximumWithdraw: 0,
-  entidade: ''
+  entity: ''
 };
 
 const CardLimit = () => {
@@ -81,7 +81,7 @@ const CardLimit = () => {
                   <th>Saque máximo</th>
                 </tr>
                   <tr>
-                    <td>{cardLimit.entidade}</td>
+                    <td>{cardLimit.entity}</td>
                     <td>
                       {cardLimit.cardLimit.toLocaleString(
                         'pt-BR',
