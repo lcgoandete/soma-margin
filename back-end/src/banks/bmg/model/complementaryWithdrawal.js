@@ -11,8 +11,13 @@ const getAvailableCard = async (codigoEntidade, cpf, sequencialOrgao) => {
   const soapAction = 'buscarCartoesDisponiveis';
   const body = getAvailableCardBody(codigoEntidade, cpf, sequencialOrgao);
   const xml = buildXmlToRequest(body);
-  const response = await requestBMG(soapAction, xml);
-  return response;
+
+  try {
+    const response = await requestBMG(soapAction, xml);
+    return response;
+  } catch (error) {
+    return error;
+  }
 };
 
 const getCardLimit = async (availableCard) => {
@@ -22,9 +27,9 @@ const getCardLimit = async (availableCard) => {
   
   try {
     const response = await requestBMG(soapAction, xml);
-    return response.body;
+    return response;
   } catch (error) {
-    return error.response.data;
+    return error;
   }
 }
 
@@ -37,9 +42,9 @@ const requestBMG = async (soapAction, xml) => {
   
   try {
     const { response } = await soapRequest({ url, headers, xml: `${xml}`, timeout: 10000 });
-    return response;
+    return response.body;
   } catch (error) {
-    return error.response;
+    return error.response.data;
   }
 }
 

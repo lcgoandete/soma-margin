@@ -1,33 +1,46 @@
 const libxmljs = require('libxmljs');
 
-const { delay } = require('../../../helpers/helpers');
+const { codigoEntidadeObj } = require('../enums');
 const complementaryWithdrawal = require('../model/complementaryWithdrawal');
 
 const getAvailableCard = async (cpf) => {
-  const codigoEntidade = [4195, 4194, 4193];
-  const sequencialOrgao = 1;
+  const codigoEntidade = Object
+    .keys(codigoEntidadeObj)
+    .map((key) => Number(key))
+    .sort((a, b) => b - a);
   
-  let counter = 0;
-  let response = {};
-  do {
-    response = await complementaryWithdrawal.getAvailableCard(codigoEntidade[counter], cpf, sequencialOrgao);
-    for (const [key, value] of Object.entries(response)) {
-      if(key === 'body') {
-        const result = {
-          codigoEntidade: codigoEntidade[counter],
-          sequencialOrgao: sequencialOrgao,
-          body: value,
-        };
-        return result;
-      };
-    };
-    counter += 1;
-    await delay(1);
-  } while (counter < codigoEntidade.length);
-  
-  const result = {
-    body: response.data,
+  const response = {
+    codigoEntidade: 0,
+    sequencialOrgao: 0,
+    body: '',
   };
+  
+  let availableCardResponse = '';
+  for (let index = 0; index < codigoEntidade.length; index += 1) {
+    const sequencialOrgao = (codigoEntidade[index] !== 128) ? 1 : 13;
+    availableCardResponse = await complementaryWithdrawal.getAvailableCard(codigoEntidade[index], cpf, sequencialOrgao);
+    response.body = availableCardResponse;
+    
+    const xmlDoc = libxmljs.parseXml(availableCardResponse);
+    const cartoesRetorno = xmlDoc.get('//cartoesRetorno');
+    if (cartoesRetorno) {
+      response.codigoEntidade = codigoEntidade[index];
+      response.sequencialOrgao = sequencialOrgao;
+      break;
+    }
+  }
+
+  const availableCard = convertAvailableCardData(response.body);
+  verifyAvailableCard(availableCard);
+
+  const result = {
+    codigoEntidade: response.codigoEntidade,
+    cpf: cpf,
+    sequencialOrgao: response.sequencialOrgao,
+    matricula: availableCard.matricula,
+    numeroContaInterna: availableCard.numeroContaInterna,
+  };
+
   return result;
 };
 
@@ -106,21 +119,12 @@ const verifyCardLimit = (CardLimitData) => {
 
 const getCardLimit = async (cpf) => {
   const availableCard = await getAvailableCard(cpf);
-  const dataCard = convertAvailableCardData(availableCard.body);
-  verifyAvailableCard(dataCard);
-  
-  const payloadCardLimit = {
-    codigoEntidade: availableCard.codigoEntidade,
-    cpf: cpf,
-    sequencialOrgao: availableCard.sequencialOrgao,
-    matricula: dataCard.matricula,
-    numeroContaInterna: dataCard.numeroContaInterna,
-  };
-
-  const cardLimitResult = await complementaryWithdrawal.getCardLimit(payloadCardLimit);
+  const cardLimitResult = await complementaryWithdrawal.getCardLimit(availableCard);
   const cardLimitData = convertCardLimitData(cardLimitResult);
   verifyCardLimit(cardLimitData);
   const result = {
+    cpf,
+    entity: codigoEntidadeObj[availableCard.codigoEntidade],
     cardLimit: cardLimitData.limiteCartao,
     availableLimit: cardLimitData.limiteDisponivel,
     maximumWithdraw: cardLimitData.valorSaqueMaximo,

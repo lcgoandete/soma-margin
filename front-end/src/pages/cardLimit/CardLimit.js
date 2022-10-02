@@ -5,10 +5,13 @@ import useCardLimit from "../../hooks/useCardLimit";
 import Loading from "../../components/loading/Loading";
 import PageTitle from "../../components/pageTitle/PageTitle";
 
+import './style.css'
+
 const cardLimitDefault = {
   cardLimit: 0,
   availableLimit: 0,
   maximumWithdraw: 0,
+  entidade: ''
 };
 
 const CardLimit = () => {
@@ -64,19 +67,21 @@ const CardLimit = () => {
         </label>
       </form>
 
-      <div>
+      <div className="margins">
         { cardLimit.message
-          ? <h2>{ cardLimit.message }</h2>
-          : <div>
-              <h2>CPF consultado: {cpf}</h2>
+          ? <h2>{cardLimit.message}</h2>
+          : <div className="margin">
+              <div className={'table-title'}>CPF consultado: {cardLimit.cpf}</div>
               <table>
                 <tbody>
                 <tr>
+                  <th>Entidade</th>
                   <th>Limite do cartão</th>
                   <th>Limite disponível</th>
                   <th>Saque máximo</th>
                 </tr>
                   <tr>
+                    <td>{cardLimit.entidade}</td>
                     <td>
                       {cardLimit.cardLimit.toLocaleString(
                         'pt-BR',

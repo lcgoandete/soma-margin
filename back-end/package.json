@@ -20,8 +20,7 @@
     "express-rescue": "^1.1.31",
     "libxmljs": "^0.19.10",
     "moment": "^2.29.4",
-    "selenium-webdriver": "^4.3.1",
-    "simple-xml-to-json": "^1.0.9"
+    "selenium-webdriver": "^4.3.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
