@@ -6,7 +6,7 @@ const complementaryWithdrawal = require('../model/complementaryWithdrawal');
 const getAvailableCard = async (cpf) => {
   const codigoEntidade = Object
     .keys(codigoEntidadeObj)
-    .map((key) => Number(key))
+    .map((key) => parseInt(key, 10))
     .sort((a, b) => b - a);
   
   const response = {
@@ -101,9 +101,9 @@ const convertCardLimitData = (cardLimit) => {
   const valorSaqueMaximo = xmlDoc.get('//valorSaqueMaximo');
 
   const availableCards = {
-    limiteCartao: Number(limiteCartao.text()),
-    limiteDisponivel: Number(limiteDisponivel.text()),
-    valorSaqueMaximo: Number(valorSaqueMaximo.text()),
+    limiteCartao: parseFloat(limiteCartao.text()),
+    limiteDisponivel: parseFloat(limiteDisponivel.text()),
+    valorSaqueMaximo: parseFloat(valorSaqueMaximo.text()),
   };
   return availableCards;
 }
