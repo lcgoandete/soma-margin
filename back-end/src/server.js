@@ -3,6 +3,7 @@ const moment = require('moment');
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const oleRotes = require('./banks/ole/rotes');
 const complementaryWithdrawal = require('./banks/bmg/rotes');
 const portalConsignadoRoutes = require('./portalConsignado/rotes');
 const portalConsignadoMunicipioRoutes = require('./portalConsignadoMunicipio/rotes');
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
+app.use(oleRotes);
 app.use(complementaryWithdrawal);
 app.use(portalConsignadoRoutes);
 app.use(portalConsignadoMunicipioRoutes);
@@ -30,6 +32,10 @@ const scheduledTime = () => {
   const currentTime = moment(new Date()).format('HH:mm:ss');
   const weekday = moment().format('dddd');
   
+  if (process.env.RELOGIN_MARGIN === 'false') {
+    return false;
+  }
+
   if (weekday === 'Saturday' || weekday === 'Sunday') {
     return false;
   }
