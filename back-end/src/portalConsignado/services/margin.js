@@ -1,5 +1,5 @@
 const margin = require('../model/margin');
-const { setMarginField } = require('../../helpers/margin-db');
+const { setMarginManager } = require('../../helpers/margin-db');
 
 let isFree = true;
 
@@ -14,7 +14,7 @@ const getMargins = async (cpf) => {
   
   if (isFree) { isFree = false; }
   
-  await setMarginField('state');
+  await setMarginManager('state');
 
   try {
     // await delay(3);

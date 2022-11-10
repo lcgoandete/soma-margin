@@ -50,7 +50,7 @@ const verifyDate = async () => {
   }
 }
 
-const setMarginField = async (field) => {
+const setMarginManager = async (field) => {
   await getMarginData();
   checkNumberOfQueries(field);
   await verifyDate();
@@ -64,5 +64,5 @@ const setMarginField = async (field) => {
 }
 
 module.exports = {
-  setMarginField,
+  setMarginManager,
 }
