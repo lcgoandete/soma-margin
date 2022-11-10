@@ -13,6 +13,8 @@ const getMargins = async (cpf) => {
   
   if (isFree) { isFree = false; }
   
+  await setMarginField('county');
+
   try {
     // await delay(3);
     return await margin.getMargins(cpf);

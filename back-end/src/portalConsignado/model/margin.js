@@ -97,7 +97,7 @@ const getMargins = async (cpf) => {
   const margin3 = await getMargin(driver, 'marginSelector3');
   const margin4 = await getMargin(driver, 'marginSelector4');
   const marginList = [ margin1, margin2, margin3, margin4 ];
-  
+
   const result = marginList.filter((margin) => margin.margemBruta.cartaoCredito !== '');
   return result;
 };
