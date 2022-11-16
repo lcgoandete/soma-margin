@@ -20,11 +20,14 @@
     "easy-soap-request": "^5.0.0",
     "express": "^4.18.1",
     "express-rescue": "^1.1.31",
+    "jsonwebtoken": "^8.5.1",
     "libxmljs": "^0.19.10",
+    "md5": "^2.3.0",
     "moment": "^2.29.4",
     "selenium-webdriver": "^4.3.1",
     "sqlite": "^4.1.2",
-    "sqlite3": "^5.1.2"
+    "sqlite3": "^5.1.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "nodemon": "^2.0.19",

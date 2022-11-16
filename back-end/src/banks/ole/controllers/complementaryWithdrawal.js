@@ -1,4 +1,4 @@
-const ole = require('../service/complementaryWithdrawal');
+const ole = require('../services/complementaryWithdrawal');
 
 const getComplementaryWithdrawal = async (req, res) => {
   const { cpf } = req.body;

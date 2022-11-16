@@ -1,4 +1,4 @@
-const complementaryWithdrawal = require('../service/complementaryWithdrawal');
+const complementaryWithdrawal = require('../services/complementaryWithdrawal');
 
 const getCardLimit = async (req, res) => {
   const { cpf } = req.body;

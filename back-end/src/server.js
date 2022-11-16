@@ -3,10 +3,12 @@ const moment = require('moment');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const oleRotes = require('./banks/ole/rotes');
-const complementaryWithdrawal = require('./banks/bmg/rotes');
-const portalConsignadoRoutes = require('./portalConsignado/rotes');
-const portalConsignadoMunicipioRoutes = require('./portalConsignadoMunicipio/rotes');
+const userRoutes = require('./user/routes');
+const loginRoutes = require('./login/routes');
+const oleRoutes = require('./banks/ole/routes');
+const bmgRoutes = require('./banks/bmg/routes');
+const portalConsignadoRoutesRoutes = require('./portalConsignado/routes');
+const portalConsignadoMunicipioRoutes = require('./portalConsignadoMunicipio/routes');
 
 
 const PORT = 5000;
@@ -16,9 +18,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(oleRotes);
-app.use(complementaryWithdrawal);
-app.use(portalConsignadoRoutes);
+app.use(loginRoutes);
+app.use(userRoutes);
+app.use(oleRoutes);
+app.use(bmgRoutes);
+app.use(portalConsignadoRoutesRoutes);
 app.use(portalConsignadoMunicipioRoutes);
 
 app.use((err, _req, res, _next) => {

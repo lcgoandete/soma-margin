@@ -7,8 +7,8 @@ require('dotenv').config();
 
 const USER_RUMOLA = process.env.USER_RUMOLA;
 const PASSWORD_RUMOLA = process.env.PASSWORD_RUMOLA;
-const USER_PORTAL = process.env.USER_PORTAL;
-const PASSWORD_PORTAL = process.env.PASSWORD_PORTAL;
+const USER_PORTAL_MUNICIPIO = process.env.USER_PORTAL_MUNICIPIO;
+const PASSWORD_PORTAL_MUNICIPIO = process.env.PASSWORD_PORTAL_MUNICIPIO;
 
 // const configBrowser = async () => {
 //   chrome.setDefaultService = new chrome.ServiceBuilder(chromedriver.path).build;
@@ -36,8 +36,8 @@ const loginPortalConsignado = async (driver) => {
   // await driver.navigate().refresh();
   await driver.navigate().refresh();
 
-  await driver.findElement(By.css('#username')).sendKeys(USER_PORTAL);
-  await driver.findElement(By.css('#password')).sendKeys(PASSWORD_PORTAL);
+  await driver.findElement(By.css('#username')).sendKeys(USER_PORTAL_MUNICIPIO);
+  await driver.findElement(By.css('#password')).sendKeys(PASSWORD_PORTAL_MUNICIPIO);
   await driver.sleep(1000);
   await driver.findElement(By.css('#captcha')).click();
   await driver.sleep(10000);
@@ -47,7 +47,7 @@ const loginPortalConsignado = async (driver) => {
   await driver.sleep(1000);
 }
 
-const validateLoginPortalConsignado = (driver) => {
+const validateLoginPortalConsignado = async (driver) => {
   let validated = false;
 
   // nao_respondem = driver.find_elements_by_css_selector('#divEtapaError2 > span.titulo')

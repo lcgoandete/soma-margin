@@ -1,4 +1,4 @@
-const margin = require('../model/margin');
+const margin = require('../models/margin');
 const { setMarginManager } = require('../../helpers/margin-db');
 
 let isFree = true;

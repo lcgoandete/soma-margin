@@ -1,4 +1,4 @@
-const ole = require('../model/complementaryWithdrawal');
+const ole = require('../models/complementaryWithdrawal');
 
 const getAccessToken = async () => {
   const accessToken = await ole.getAccessToken();

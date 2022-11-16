@@ -1,7 +1,7 @@
 const rescue = require('express-rescue');
 const portalConsignadoRoutes = require('express').Router();
 
-const margin = require('./controller/margin')
+const margin = require('./controllers/margin')
 
 portalConsignadoRoutes.post('/margins/', rescue(margin.getMargins));
 

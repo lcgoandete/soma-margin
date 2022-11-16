@@ -1,7 +1,7 @@
 const libxmljs = require('libxmljs');
 
 const { codigoEntidadeObj } = require('../enums');
-const complementaryWithdrawal = require('../model/complementaryWithdrawal');
+const complementaryWithdrawal = require('../models/complementaryWithdrawal');
 
 const getAvailableCard = async (cpf) => {
   const codigoEntidade = Object
