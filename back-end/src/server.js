@@ -3,27 +3,14 @@ const moment = require('moment');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const userRoutes = require('./user/routes');
-const loginRoutes = require('./login/routes');
-const oleRoutes = require('./banks/ole/routes');
-const bmgRoutes = require('./banks/bmg/routes');
-const portalConsignadoRoutesRoutes = require('./portalConsignado/routes');
-const portalConsignadoMunicipioRoutes = require('./portalConsignadoMunicipio/routes');
-
-
+const routes = require('./router');
 const PORT = 5000;
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-
-app.use(loginRoutes);
-app.use(userRoutes);
-app.use(oleRoutes);
-app.use(bmgRoutes);
-app.use(portalConsignadoRoutesRoutes);
-app.use(portalConsignadoMunicipioRoutes);
+app.use(routes);
 
 app.use((err, _req, res, _next) => {
   if (err.status) return res.status(err.status).json({ message: err.message });
