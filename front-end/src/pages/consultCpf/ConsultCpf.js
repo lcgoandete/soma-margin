@@ -107,7 +107,7 @@ const ConsultCpf = () => {
                 </tr>
               </tbody>
             </table>
-            
+
             <div className={'table-title'}>Margem Bruta</div>
             <div className={'table-title'}>{client.margemBruta.provimento}</div>
             <table>
@@ -119,12 +119,12 @@ const ConsultCpf = () => {
                 <tr>
                   <td>Consignações Facultativas</td>
                   <td>{client.margemBruta.consignacoesFacultativas}</td>
-                </tr>  
+                </tr>
                 <tr>
                   <td>Cartão de Crédito</td>
                   <td>{client.margemBruta.cartaoCredito}</td>
-                </tr>  
-                <tr>  
+                </tr>
+                <tr>
                   <td>Cartão de Benefício</td>
                   <td>{client.margemBruta.cartaoBenefico}</td>
                 </tr>  
@@ -163,12 +163,12 @@ const ConsultCpf = () => {
                 <tr>
                   <td>Cartão de Crédito</td>
                   <td>{client.margemDisponivel.cartaoCredito}</td>
-                </tr> 
-                <tr> 
+                </tr>
+                <tr>
                   <td>Cartão de Benefício</td>
                   <td>{client.margemDisponivel.cartaoBenefico}</td>
                 </tr>
-              </tbody> 
+              </tbody>
             </table>
           </div>
         ))}

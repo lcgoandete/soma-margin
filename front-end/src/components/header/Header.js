@@ -13,6 +13,8 @@ const Header = () => {
           <ul>
             <Link to="/margin"><li>Pesquisar Margem</li></Link>
             <Link to="/card-limit"><li>Consulta saque BMG</li></Link>
+            <Link to="/agreement"><li>Contrato - Safra</li></Link>
+            <Link to="/formalization"><li>Formalizacao - Safra</li></Link>
           </ul>
         </nav>
       </header>

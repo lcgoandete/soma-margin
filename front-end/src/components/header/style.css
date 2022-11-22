@@ -15,7 +15,7 @@ nav {
 }
 
 ul {
-  width: 360px;
+  width: 40%;
   display: flex;
   justify-content: space-between;
 }
