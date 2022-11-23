@@ -7,7 +7,7 @@ const useCardLimit = () => {
     try {
       const response = await axios({
         method: 'POST',
-        url: `${url}/bmg/complementary-withdrawal/card-limit`,
+        url: `${url}/banks/bmg/complementary-withdrawal/card-limit`,
         data: { cpf },
       });
       return response.data;
