@@ -11,7 +11,7 @@ const useAgreement = () => {
       });
       return response.data;
     } catch (error) {
-      if (error.response.data) {
+      if (error.response.data.message) {
         return error.response.data.message;
       } else {
         return error.message;

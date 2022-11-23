@@ -7,18 +7,19 @@ import Loading from "../../../components/loading/Loading";
 import PageTitle from "../../../components/pageTitle/PageTitle";
 import './style.css'
 
-const agreementDefault = {
+const agreementDefault = [{
+  cpf: '',
   agreement: '',
   name: '',
   dateTime: '',
   status: '',
   situation: '',
-};
+}];
 
 const Agreement = () => {
   const [cpf, setCpf] = useState('');
   const [loading, setLoading] = useState(false);
-  const [agreementList, setAgreementList] = useState([agreementDefault]);
+  const [agreementList, setAgreementList] = useState(agreementDefault);
   const [errorMessage, setErrorMessage] = useState('');
   const { getAgremments } = useAgreement();
 
@@ -32,7 +33,6 @@ const Agreement = () => {
     }
 
     setErrorMessage('');
-    setAgreementList([])
     setLoading(true);
     const result = await getAgremments(cpf);
     typeof(result) !== 'string' ? setAgreementList(result) : setErrorMessage(result);
@@ -48,6 +48,45 @@ const Agreement = () => {
       cpfNumber = value;
       setCpf(cpfNumber);
     }
+  }
+
+  const renderingTable = () => {
+    if (errorMessage) {
+      return (
+        <div className="margins">
+          <h2>{ errorMessage }</h2>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="margins">
+          <div className="margin">
+          <div className={'table-title'}>CPF consultado: { agreementList[0].cpf }</div>
+          <div className={'table-title'}>Nome: { agreementList[0].name }</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Contrato</th>
+                <th>Data</th>
+                <th>Situação</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              { agreementList.map((agreement) => (
+                <tr key={agreement.agreement}>
+                  <td>{ agreement.agreement }</td>
+                  <td>{ agreement.dateTime && moment(agreement.dateTime).format("DD/MM/YYYY HH:mm:ss") }</td>
+                  <td>{ agreement.situation }</td>
+                  <td>{ agreement.status }</td>
+                </tr>))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -69,33 +108,7 @@ const Agreement = () => {
           { loading && <Loading /> }
         </label>
       </form>
-
-      <div className="margins">
-        { errorMessage
-          ? <h2>{errorMessage}</h2>
-          : agreementList.map((agreement, index) => (
-            <div className="margin" key={index}>
-              <div className={'table-title'}>CPF consultado: { agreement.cpf }</div>
-              <div className={'table-title'}>Nome: { agreement.name }</div>
-              <table>
-                <tbody>
-                <tr>
-                  <th>Contrato</th>
-                  <th>Data</th>
-                  <th>Status</th>
-                  <th>Situação</th>
-                </tr>
-                  <tr>
-                    <td>{ agreement.agreement }</td>
-                    <td>{ agreement.dateTime && moment(agreement.dateTime).format("DD/MM/YYYY HH:mm:ss")  }</td>
-                    <td>{ agreement.status }</td>
-                    <td>{ agreement.situation }</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-        ))}
-      </div>
+      { renderingTable() }
     </>
   );
 }
