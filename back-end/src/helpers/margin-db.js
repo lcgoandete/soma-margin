@@ -12,11 +12,14 @@ const marginData = {
 const QUERY_LIMIT = 449;
 
 const getMarginData = async () => {
-  const margin = await prisma.margin.findUnique({
-    where: {
-      id: 1
-    }
-  });
+  let margin = await prisma.margin.findUnique({ where: { id: 1 } });
+
+  if (!margin) {
+    margin = await prisma.margin.create({
+      data: { id: 1, state: 0, county: 0 },
+    });
+  }
+
   marginData.county = margin.county;
   marginData.state = margin.state;
   marginData.createdAt = margin.created_at;
@@ -37,11 +40,7 @@ const verifyDate = async () => {
 
   if (currentDate > marginDate) {
     const margin = await prisma.margin.update({
-      data: {
-        state: 0,
-        county: 0,
-        created_at: new Date(),
-      },
+      data: { state: 0, county: 0, created_at: new Date() },
       where: { id: 1 },
     });
     marginData.county = margin.county;
