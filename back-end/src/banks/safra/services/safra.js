@@ -69,10 +69,12 @@ const getFormalization = async (cpf) => {
   }
 
   const idAgreement = parseInt(agreement.nrContrato);
+  const formalizations = await safra.getFormalization(idAgreement);
+  
   const cpfCustomer = agreement.nrCpfCliente;
   const nameCustomer = agreement.nmCliente;
-  const formalizations = await safra.getFormalization(idAgreement);
   const formalization = phaseDescription(formalizations);
+  
   const result = { cpfCustomer, nameCustomer, ...formalization };
   return result;
 }
