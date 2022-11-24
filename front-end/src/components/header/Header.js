@@ -11,10 +11,27 @@ const Header = () => {
         </Link>
         <nav>
           <ul>
-            <Link to="/margin"><li>Pesquisar Margem</li></Link>
-            <Link to="/card-limit"><li>Consulta saque BMG</li></Link>
-            <Link to="/agreement"><li>Contrato - Safra</li></Link>
-            <Link to="/formalization"><li>Formalizacao - Safra</li></Link>
+            <li className="dropdown">
+              <span className="dropbtn">Portal Consignado</span>
+              <div className="dropdown-content">
+                <Link to="/margin">Pesquisar Margem</Link>
+              </div>
+            </li>
+            
+            <li className="dropdown">
+              <span className="dropbtn">Banco BMG</span>
+              <div className="dropdown-content">
+                <Link to="/card-limit">Consulta Saque</Link>
+              </div>
+            </li>
+            
+            <li className="dropdown">
+              <span className="dropbtn">Banco SAFRA</span>
+              <div className="dropdown-content">
+                <Link to="/agreement">Contrato</Link>
+                <Link to="/formalization">Formalização</Link>
+              </div>
+            </li>
           </ul>
         </nav>
       </header>
