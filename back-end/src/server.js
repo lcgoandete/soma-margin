@@ -4,8 +4,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const routes = require('./router');
-const PORT = 5000;
+const { InternalServerError } = require('./helpers/httpStatus');
 
+const PORT = 5000;
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -14,7 +15,7 @@ app.use(routes);
 
 app.use((err, _req, res, _next) => {
   if (err.status) return res.status(err.status).json({ message: err.message });
-  return res.status(500).json({ message: `Internal Error: ${err.message}` });
+  return res.status(InternalServerError).json({ message: err.message });
 });
 
 const scheduledTime = () => {

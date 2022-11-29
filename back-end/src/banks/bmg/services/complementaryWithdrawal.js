@@ -1,4 +1,5 @@
 const libxmljs = require('libxmljs');
+const { NotFound, Forbiden } = require('../../../helpers/httpStatus');
 
 const { codigoEntidadeObj } = require('../enums');
 const complementaryWithdrawal = require('../models/complementaryWithdrawal');
@@ -50,7 +51,7 @@ const convertAvailableCardData = (availableCard) => {
   const faultstring = xmlDoc.get('//faultstring');
   if(faultstring) {
     throw {
-      status: 404,
+      status: NotFound,
       message: faultstring.text(),
     }
   }
@@ -72,14 +73,14 @@ const convertAvailableCardData = (availableCard) => {
 const verifyAvailableCard = (dataCard) => {
   if (dataCard.cpfImpedidoComissionar) {
     throw {
-      status: 403,
+      status: Forbiden,
       message: 'Cliente impedido de comissionar',
     };
   }
 
   if (!dataCard.liberado) {
     throw {
-      status: 403,
+      status: Forbiden,
       message: 'Cliente não liberado',
     };
   }
@@ -91,7 +92,7 @@ const convertCardLimitData = (cardLimit) => {
   const faultstring = xmlDoc.get('//faultstring');
   if(faultstring) {
     throw {
-      status: 404,
+      status: NotFound,
       message: faultstring.text(),
     }
   }
@@ -111,7 +112,7 @@ const convertCardLimitData = (cardLimit) => {
 const verifyCardLimit = (CardLimitData) => {
   if (CardLimitData.limiteDisponivel < 500) {
     throw {
-      status: 403,
+      status: Forbiden,
       message: 'Limite disponível inferior a R$ 500,00',
     };
   }
