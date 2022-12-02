@@ -1,7 +1,9 @@
-const PageTitle = ({title}) => {
+import { Center, Heading } from "@chakra-ui/react";
+
+export const PageTitle = ({ title }) => {
   return (
-    <h2>{title}</h2>
+    <Center>
+      <Heading my="8">{ title }</Heading>
+    </Center>
   );
 }
-
-export default PageTitle;

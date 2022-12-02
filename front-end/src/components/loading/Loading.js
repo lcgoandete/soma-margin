@@ -1,9 +1,8 @@
-import './style.css';
+import { Spinner } from '@chakra-ui/react';
 
-const Loading = () => {
+export const Loading = () => {
   return (
-    <div className="lds-dual-ring"></div>
+    <Spinner mx="2"/>
   );
 }
 
-export default Loading;

@@ -1,10 +1,11 @@
-import { useState } from "react";
-import * as cpfTest from 'cpf-cnpj-validator';
+import { useState } from 'react';
+import { Box, Center, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 
-import useFormalization from "../../../hooks/useFormalization";
-import Loading from "../../../components/loading/Loading";
-import PageTitle from "../../../components/pageTitle/PageTitle";
-import './style.css'
+import { Header } from '../../../components/header/Header';
+import { CpfForm } from '../../../components/cpf-form/CpfForm';
+import { useFormalization } from '../../../hooks/useFormalization';
+import { PageTitle } from '../../../components/pageTitle/PageTitle';
+import { AlertErrorMessage } from '../../../components/alert-error-message/AlertErrorMessage';
 
 const formalizationDefault = {
   cpfCustomer: '',
@@ -14,97 +15,74 @@ const formalizationDefault = {
   link: '',
 };
 
-const Formalization = () => {
-  const [cpf, setCpf] = useState('');
-  const [loading, setLoading] = useState(false);
+export const Formalization = () => {
   const [formalization, setFormalization] = useState(formalizationDefault);
   const [errorMessage, setErrorMessage] = useState('');
-  const { getFormalization } = useFormalization();
+  const { loading, getFormalization } = useFormalization();
 
-  const consultCpf = async (target) => {
-    target.preventDefault();
-    
-    if(!cpfTest.cpf.isValid(cpf)) {
-      setCpf('');
-      setErrorMessage('CPF inválido');
-      return;
-    }
-
-    setErrorMessage('');
-    setLoading(true);
-    const result = await getFormalization(cpf);
-    typeof(result) !== 'string' ? setFormalization(result) : setErrorMessage(result);
-    setLoading(false);
-    setCpf('');
-  }
-
-  const formatCpf = (cpfNumber) => {
-    if (cpfNumber.length <= 14) {
-      let value = cpfNumber;
-      value = value.replace(/\D/g, '');
-      value = value.replace(/^(\d{1,3})(\d{1,3})(\d{1,3})(\d{1,2})/, '$1.$2.$3-$4');
-      cpfNumber = value;
-      setCpf(cpfNumber);
-    }
-  }
-
-  const renderingTable = () => {
+   const renderingTable = () => {
     if (errorMessage) {
       return (
         <div className="margins">
-          <h2>{ errorMessage }</h2>
+          <AlertErrorMessage errorMessage={ errorMessage } />
         </div>
       );
     }
-    
+
     return (
-      <div className="margins">
-        <div className="margin">
-          <div className={'table-title'}>CPF Consultado: { formalization.cpfCustomer }</div>
-          <div className={'table-title'}>Nome: { formalization.nameCustomer }</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Contrato</th>
-                <th>Fase</th>
-                <th>Link</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{ formalization.agreement }</td>
-                <td>{ formalization.phaseDescription }</td>
-                <td>{ formalization.link }</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <Center>
+        <Box minWidth="500px" marginY='7'>
+          <Box padding='2' border='1px' borderColor='gray.200' borderTopRadius="10px">
+            CPF consultado: { formalization.cpfCustomer }
+          </Box>
+          <Box padding='2' border='1px' borderColor='gray.200'>
+            Nome: { formalization.nameCustomer }
+          </Box>
+          <TableContainer>
+            <Table variant='simple'>
+              <Thead>
+                <Tr>
+                  <Th>Contrato</Th>
+                  <Th>Fase</Th>
+                  <Th>Link</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <Tr>
+                  <Td>{ formalization.agreement }</Td>
+                  <Td>{ formalization.phaseDescription }</Td>
+                  <Td>{ formalization.link }</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Center>
     );
+  }
+
+  const onClickCpf = async (response) => {
+    const { cpf, message } = response;
+    
+    if (message) {
+      setErrorMessage(message);
+    } else {
+      const result = await getFormalization(cpf);
+
+      if (result.errorMessage) {
+        setErrorMessage(result.errorMessage);
+      } else {
+        setFormalization(result);
+      }
+    }
   }
 
   return (
     <>
+      <Header />
       <PageTitle title="Formalização Safra" />
-      <form onSubmit={ consultCpf }>
-        <label htmlFor="cpf">
-          CPF:
-          <input
-            required
-            autoFocus
-            id="cpf"
-            type="text"
-            name="cpf"
-            autoComplete="off"
-            value={ cpf }
-            onChange={({ target }) => formatCpf(target.value)}
-          />
-          { loading && <Loading /> }
-        </label>
-      </form>
+      <CpfForm loading={ loading } onClickCpf={ onClickCpf } />
       { renderingTable() }
     </>
   );
 }
-
-export default Formalization;

@@ -1,11 +1,12 @@
-import { useState } from "react";
-import moment from 'moment';
-import * as cpfTest from 'cpf-cnpj-validator';
+import { useState } from 'react';
+import { Box, Center, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 
-import useAgreement from "../../../hooks/useAgreement";
-import Loading from "../../../components/loading/Loading";
-import PageTitle from "../../../components/pageTitle/PageTitle";
-import './style.css'
+import { useAgreement } from '../../../hooks/useAgreement';
+import { Header } from '../../../components/header/Header';
+import { formatDateTime } from '../../../helpers/formatter';
+import { CpfForm } from '../../../components/cpf-form/CpfForm';
+import { PageTitle } from '../../../components/pageTitle/PageTitle';
+import { AlertErrorMessage } from '../../../components/alert-error-message/AlertErrorMessage';
 
 const agreementDefault = [{
   cpf: '',
@@ -16,101 +17,72 @@ const agreementDefault = [{
   situation: '',
 }];
 
-const Agreement = () => {
-  const [cpf, setCpf] = useState('');
-  const [loading, setLoading] = useState(false);
+export const Agreement = () => {
   const [agreementList, setAgreementList] = useState(agreementDefault);
   const [errorMessage, setErrorMessage] = useState('');
-  const { getAgremments } = useAgreement();
+  const { loading, getAgremments } = useAgreement();
 
-  const consultCpf = async (target) => {
-    target.preventDefault();
+  const onClickCpf = async (response) => {
+    const { cpf, message } = response;
     
-    if(!cpfTest.cpf.isValid(cpf)) {
-      setCpf('');
-      setErrorMessage('CPF inválido');
-      return;
-    }
+    if (message) {
+      setErrorMessage(message);
+    } else {
+      const result = await getAgremments(cpf);
 
-    setErrorMessage('');
-    setLoading(true);
-    const result = await getAgremments(cpf);
-    typeof(result) !== 'string' ? setAgreementList(result) : setErrorMessage(result);
-    setLoading(false);
-    setCpf('');
-  }
-
-  const formatCpf = (cpfNumber) => {
-    if (cpfNumber.length <= 14) {
-      let value = cpfNumber;
-      value = value.replace(/\D/g, '');
-      value = value.replace(/^(\d{1,3})(\d{1,3})(\d{1,3})(\d{1,2})/, '$1.$2.$3-$4');
-      cpfNumber = value;
-      setCpf(cpfNumber);
+      if (result.errorMessage) {
+        setErrorMessage(result.errorMessage);
+      } else {
+        setAgreementList(result);
+      }
     }
   }
 
   const renderingTable = () => {
-    if (errorMessage) {
-      return (
-        <div className="margins">
-          <h2>{ errorMessage }</h2>
-        </div>
-      );
-    }
-    
+    if (errorMessage) return <AlertErrorMessage errorMessage={ errorMessage } />
+
     return (
-      <div className="margins">
-          <div className="margin">
-          <div className={'table-title'}>CPF consultado: { agreementList[0].cpf }</div>
-          <div className={'table-title'}>Nome: { agreementList[0].name }</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Contrato</th>
-                <th>Data</th>
-                <th>Situação</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              { agreementList.map((agreement) => (
-                <tr key={agreement.agreement}>
-                  <td>{ agreement.agreement }</td>
-                  <td>{ agreement.dateTime && moment(agreement.dateTime).format("DD/MM/YYYY HH:mm:ss") }</td>
-                  <td>{ agreement.situation }</td>
-                  <td>{ agreement.status }</td>
-                </tr>))
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <Center>
+        <Box minWidth="500px" marginY='7'>
+          <Box padding='2' border='1px' borderColor='gray.200' borderTopRadius="10px">
+            CPF consultado: { agreementList[0].cpf }
+          </Box>
+          <Box padding='2' border='1px' borderColor='gray.200'>
+            Nome: { agreementList[0].name }
+          </Box>
+          <TableContainer>
+            <Table variant='striped' colorScheme='gray'>
+              <Thead>
+                <Tr>
+                  <Th>Contrato</Th>
+                  <Th>Data</Th>
+                  <Th>Situação</Th>
+                  <Th>Status</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                { agreementList.map((agreement) => (
+                  <Tr key={agreement.agreement}>
+                    <Td>{ agreement.agreement }</Td>
+                    <Td>{ agreement.dateTime && formatDateTime(agreement.dateTime) }</Td>
+                    <Td>{ agreement.situation }</Td>
+                    <Td>{ agreement.status }</Td>
+                  </Tr>))
+                }
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Center>
     );
   }
 
   return (
     <>
+      <Header />
       <PageTitle title="Consulta Contrato Safra" />
-      <form onSubmit={ consultCpf }>
-        <label htmlFor="cpf">
-          CPF:
-          <input
-            required
-            autoFocus
-            id="cpf"
-            type="text"
-            name="cpf"
-            autoComplete="off"
-            value={ cpf }
-            onChange={({ target }) => formatCpf(target.value)}
-          />
-          { loading && <Loading /> }
-        </label>
-      </form>
+      <CpfForm loading={ loading } onClickCpf={ onClickCpf } />
       { renderingTable() }
     </>
   );
 }
-
-export default Agreement;

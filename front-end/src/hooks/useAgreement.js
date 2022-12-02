@@ -1,24 +1,19 @@
-import axios from 'axios';
+import { useState } from 'react';
 
-const url = process.env.REACT_APP_URL;
+import { getAgremmentsApi } from '../services/somaAPI';
 
-const useAgreement = () => {
+export const useAgreement = () => {
+  const [loading, setLoading] = useState(false);
+  
   const getAgremments = async (cpf) => {
-    try {
-      const response = await axios({
-        method: 'GET',
-        url: `${url}/banks/safra/agreement/${cpf}`,
-      });
-      return response.data;
-    } catch (error) {
-      if (error.response.data.message) {
-        return error.response.data.message;
-      } else {
-        return error.message;
-      }
-    }
+    setLoading(true);
+    const result = await getAgremmentsApi(cpf);
+    setLoading(false);
+    return result;
   };
-  return { getAgremments };
+  
+  return {
+    loading,
+    getAgremments
+  };
 };
-
-export default useAgreement;

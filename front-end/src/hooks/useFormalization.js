@@ -1,24 +1,19 @@
-import axios from 'axios';
+import { useState } from 'react';
 
-const url = process.env.REACT_APP_URL;
+import { getFormalizationApi } from '../services/somaAPI';
 
-const useFormalization = () => {
+export const useFormalization = () => {
+  const [loading, setLoading] = useState(false);
+
   const getFormalization = async (cpf) => {
-    try {
-      const response = await axios({
-        method: 'GET',
-        url: `${url}/banks/safra/formalization/${cpf}`,
-      });
-      return response.data;
-    } catch (error) {
-      if (error.response.data.message) {
-        return error.response.data.message;
-      } else {
-        return error.message;
-      }
-    }
+    setLoading(true);
+    const result = await getFormalizationApi(cpf);
+    setLoading(false);
+    return result;
   };
-  return { getFormalization };
-};
 
-export default useFormalization;
+  return {
+    loading,
+    getFormalization
+  };
+};

@@ -1,9 +1,14 @@
-import './App.css';
+import { ChakraProvider } from '@chakra-ui/react'
 
 import PageRoutes from './pages/PageRoutes';
+import './App.css';
 
 function App() {
-  return (<PageRoutes />);
+  return (
+    <ChakraProvider>
+      <PageRoutes />
+    </ChakraProvider>
+  );
 }
 
 export default App;

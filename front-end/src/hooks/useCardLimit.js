@@ -1,25 +1,19 @@
-import axios from 'axios';
+import { useState } from 'react';
 
-const url = process.env.REACT_APP_URL;
+import { getCardLimitApi } from '../services/somaAPI';
 
-const useCardLimit = () => {
-  const cardLimitApi = async (cpf) => {
-    try {
-      const response = await axios({
-        method: 'POST',
-        url: `${url}/banks/bmg/complementary-withdrawal/card-limit`,
-        data: { cpf },
-      });
-      return response.data;
-    } catch (error) {
-      if(error.response.data.message) {
-        return { message: error.response.data.message };
-      } else {
-        return { message: `Houve um erro inesperado "${error.response.statusText}"` };
-      }
-    }
+export const useCardLimit = () => {
+  const [loading, setLoading] = useState(false);
+
+  const getCardLimit = async (cpf) => {
+    setLoading(true);
+    const result = await getCardLimitApi(cpf);
+    setLoading(false);
+    return result;
   };
-  return { cardLimitApi };
-};
 
-export default useCardLimit;
+  return {
+    loading,
+    getCardLimit
+  };
+};
