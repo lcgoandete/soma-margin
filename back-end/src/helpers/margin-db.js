@@ -1,5 +1,6 @@
 const moment = require('moment');
 const { PrismaClient } = require('@prisma/client');
+const { Unauthorized } = require('./httpStatus');
 
 const prisma = new PrismaClient();
 
@@ -28,7 +29,7 @@ const getMarginData = async () => {
 const checkNumberOfQueries = (field) => {
   if (marginData[field] > QUERY_LIMIT) {
     throw {
-      status: 401,
+      status: Unauthorized,
       message: 'Limite de consultas de margem atingido',
     };
   }

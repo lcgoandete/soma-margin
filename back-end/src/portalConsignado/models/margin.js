@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { By } = require('selenium-webdriver');
+const { NotFound } = require('../../helpers/httpStatus');
 
 const { isLogin } = require('./login');
 const selector = require('./marginSelector');
@@ -17,7 +18,7 @@ const checkCpf = async (driver, cpf) => {
   const invalidCpf = await driver.findElements(By.css('#divEtapaError2'));
   if(invalidCpf.length > 0) {
     const error = await driver.findElement(By.xpath('/html/body/div/div/div[2]/div/form/div[2]/div/div[1]/div/div/ul/li/span')).getText();
-    throw { status: 404, message: error }
+    throw { status: NotFound, message: error }
   }
 }
 

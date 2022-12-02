@@ -5,7 +5,7 @@ const moment = require('moment');
 const { SAFRA_API_URL, SAFRA_API_USERNAME, SAFRA_API_PASSWORD } = process.env;
 
 const authentication = {
-  accessToken: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQVBJQ0I0MzAzMTQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJDb3JyZXNwb25kZW50ZUFwaSIsIklkVXN1YXJpbyI6IjQzMDMxNCIsIklkQ29yYmFuIjoiMjU2MDEiLCJleHAiOjE2NjkxNDQzMDQsImlzcyI6InNhZnJhLmNvbS5iciIsImF1ZCI6InNhZnJhLmNvbS5iciJ9.a51lTG-pVoUUJBVnLybptbbRd9j34Bog5YvLU4oLzcOS16sND0Jya1H31Yx8GbP6LP0om3EvMxpwsefsJEe7kg",
+  accessToken: "",
   tokenLifeMinute: moment("210000", "HHmmss"),
 };
 

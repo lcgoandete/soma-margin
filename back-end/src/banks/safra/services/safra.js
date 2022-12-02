@@ -1,3 +1,4 @@
+const { NotFound } = require('../../../helpers/httpStatus');
 const safra = require('../models/safra');
 
 const getAgreements = async (cpf) => {
@@ -5,7 +6,7 @@ const getAgreements = async (cpf) => {
   
   if (!agreements || agreements.length === 0) {
     throw {
-      status: 404,
+      status: NotFound,
       message: 'Contrato não encontrado.'
     }
   }
@@ -63,7 +64,7 @@ const getFormalization = async (cpf) => {
   
   if (!agreement) {
     throw {
-      status: 404,
+      status: NotFound,
       message: 'Contrato não encontrado.'
     }
   }
