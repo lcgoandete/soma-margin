@@ -45,7 +45,7 @@ export const Agreement = () => {
       <Center>
         <Box minWidth="500px" marginY='7'>
           <Box padding='2' border='1px' borderColor='gray.200' borderTopRadius="10px">
-            CPF consultado: { agreementList[0].cpf }
+            CPF Consultado: { agreementList[0].cpf }
           </Box>
           <Box padding='2' border='1px' borderColor='gray.200'>
             Nome: { agreementList[0].name }

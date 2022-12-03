@@ -43,7 +43,7 @@ export const CardLimit = () => {
       <Center>
         <Box marginY='7'>
           <Box padding='3' border='1px' borderColor='gray.200' borderTopRadius="10px">
-            CPF consultado: {cardLimit.cpf}
+            CPF Consultado: {cardLimit.cpf}
           </Box>
           <TableContainer>
             <Table variant='simple'>

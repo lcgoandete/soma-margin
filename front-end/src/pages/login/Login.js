@@ -20,7 +20,9 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const { authenticate, loading, errorMessage} = useAuthentication();
 
-  const getAuthentication = async () => {
+  const getAuthentication = async (event) => {
+    event.preventDefault();
+    if (event.key !== 'Enter' && event.type !== 'click') return;
     await authenticate({ email, password });
   }
 
@@ -53,8 +55,9 @@ export const Login = () => {
               autoComplete="off"
               value={ password }
               onChange={({ target }) => setPassword(target.value)}
+              onKeyUp={ (event) => getAuthentication(event) }
             />
-            <Button mt="2" colorScheme='blue' type='submit' onClick={ getAuthentication } >
+            <Button mt="2" colorScheme='blue' type='submit' onClick={ (event) => getAuthentication(event) } >
               Entrar
               { loading && <Loading /> }
             </Button>

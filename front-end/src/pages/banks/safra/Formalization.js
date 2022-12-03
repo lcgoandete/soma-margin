@@ -33,7 +33,7 @@ export const Formalization = () => {
       <Center>
         <Box minWidth="500px" marginY='7'>
           <Box padding='2' border='1px' borderColor='gray.200' borderTopRadius="10px">
-            CPF consultado: { formalization.cpfCustomer }
+            CPF Consultado: { formalization.cpfCustomer }
           </Box>
           <Box padding='2' border='1px' borderColor='gray.200'>
             Nome: { formalization.nameCustomer }
