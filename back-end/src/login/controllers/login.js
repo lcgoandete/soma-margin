@@ -1,10 +1,9 @@
-const login = require('../services/login');
 const { Ok } = require('../../helpers/httpStatus');
 
 const getLogin =  async (req, res) => {
-  const { id, name, email, password } = req.body;
-  const token = await login.getLogin({ name, email, password });
-  const result = { id, name, token };
+  const { id, name, role } = req.body;
+  const { authorization } = req.header;
+  const result = { id, name, role, token: authorization };
   return res.status(Ok).json(result);
 }
 

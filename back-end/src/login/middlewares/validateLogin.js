@@ -1,15 +1,35 @@
-// const isValidEmail = require('./emailValidate');
-// const { User } = require('../../../database/models');
-// const isValidPassword = require('./passwordValidate');
-
 const md5 = require('md5');
 const yup = require('yup');
-const { getUserByEmail } = require('../../user/models/user');
-const { BadRequest, InternalServerError, Unauthorized } = require('../../helpers/httpStatus');
 
-const validateLogin = async (req, res, next) => {
+const { findUserByEmail } = require('../../user/models/user');
+const { BadRequest, Unauthorized } = require('../../helpers/httpStatus');
+
+const validateLogin = async (req, _res, next) => {
   const { email, password } = req.body;
 
+  try {
+    await validateFields(email, password);
+    const user = await findUserByEmail(email);
+    
+    if (!user) {
+      throw { status: Unauthorized, message: 'invalid email or password' };
+    }
+
+    if (md5(password) !== user.password) {
+      throw { status: Unauthorized, message: 'invalid email or password' };
+    }
+
+    req.body.id = user.id;
+    req.body.name = user.name;
+    req.body.role = user.role;
+    delete(req.body.password);
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+const validateFields = async (email, password) => {
   const schema = yup.object().shape({
     email: yup.string().required().email(),
     password: yup.string().required().min(8),
@@ -17,30 +37,8 @@ const validateLogin = async (req, res, next) => {
 
   try {
     await schema.validate({ email, password });
-    const user = await getUserByEmail(email);
-    
-    if (!user || !user.length) {
-      return res.status(Unauthorized).json({
-        message: 'invalid email or password',
-      });
-    }
-    
-    const hashPassword = md5(password);
-    if (hashPassword !== user[0].password) {
-      return res.status(Unauthorized).json({
-        message: 'invalid email or password',
-      });
-    }
-    req.body.id = user.id;
-    req.body.name = user.name;
-    next();
   } catch (error) {
-    if (error.name){
-      if (error.name === 'ValidationError') {
-        return res.status(BadRequest).json({ message: error.message });
-      }
-    }
-    return res.status(InternalServerError).json({ message: error.message });
+    throw { status: BadRequest, message: error.message };
   }
 }
 

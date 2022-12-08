@@ -5,13 +5,14 @@ const { Unauthorized } = require('../helpers/httpStatus');
 
 const TOKEN_SECRET = process.env.TOKEN_SECRET || 'secretword';
 
-const generateToken = (userData) => {
-  const jwtConfig = { expiresIn: '12h', algorithm: 'HS256' };
+const generateToken = (req, _res, next) => {
+  const { id, name, role } = req.body;
+  const payload = { id, name, role };
 
-  const { name, email } = userData;
-  const payload = { name, email };
+  const jwtConfig = { expiresIn: '12h', algorithm: 'HS256' };
   const token = jwt.sign(payload, TOKEN_SECRET, jwtConfig);
-  return token;
+  req.header.authorization =  token;
+  next();
 };
 
 const validateToken = (req, _res, next) => {
@@ -23,6 +24,7 @@ const validateToken = (req, _res, next) => {
   
   try {
     const decoded = jwt.verify(authorization, TOKEN_SECRET);
+    req.params.role = decoded.role;
     next();
   } catch (error) {
     throw { status: Unauthorized, message: 'Expired or invalid token' };
