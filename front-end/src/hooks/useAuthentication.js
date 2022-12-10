@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { isValidTokenApi, setAuthentication } from "../services/somaAPI";
+import { isValidTokenApi, setAuthenticationApi } from "../services/somaAPI";
 
 export const useAuthentication = () => {
   const navigate = useNavigate();
@@ -12,12 +12,12 @@ export const useAuthentication = () => {
   const authenticate = async (credentials) => {
     setLoading(true);
     setErrorMessage('');
-    const result = await setAuthentication(credentials);
+    const result = await setAuthenticationApi(credentials);
     
     if (result.errorMessage) {
       setErrorMessage(result.errorMessage);
     } else {
-      localStorage.setItem('user', JSON.stringify({ id: result.id, name: result.name }));
+      localStorage.setItem('user', JSON.stringify({ id: result.id, name: result.name, role: result.role }));
       localStorage.setItem('token', result.token);
       setAuthenticated(true);
       navigate('/');

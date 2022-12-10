@@ -13,14 +13,31 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 import logo from '../../assets/images/soma-logo.png';
+import { useState } from 'react';
+
+const getUser = () => JSON.parse(localStorage.getItem('user'));
 
 export const Header = () => {
+  const [user] = useState(getUser);
   const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem('user');
     navigate("/login");
   }
+
+  const renderUserMenu = () => {
+    if (user.role === 'ADMIN') {
+      return (
+        <Menu>
+          <Button type='button'>
+            <Link to="/user">Usuários</Link>
+          </Button>
+        </Menu>
+      );
+    }
+  }
+
   return (
     <Flex direction='row' width='99%' my='2' mx='auto' px='3' border='1px' borderRadius='10' borderColor='gray.200'>
       <Image boxSize='70px' objectFit='scale-down' src={ logo } alt='enterprise logo'/>
@@ -61,6 +78,8 @@ export const Header = () => {
             </MenuItem>
           </MenuList>
         </Menu>
+
+        { renderUserMenu() }
       </Center>
       <Spacer />
       <Center>
