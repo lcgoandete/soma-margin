@@ -47,7 +47,7 @@ const updateUser = async (user) => {
     data: { 
       name: user.name,
       email: user.email,
-      password: user.password,
+      // password: user.password,
       role: user.role,
       active: user.active,
       updated_at: new Date,

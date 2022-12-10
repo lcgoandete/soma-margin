@@ -5,16 +5,16 @@ const users = require('../models/user');
 const { Conflict, BadRequest} = require('../../helpers/httpStatus');
 
 const validateUserFields = async (req, _res, next) => {
-  const { name, email, password, role, active } = req.body;
-  const user = { name, email, password, role, active };
+  const { id, name, email, password, role, active } = req.body;
+  const user = { id, name, email, password, role, active };
 
   try {
     await validateFields(user);
     const formattedUser = formatData(user);
     validateRoles(formattedUser.role);
     validateActive(formattedUser.active);
-    if (req.method !== 'PUT') await emailExist(formattedUser.email);
-    if (req.method !== 'PUT') await nameExist(formattedUser.name);
+    if (!user.id) await emailExist(formattedUser.email);
+    if (!user.id) await nameExist(formattedUser.name);
     req.body = formattedUser;
     next();
   } catch (error) {
@@ -23,13 +23,23 @@ const validateUserFields = async (req, _res, next) => {
 }
 
 const validateFields = async (user) => {
-  const schema = yup.object().shape({
-    name: yup.string().required().min(4),
-    email: yup.string().required().email(),
-    password: yup.string().required().min(8),
-    role: yup.string().required().min(4),
-    active: yup.number().required(),
-  });
+  let schema = {};
+
+  if (!user.id) {
+    schema = yup.object().shape({
+      name: yup.string().required().min(4),
+      email: yup.string().required().email(),
+      password: yup.string().required().min(8),
+      role: yup.string().required().min(4),
+      active: yup.number().required(),
+    });
+  } else {
+    schema = yup.object().shape({
+      name: yup.string().required().min(4),
+      email: yup.string().required().email(),
+      role: yup.string().required().min(4),
+    });
+  }
 
   try {
     await schema.validate(user);
@@ -42,7 +52,7 @@ const formatData = (user) => {
   const newUser = { ...user };
   newUser.name = user.name.toUpperCase();
   newUser.email = user.email.toLowerCase();
-  newUser.password = md5(user.password);
+  if (!user.id) newUser.password = md5(user.password);
   newUser.role = user.role.toUpperCase();
   newUser.active = user.active;
   return newUser;
