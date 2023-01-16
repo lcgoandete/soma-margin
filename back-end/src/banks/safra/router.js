@@ -17,4 +17,10 @@ safraRoutes.post('/banks/safra/formalization',
   rescue(safra.getFormalization)
 );
 
+safraRoutes.post('/banks/safra/fgtsbalance',
+  validateCpf,
+  validateToken,
+  rescue(safra.getFgtsBalance)
+);
+
 module.exports = safraRoutes;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { getAgremmentsApi } from '../services/somaAPI';
+import { getAgremmentsApi } from '../../../services/banks/safra/safraAPI';
 
 export const useAgreement = () => {
   const [loading, setLoading] = useState(false);

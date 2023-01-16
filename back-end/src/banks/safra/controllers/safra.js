@@ -13,7 +13,14 @@ const getFormalization = async (req, res) => {
   return res.status(Ok).json(result);
 }
 
+const getFgtsBalance = async (req, res) => {
+  const { cpf } = req.body;
+  const result = await safra.getFgtsBalance(cpf);
+  return res.status(Ok).json(result);
+}
+
 module.exports = {
   getAgreements,
   getFormalization,
+  getFgtsBalance,
 }

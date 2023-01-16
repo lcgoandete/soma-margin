@@ -9,16 +9,6 @@ const authentication = {
   tokenLifeMinute: moment("210000", "HHmmss"),
 };
 
-const checkToken = async () => {
-  const currentTime = moment();
-  const duration = moment.duration(currentTime.diff(authentication.tokenLifeMinute));
-  const durationInMinutes = parseInt((duration.hours() * 60) + duration.minutes());
-
-  if (durationInMinutes > 28 || durationInMinutes < 0) {
-    await getAccessToken();
-  }  
-}
-
 const getAccessToken = async () => {
   const { data } = await axios({
     method: 'POST',
@@ -33,6 +23,16 @@ const getAccessToken = async () => {
   });
   authentication.accessToken = data.token;
   authentication.tokenLifeMinute = moment();
+}
+
+const checkToken = async () => {
+  const currentTime = moment();
+  const duration = moment.duration(currentTime.diff(authentication.tokenLifeMinute));
+  const durationInMinutes = parseInt((duration.hours() * 60) + duration.minutes());
+
+  if (durationInMinutes > 28 || durationInMinutes < 0) {
+    await getAccessToken();
+  }  
 }
 
 const getAgreements = async (cpf) => {
@@ -60,7 +60,21 @@ const getFormalization = async (idProposta) => {
   return data;
 }
 
+const getFgtsBalance = async (cpf) => {
+  await checkToken();
+  const { data } = await axios({
+    method: 'GET',
+    url: `${SAFRA_API_URL}/Fgts?idCliente=${cpf}&tpProduto=2`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authentication.accessToken}`,
+    },
+  });
+  return data;
+}
+
 module.exports = {
   getAgreements,
   getFormalization,
+  getFgtsBalance,
 }

@@ -1,28 +1,21 @@
 import { useState } from 'react';
 import { Box, Center, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 
-import { useAgreement } from '../../../hooks/useAgreement';
 import { Header } from '../../../components/header/Header';
 import { formatDateTime } from '../../../helpers/formatter';
 import { CpfForm } from '../../../components/cpf-form/CpfForm';
 import { PageTitle } from '../../../components/pageTitle/PageTitle';
-import { AlertErrorMessage } from '../../../components/alert-error-message/AlertErrorMessage';
-
-const agreementDefault = [{
-  cpf: '',
-  agreement: '',
-  name: '',
-  dateTime: '',
-  status: '',
-  situation: '',
-}];
+import { useAgreement } from '../../../hooks/banks/safra/useAgreement';
+import { AlertMessage } from '../../../components/alert-error-message/AlertMessage';
 
 export const Agreement = () => {
-  const [agreementList, setAgreementList] = useState(agreementDefault);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [agreementList, setAgreementList] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const { loading, getAgremments } = useAgreement();
 
   const onClickCpf = async (response) => {
+    setErrorMessage(null);
+    setAgreementList(null);
     const { cpf, message } = response;
     
     if (message) {
@@ -39,8 +32,10 @@ export const Agreement = () => {
   }
 
   const renderingTable = () => {
-    if (errorMessage) return <AlertErrorMessage errorMessage={ errorMessage } />
-
+    if (errorMessage) return <AlertMessage status="error" alertTitle="Error:" message={ errorMessage } />
+    
+    if (!agreementList) return null;
+    
     return (
       <Center>
         <Box minWidth="500px" marginY='7'>

@@ -3,31 +3,38 @@ import { Box, Center, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@c
 
 import { Header } from '../../../components/header/Header';
 import { CpfForm } from '../../../components/cpf-form/CpfForm';
-import { useFormalization } from '../../../hooks/useFormalization';
 import { PageTitle } from '../../../components/pageTitle/PageTitle';
-import { AlertErrorMessage } from '../../../components/alert-error-message/AlertErrorMessage';
-
-const formalizationDefault = {
-  cpfCustomer: '',
-  nameCustomer: '',
-  agreement: '',
-  phaseDescription: '',
-  link: '',
-};
+import { useFormalization } from '../../../hooks/banks/safra/useFormalization';
+import { AlertMessage } from '../../../components/alert-error-message/AlertMessage';
 
 export const Formalization = () => {
-  const [formalization, setFormalization] = useState(formalizationDefault);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [formalization, setFormalization] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const { loading, getFormalization } = useFormalization();
 
-   const renderingTable = () => {
-    if (errorMessage) {
-      return (
-        <div className="margins">
-          <AlertErrorMessage errorMessage={ errorMessage } />
-        </div>
-      );
+  const onClickCpf = async (response) => {
+    setErrorMessage(null);
+    setFormalization(null);
+    const { cpf, message } = response;
+    
+    if (message) {
+      setErrorMessage(message);
+    } else {
+      setErrorMessage('');
+      const result = await getFormalization(cpf);
+
+      if (result.errorMessage) {
+        setErrorMessage(result.errorMessage);
+      } else {
+        setFormalization(result);
+      }
     }
+  }
+
+   const renderingTable = () => {
+    if (errorMessage) return <AlertMessage status="error" alertTitle="Error:" message={ errorMessage } />
+
+    if (!formalization) return null;
 
     return (
       <Center>
@@ -59,22 +66,6 @@ export const Formalization = () => {
         </Box>
       </Center>
     );
-  }
-
-  const onClickCpf = async (response) => {
-    const { cpf, message } = response;
-    
-    if (message) {
-      setErrorMessage(message);
-    } else {
-      const result = await getFormalization(cpf);
-
-      if (result.errorMessage) {
-        setErrorMessage(result.errorMessage);
-      } else {
-        setFormalization(result);
-      }
-    }
   }
 
   return (

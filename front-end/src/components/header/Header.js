@@ -27,14 +27,16 @@ export const Header = () => {
   }
 
   const renderUserMenu = () => {
-    if (user.role === 'ADMIN') {
-      return (
-        <Menu>
-          <Button type='button'>
-            <Link to="/user">Usuários</Link>
-          </Button>
-        </Menu>
-      );
+    if (user.role) {
+      if (user.role === 'ADMIN') {
+        return (
+          <Menu>
+            <Button type='button'>
+              <Link to="/user">Usuários</Link>
+            </Button>
+          </Menu>
+        );
+      }
     }
   }
 
@@ -75,6 +77,9 @@ export const Header = () => {
             </MenuItem>
             <MenuItem>
               <Link to="/formalization">Formalização</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/fgtsBalance">Saldo do FGTS</Link>
             </MenuItem>
           </MenuList>
         </Menu>

@@ -4,7 +4,7 @@ import logo from '../../assets/images/soma-logo.png';
 
 export const NotFound = () => {
   return (
-    <Center flexDirection='column' h='100vh' bgColor='gray.200'>
+    <Center flexDirection='column' h='100vh'>
       <Heading>
         Página não encontrada.
       </Heading>

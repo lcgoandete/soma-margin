@@ -9,6 +9,7 @@ import { CardLimit } from './banks/bmg/CardLimit';
 import { Agreement } from './banks/safra/Agreement';
 import { Margin } from './consigned-portal/Margin';
 import { Private } from '../components/private/Private';
+import { FgtsBalance } from "./banks/safra/FgtsBalance";
 import { Formalization } from './banks/safra/Formalization';
 
 const PageRoutes = () => {
@@ -21,6 +22,7 @@ const PageRoutes = () => {
         <Route path="/card-limit" element={ <Private><CardLimit /></Private> } />
         <Route path="/agreement" element={ <Private><Agreement /></Private> } />
         <Route path="/formalization" element={ <Private><Formalization /></Private> } />
+        <Route path="/fgtsBalance" element={ <Private><FgtsBalance /></Private> } />
         <Route path="/user" element={ <Private><User /></Private> } />
         <Route path="/forbidden" element={ <Forbidden /> } />
         <Route path="*" element={<NotFound />} />

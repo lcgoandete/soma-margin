@@ -5,62 +5,46 @@ import { Header } from '../../components/header/Header';
 import { CpfForm } from '../../components/cpf-form/CpfForm';
 import { PageTitle } from '../../components/pageTitle/PageTitle';
 import { useConsignedPortal } from '../../hooks/useConsignedPortal';
-import { AlertErrorMessage } from '../../components/alert-error-message/AlertErrorMessage';
+import { AlertMessage } from '../../components/alert-error-message/AlertMessage';
 
 export const Margin = () => {
   const [queryType, setQueryType] = useState('');
   const { loading, getMargin } = useConsignedPortal();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
   const [margin, setMargin] = useState([]);
 
   const onClickCpf = async (response) => {
     if(!queryType) {
-      setQueryType('');
       setErrorMessage('Favor selecionar o tipo de consulta');
       return;
     }
-
+    
+    setErrorMessage(null);
+    setMargin(null);
     const { cpf, message } = response;
+
     if (message) {
       setErrorMessage(message);
     } else {
       const result = await getMargin(queryType, cpf);
     
       if (result.errorMessage) {
+        setQueryType('');
         setErrorMessage(result.errorMessage);
       } else {
-        setMargin(result);
         setQueryType('');
+        setMargin(result);
       }
     }
   }
 
-  return (
-    <>
-      <Header />
-      <PageTitle title="Pesquisar Margem" />
-      <CpfForm loading={ loading } onClickCpf={ onClickCpf } 
-        queryTypeElement={
-          <Box mb='2'>
-            <FormLabel htmlFor="queryType">Tipo de Consulta:</FormLabel>
-            <Select
-              autoFocus
-              id="queryType"
-              name="queryType"
-              value={queryType}
-              onChange={({ target }) => setQueryType(target.value)}
-            >
-              <option value="">Selecione...</option>
-              <option value="margins">Estado de São Paulo</option>
-              <option value="municipio-margins">Município de São Paulo</option>
-            </Select>
-          </Box>
-        }
-      />
+  const renderingTable = () => {
+    if (errorMessage) return <AlertMessage status="error" alertTitle="Error:" message={ errorMessage } />
+
+    // if (!margin || margin.length === 0) return null;
+    return (
       <Center>
-        { errorMessage
-          ? <AlertErrorMessage errorMessage={ errorMessage } />
-          : margin?.map((client, index) => (
+        { margin?.map((client, index) => (
           <Box marginY='7' key={index}>
             <Box padding='3' border='1px' borderColor='gray.200' borderTopRadius="10px">
               <Text fontSize='19' as='b'>Dados de Identificação</Text>
@@ -159,6 +143,32 @@ export const Margin = () => {
           </Box>
         ))}
       </Center>
+    );
+  }
+
+  return (
+    <>
+      <Header />
+      <PageTitle title="Pesquisar Margem" />
+      <CpfForm loading={ loading } onClickCpf={ onClickCpf } 
+        queryTypeElement={
+          <Box mb='2'>
+            <FormLabel htmlFor="queryType">Tipo de Consulta:</FormLabel>
+            <Select
+              autoFocus
+              id="queryType"
+              name="queryType"
+              value={queryType}
+              onChange={({ target }) => setQueryType(target.value)}
+            >
+              <option value="">Selecione...</option>
+              <option value="margins">Estado de São Paulo</option>
+              <option value="municipio-margins">Município de São Paulo</option>
+            </Select>
+          </Box>
+        }
+      />
+      { renderingTable() }
     </>
   );
 }

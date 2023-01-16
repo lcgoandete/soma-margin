@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { getFormalizationApi } from '../services/somaAPI';
+import { getFormalizationApi } from '../../../services/banks/safra/safraAPI';
 
 export const useFormalization = () => {
   const [loading, setLoading] = useState(false);

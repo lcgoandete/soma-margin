@@ -19,44 +19,6 @@ export const setAuthenticationApi = async (credendials) => {
   }
 }
 
-export const getAgremmentsApi = async (cpf) => {
-  const token = localStorage.getItem('token');
-  try {
-    const { data } = await axios({
-      method: 'POST',
-      url: `${url}/banks/safra/agreement/`,
-      headers: { Authorization: token },
-      data: { cpf }
-    });
-    return data;
-  } catch (error) {
-    if (error.response.data.message) {
-      return { errorMessage: error.response.data.message };
-    } else {
-      return { errorMessage: error.message };
-    }
-  }
-}
-
-export const getFormalizationApi = async (cpf) => {
-  const token = localStorage.getItem('token');
-  try {
-    const { data } = await axios({
-      method: 'POST',
-      url: `${url}/banks/safra/formalization/`,
-      headers: { Authorization: token },
-      data: { cpf }
-    });
-    return data;
-  } catch (error) {
-    if (error.response.data.message) {
-      return { errorMessage: error.response.data.message };
-    } else {
-      return { errorMessage: error.message };
-    }
-  }
-}
-
 export const getCardLimitApi = async (cpf) => {
   const token = localStorage.getItem('token');
   try {
@@ -155,6 +117,25 @@ export const editUsersApi = async (user) => {
     const { data } = await axios({
       method: 'PUT',
         url: `${url}/users/${user.id}`,
+        headers: { Authorization: token },
+        data: user,
+      });
+    return data;
+  } catch (error) {
+    if (error.response.data.message) {
+      return { errorMessage: error.response.data.message };
+    } else {
+      return { errorMessage: error.message };
+    }
+  }
+}
+
+export const registerUsersApi = async (user) => {
+  const token = localStorage.getItem('token');
+  try {
+    const { data } = await axios({
+      method: 'POST',
+        url: `${url}/users/`,
         headers: { Authorization: token },
         data: user,
       });
