@@ -13,7 +13,7 @@ import {
 import logo from '../../assets/images/soma-logo.png';
 import { Loading } from '../../components/loading/Loading';
 import { useAuthentication } from '../../hooks/useAuthentication';
-import { AlertErrorMessage } from '../../components/alert-error-message/AlertErrorMessage';
+import { AlertMessage } from '../../components/alert-error-message/AlertMessage';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -63,7 +63,7 @@ export const Login = () => {
             </Button>
           </FormControl>
         </Box>
-        { errorMessage && <AlertErrorMessage errorMessage={ errorMessage } /> }
+        { errorMessage && <AlertMessage status="error" alertTitle="Error:" message={ errorMessage } /> }
       </Center>
     </Box>
   );
