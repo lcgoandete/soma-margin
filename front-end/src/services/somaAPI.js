@@ -20,7 +20,7 @@ export const setAuthenticationApi = async (credendials) => {
 }
 
 export const getCardLimitApi = async (cpf) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'POST',
@@ -39,7 +39,7 @@ export const getCardLimitApi = async (cpf) => {
 }
 
 export const getConsignedPortalMarginApi = async (queryType, cpf) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'POST',
@@ -58,7 +58,7 @@ export const getConsignedPortalMarginApi = async (queryType, cpf) => {
 }
 
 export const isValidTokenApi = async () => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'GET',
@@ -76,7 +76,7 @@ export const isValidTokenApi = async () => {
 }
 
 export const getUsersApi = async (take, skip) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'GET',
@@ -94,7 +94,7 @@ export const getUsersApi = async (take, skip) => {
 }
 
 export const deleteUsersApi = async (userId) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'DELETE',
@@ -112,7 +112,7 @@ export const deleteUsersApi = async (userId) => {
 }
 
 export const editUsersApi = async (user) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'PUT',
@@ -131,7 +131,7 @@ export const editUsersApi = async (user) => {
 }
 
 export const registerUsersApi = async (user) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'POST',

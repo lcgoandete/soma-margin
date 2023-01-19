@@ -17,8 +17,8 @@ export const useAuthentication = () => {
     if (result.errorMessage) {
       setErrorMessage(result.errorMessage);
     } else {
-      localStorage.setItem('user', JSON.stringify({ id: result.id, name: result.name, role: result.role }));
-      localStorage.setItem('token', result.token);
+      sessionStorage.setItem('user', JSON.stringify({ id: result.id, name: result.name, role: result.role }));
+      sessionStorage.setItem('token', result.token);
       setAuthenticated(true);
       navigate('/');
     }
@@ -31,8 +31,8 @@ export const useAuthentication = () => {
     if (result.validatedToken) {
       setAuthenticated(true);
     } else {
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('token');
       navigate('/login');
     }
   }

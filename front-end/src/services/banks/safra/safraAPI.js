@@ -3,7 +3,7 @@ import axios from 'axios';
 const url = process.env.REACT_APP_URL;
 
 export const getAgremmentsApi = async (cpf) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'POST',
@@ -22,7 +22,7 @@ export const getAgremmentsApi = async (cpf) => {
 }
 
 export const getFormalizationApi = async (cpf) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'POST',
@@ -41,7 +41,7 @@ export const getFormalizationApi = async (cpf) => {
 }
 
 export const getFgtsBalanceApi = async (cpf) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
       method: 'POST',

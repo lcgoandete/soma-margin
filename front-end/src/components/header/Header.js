@@ -15,14 +15,15 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import logo from '../../assets/images/soma-logo.png';
 import { useState } from 'react';
 
-const getUser = () => JSON.parse(localStorage.getItem('user'));
+const getUser = () => JSON.parse(sessionStorage.getItem('user'));
 
 export const Header = () => {
   const [user] = useState(getUser);
   const navigate = useNavigate();
 
   const logout = () => {
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
     navigate("/login");
   }
 
