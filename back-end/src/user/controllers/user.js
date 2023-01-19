@@ -1,5 +1,5 @@
 const users = require('../models/user');
-const { Ok, Created} =require('../../helpers/httpStatus');
+const { Ok, Created } = require('../../helpers/httpStatus');
 
 const createUser = async (req, res) => {
   const user = req.body;
