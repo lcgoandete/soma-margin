@@ -48,10 +48,10 @@ const getAgreements = async (cpf) => {
   return data;
 }
 
-const getFormalization = async (idProposta) => {
+const getFormalization = async (idAgreement) => {
   const { data } = await axios({
     method: 'GET',
-    url: `${SAFRA_API_URL}/AcompanhamentoFormalizacao?idProposta=${idProposta}`,
+    url: `${SAFRA_API_URL}/AcompanhamentoFormalizacao?idProposta=${idAgreement}`,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${authentication.accessToken}`,
