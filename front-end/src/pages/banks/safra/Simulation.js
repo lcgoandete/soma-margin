@@ -124,7 +124,7 @@ export const Simulation = () => {
             >
               <option value="">Selecione...</option>
               <option value={ 50008 }>50008 - GOV SP - SEFAZ</option>
-              <option value={ 50009 }>50010 - GOV SP - POLÍCIA MILITAR</option>
+              <option value={ 50009 }>50009 - GOV SP - POLÍCIA MILITAR</option>
               <option value={ 50010 }>50010 - GOV SP - SPPREV</option>
               <option value={ 10110 }>10110 - PREF SÃO PAULO</option>
             </Select>
