@@ -10,6 +10,7 @@ import { Agreement } from './banks/safra/Agreement';
 import { Margin } from './consigned-portal/Margin';
 import { Private } from '../components/private/Private';
 import { FgtsBalance } from "./banks/safra/FgtsBalance";
+import { Simulation } from "./banks/safra/Simulation";
 import { Formalization } from './banks/safra/Formalization';
 
 const PageRoutes = () => {
@@ -23,6 +24,7 @@ const PageRoutes = () => {
         <Route path="/agreement" element={ <Private><Agreement /></Private> } />
         <Route path="/formalization" element={ <Private><Formalization /></Private> } />
         <Route path="/fgtsBalance" element={ <Private><FgtsBalance /></Private> } />
+        <Route path="/simulation" element={ <Private><Simulation /></Private> } />
         <Route path="/user" element={ <Private><User /></Private> } />
         <Route path="/forbidden" element={ <Forbidden /> } />
         <Route path="*" element={<NotFound />} />

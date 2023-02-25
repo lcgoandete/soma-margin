@@ -82,6 +82,9 @@ export const Header = () => {
             <MenuItem>
               <Link to="/fgtsBalance">Saldo do FGTS</Link>
             </MenuItem>
+            <MenuItem>
+              <Link to="/simulation">Simulação</Link>
+            </MenuItem>
           </MenuList>
         </Menu>
 

@@ -21,3 +21,11 @@ export const formatCpf = (cpfNumber) => {
   cpfNumber = value;
   return cpfNumber;
 }
+
+export const formatCurrencyMask = (currency) => {
+  let formatedCurrency = currency;
+  formatedCurrency = formatedCurrency.replace(/\D/g, '');
+  formatedCurrency = formatedCurrency.replace(/(\d)(\d{2})$/, '$1,$2');
+  formatedCurrency = formatedCurrency.replace(/(?=(\d{3})+(\D))\B/g, '.');
+  return formatedCurrency;
+}

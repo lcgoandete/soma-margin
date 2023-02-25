@@ -58,3 +58,22 @@ export const getFgtsBalanceApi = async (cpf) => {
     }
   }
 }
+
+export const getSimulationApi = async (payload) => {
+  const token = sessionStorage.getItem('token');
+  try {
+    const { data } = await axios({
+      method: 'POST',
+      url: `${url}/banks/safra/simulation`,
+      headers: { Authorization: token },
+      data: { payload },
+    });
+    return data;
+  } catch (error) {
+    if (error.response.data.message) {
+      return { errorMessage: error.response.data.message };
+    } else {
+      return { errorMessage: error.message };
+    }
+  }
+}
