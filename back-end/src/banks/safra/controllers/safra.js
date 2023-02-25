@@ -19,8 +19,15 @@ const getFgtsBalance = async (req, res) => {
   return res.status(Ok).json(result);
 }
 
+const getSimulation = async (req, res) => {
+  const { payload } = req.body;
+  const result = await safra.getSimulation(payload);
+  return res.status(Ok).json(result);
+}
+
 module.exports = {
   getAgreements,
   getFormalization,
   getFgtsBalance,
+  getSimulation,
 }

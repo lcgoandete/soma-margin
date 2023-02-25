@@ -73,8 +73,23 @@ const getFgtsBalance = async (cpf) => {
   return data;
 }
 
+const getSimulation = async (payload) => {
+  await checkToken();
+  const { data } = await axios({
+    method: 'POST',
+    url: `${SAFRA_API_URL}/Calculo/Novo`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${authentication.accessToken}`,
+    },
+    data: payload,
+  });
+  return data;
+}
+
 module.exports = {
   getAgreements,
   getFormalization,
   getFgtsBalance,
+  getSimulation,
 }

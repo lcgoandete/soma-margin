@@ -85,8 +85,14 @@ const getFgtsBalance = async (cpf) => {
   return result;
 }
 
+const getSimulation = async (payload) => {
+  const result = await safra.getSimulation(payload);
+  return result;
+}
+
 module.exports = {
   getAgreements,
   getFormalization,
   getFgtsBalance,
+  getSimulation,
 }

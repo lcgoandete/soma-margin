@@ -23,4 +23,8 @@ safraRoutes.post('/banks/safra/fgtsbalance',
   rescue(safra.getFgtsBalance)
 );
 
+safraRoutes.post('/banks/safra/simulation',
+  validateToken,
+  rescue(safra.getSimulation)
+);
 module.exports = safraRoutes;
