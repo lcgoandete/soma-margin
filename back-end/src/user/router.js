@@ -18,7 +18,12 @@ userRoutes.get('/users/',
   private,
   rescue(users.findAllUsers)
 );
-userRoutes.put('/users/:id',
+userRoutes.get('/users/name',
+  validateToken,
+  private,
+  rescue(users.findUsersByName)
+);
+userRoutes.put('/users/',
   validateToken,
   private,
   validateUserFields,

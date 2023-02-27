@@ -10,7 +10,6 @@ const findAllUsers = async (take, skip) => {
   const result = await prisma.user.findMany({
     take: take,
     skip: skip,
-    where: { active: 1 },
     select: {
       id: true,
       name: true,
@@ -22,18 +21,34 @@ const findAllUsers = async (take, skip) => {
   return result;
 }
 
+const findUsersByName = async (name, take, skip) => {
+  const result = await prisma.user.findMany({
+    where: { name: { contains: name.toUpperCase() }},
+    take: take,
+    skip: skip,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      active: true,
+    },
+  });
+  return result;
+}
+
+const findUserByName = async (name) => {
+  const result = await prisma.user.findMany({ where: { name }});
+  return result[0];
+}
+
 const findUserById = async (id) => {
-  const result = await prisma.user.findMany({ where: { id, active: 1 }});
+  const result = await prisma.user.findMany({ where: { id }});
   return result[0];
 }
 
 const findUserByEmail = async (email) => {
-  const result = await prisma.user.findMany({ where: { email: email, active: 1 }});
-  return result[0];
-}
-
-const findUserByName = async (name) => {
-  const result = await prisma.user.findMany({ where: { name: name, active: 1 }});
+  const result = await prisma.user.findMany({ where: { email: email }});
   return result[0];
 }
 
@@ -47,7 +62,6 @@ const updateUser = async (user) => {
     data: { 
       name: user.name,
       email: user.email,
-      // password: user.password,
       role: user.role,
       active: user.active,
       updated_at: new Date,
@@ -65,10 +79,11 @@ const updateUser = async (user) => {
 
 module.exports = {
   createUser,
+  updateUser,
+  deleteUser,
   findAllUsers,
   findUserById,
-  findUserByEmail,
   findUserByName,
-  deleteUser,
-  updateUser,
+  findUserByEmail,
+  findUsersByName,
 }

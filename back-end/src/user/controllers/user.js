@@ -13,9 +13,14 @@ const findAllUsers = async (req, res) => {
   res.status(Ok).json(result);
 }
 
+const findUsersByName = async (req, res) => {
+  const { name, take, skip } = req.query;
+  const result = await users.findUsersByName(name, parseInt(take), parseInt(skip));
+  res.status(Ok).json(result);
+}
+
 const updateUser = async (req, res) => {
-  const { id } = req.params;
-  const { name, email, password, role, active } = req.body;
+  const { id, name, email, password, role, active } = req.body;
   const userData = { id: parseInt(id), name, email, password, role, active };
   const result = await users.updateUser(userData);
   res.status(Ok).json(result);
@@ -29,7 +34,8 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
   createUser,
-  findAllUsers,
   updateUser,
   deleteUser,
+  findAllUsers,
+  findUsersByName,
 }
