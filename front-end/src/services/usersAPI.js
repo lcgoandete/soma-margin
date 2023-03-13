@@ -18,9 +18,8 @@ export const getUsersApi = async (take, skip) => {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
-    } else {
-      return { errorMessage: error.message };
     }
+    return { errorMessage: error.message };
   }
 }
 
@@ -39,9 +38,8 @@ export const getUsersByNameApi = async (name, take, skip) => {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
-    } else {
-      return { errorMessage: error.message };
     }
+    return { errorMessage: error.message };
   }
 }
 
@@ -60,9 +58,8 @@ export const deleteUsersApi = async (id) => {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
-    } else {
-      return { errorMessage: error.message };
     }
+    return { errorMessage: error.message };
   }
 }
 
@@ -82,9 +79,8 @@ export const editUsersApi = async (user) => {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
-    } else {
-      return { errorMessage: error.message };
     }
+    return { errorMessage: error.message };
   }
 }
 
@@ -104,8 +100,7 @@ export const registerUsersApi = async (user) => {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
-    } else {
-      return { errorMessage: error.message };
     }
+    return { errorMessage: error.message };
   }
 }

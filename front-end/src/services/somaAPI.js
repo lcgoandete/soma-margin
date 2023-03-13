@@ -17,9 +17,8 @@ export const setAuthenticationApi = async (credendials) => {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
-    } else {
-      return { errorMessage: error.message };
     }
+    return { errorMessage: error.message };
   }
 }
 
@@ -39,9 +38,8 @@ export const getCardLimitApi = async (cpf) => {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
-    } else {
-      return { errorMessage: error.message };
     }
+    return { errorMessage: error.message };
   }
 }
 
@@ -61,9 +59,8 @@ export const getConsignedPortalMarginApi = async (queryType, cpf) => {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
-    } else {
-      return { errorMessage: error.message };
     }
+    return { errorMessage: error.message };
   }
 }
 
@@ -82,8 +79,7 @@ export const isValidTokenApi = async () => {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
-    } else {
-      return { errorMessage: error.message };
     }
+    return { errorMessage: error.message };
   }
 }
