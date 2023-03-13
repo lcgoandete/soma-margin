@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
+import { Center, Image } from '@chakra-ui/react';
 import { Header } from '../../components/header/Header';
 import { PageTitle } from '../../components/pageTitle/PageTitle';
 
 import logo from '../../assets/images/soma-logo.png';
 import { useAuthentication } from '../../hooks/useAuthentication';
-import { Center, Image } from '@chakra-ui/react';
+
 export const Home = () => {
   const { isValidToken } = useAuthentication();
   
@@ -14,7 +15,6 @@ export const Home = () => {
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   return (
     <>
