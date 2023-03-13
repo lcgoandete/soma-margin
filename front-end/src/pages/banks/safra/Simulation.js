@@ -19,11 +19,12 @@ import {
 
 import { Header } from '../../../components/header/Header';
 import { Loading } from '../../../components/loading/Loading';
+import { Private } from '../../../components/private/Private';
 import { PageTitle } from '../../../components/pageTitle/PageTitle';
 import { useSimulation } from '../../../hooks/banks/safra/useSimulation';
 import { AlertMessage } from '../../../components/alert-error-message/AlertMessage';
 import { formatCurrency, formatCpf, formatCurrencyMask } from '../../../helpers/formatter';
-
+import { SimulationSettings } from '../../../components/safra/simulation/SimulationSettings';
 
 export const Simulation = () => {
   const [idConvenio, setIdConvenio] = useState('');
@@ -33,7 +34,7 @@ export const Simulation = () => {
   const [comSeguro, SetComSeguro] = useState(false);
   const [valorPrincipal, setValorPrincipal] = useState('');
   const [valorParcela, setValorParcela] = useState('');
-  const [prazo, setPrazo] = useState('');
+  const [prazo, setPrazo] = useState(96);
   const [dataAdmissao, setDataAdmissao] = useState('');
   const [valorRenda, setValorRenda] = useState('1.000.000,00');
   const [valorDescontos, setValorDescontos] = useState('');
@@ -50,7 +51,6 @@ export const Simulation = () => {
     setIdConvenio('');
     setValorPrincipal('');
     setValorParcela('');
-    setPrazo('');
   };
 
   const getSimulations = async () => {
@@ -111,6 +111,11 @@ export const Simulation = () => {
     <>
       <Header />
       <PageTitle title="Simulação Safra" />
+      
+      <Private>
+        <SimulationSettings name="simulationSettings" />
+      </Private>
+      
       <FormControl mx="auto" p="15px" w="950px" border="1px" borderRadius="10px" borderColor="gray.200" align='center'>
         <SimpleGrid columns={3} spacing={2}>
           <Box w="290px">
@@ -206,6 +211,7 @@ export const Simulation = () => {
               name="prazo"
               autoComplete="off"
               value={ prazo }
+              disabled={ true }
               onChange={({ target }) => setPrazo(target.value)}
             />
           </Box>
