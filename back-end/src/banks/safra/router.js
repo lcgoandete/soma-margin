@@ -27,4 +27,15 @@ safraRoutes.post('/banks/safra/simulation',
   validateToken,
   rescue(safra.getSimulation)
 );
+
+safraRoutes.post('/banks/safra/simulationSettings',
+  validateToken,
+  rescue(safra.setSimulationSettings)
+);
+
+safraRoutes.get('/banks/safra/simulationSettings',
+  validateToken,
+  rescue(safra.getSimulationSettings)
+);
+
 module.exports = safraRoutes;

@@ -90,9 +90,21 @@ const getSimulation = async (payload) => {
   return result;
 }
 
+const setSimulationSettings = async (taxaJuros) => {
+  const result = await safra.setSimulationSettings(taxaJuros);
+  return result;
+}
+
+const getSimulationSettings = async () => {
+  const result = await safra.getSimulationSettings();
+  return result;
+}
+
 module.exports = {
   getAgreements,
   getFormalization,
   getFgtsBalance,
   getSimulation,
+  setSimulationSettings,
+  getSimulationSettings,
 }

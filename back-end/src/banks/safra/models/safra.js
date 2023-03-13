@@ -1,4 +1,7 @@
 require('dotenv').config();
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
 const axios = require('axios');
 const moment = require('moment');
 
@@ -87,9 +90,40 @@ const getSimulation = async (payload) => {
   return data;
 }
 
+const setSimulationSettings = async (taxaJuros) => {
+  const { newTaxaJurosSefaz, newTaxaJurosPM, newTaxaJurosSpprev, newTaxaJurosPrefSP } = taxaJuros
+  await prisma.settings.upsert({
+    where: { id: 1 },
+    update: {
+      taxa_juros_sefaz: newTaxaJurosSefaz,
+      taxa_juros_pm: newTaxaJurosPM,
+      taxa_juros_spprev: newTaxaJurosSpprev,
+      taxa_juros_prefsp: newTaxaJurosPrefSP,
+    },
+    create: {
+      taxa_juros_sefaz: newTaxaJurosSefaz,
+      taxa_juros_pm: newTaxaJurosPM,
+      taxa_juros_spprev: newTaxaJurosSpprev,
+      taxa_juros_prefsp: newTaxaJurosPrefSP,
+    },
+  })
+}
+
+const getSimulationSettings = async () => {
+  const result = await prisma.settings.findUnique({ where: { id: 1 } });
+  return {
+    taxaJurosSefaz: result.taxa_juros_sefaz,
+    taxaJurosPM: result.taxa_juros_pm,
+    taxaJurosSpprev: result.taxa_juros_spprev,
+    taxaJurosPrefSP: result.taxa_juros_prefsp,
+  };
+}
+
 module.exports = {
   getAgreements,
   getFormalization,
   getFgtsBalance,
   getSimulation,
+  setSimulationSettings,
+  getSimulationSettings,
 }

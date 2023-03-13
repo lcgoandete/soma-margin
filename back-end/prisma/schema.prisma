@@ -27,3 +27,11 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
+
+model settings {
+  id                Int   @id @default(autoincrement())
+  taxa_juros_sefaz  Float
+  taxa_juros_pm     Float
+  taxa_juros_spprev Float
+  taxa_juros_prefsp Float
+}

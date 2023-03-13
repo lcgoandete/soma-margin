@@ -25,9 +25,22 @@ const getSimulation = async (req, res) => {
   return res.status(Ok).json(result);
 }
 
+const setSimulationSettings = async (req, res) => {
+  const taxaJuros = req.body;
+  const result = await safra.setSimulationSettings(taxaJuros);
+  return res.status(Ok).json(result);
+}
+
+const getSimulationSettings = async (req, res) => {
+  const result = await safra.getSimulationSettings();
+  return res.status(Ok).json(result);
+}
+
 module.exports = {
   getAgreements,
   getFormalization,
   getFgtsBalance,
   getSimulation,
+  setSimulationSettings,
+  getSimulationSettings,
 }
