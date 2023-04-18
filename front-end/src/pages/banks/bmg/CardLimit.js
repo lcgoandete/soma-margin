@@ -6,21 +6,16 @@ import { useCardLimit } from '../../../hooks/useCardLimit';
 import { formatCurrency } from '../../../helpers/formatter';
 import { CpfForm } from '../../../components/cpf-form/CpfForm';
 import { PageTitle } from '../../../components/pageTitle/PageTitle';
-import { AlertErrorMessage } from '../../../components/alert-error-message/AlertErrorMessage';
-
-const cardLimitDefault = {
-  cardLimit: 0,
-  availableLimit: 0,
-  maximumWithdraw: 0,
-  entity: ''
-};
+import { AlertMessage } from '../../../components/alert-error-message/AlertMessage';
 
 export const CardLimit = () => {
   const { loading, getCardLimit } = useCardLimit();
-  const [errorMessage, setErrorMessage] = useState('');
-  const [cardLimit, setCardLimit] = useState(cardLimitDefault);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [cardLimit, setCardLimit] = useState(null);
 
   const onClickCpf = async (response) => {
+    setErrorMessage(null);
+    setCardLimit(null);
     const { cpf, message } = response;
 
     if (message) {
@@ -37,7 +32,9 @@ export const CardLimit = () => {
   }
 
   const renderingTable = () => {
-    if (errorMessage) return <AlertErrorMessage errorMessage={ errorMessage } />
+    if (errorMessage) return <AlertMessage status="error" alertTitle="Error:" message={ errorMessage } />
+
+    if (!cardLimit) return null;
 
     return (
       <Center>

@@ -7,21 +7,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Box,
   Button,
   FormControl,
   FormLabel,
   IconButton,
   Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Radio,
-  RadioGroup,
   Stack,
   Table,
   TableContainer,
@@ -29,38 +19,62 @@ import {
   Td,
   Th,
   Thead,
-  Tr
+  Tr,
+  Tooltip,
+  Center,
+  Switch,
 } from "@chakra-ui/react";
 
 import { useUsers } from "../../hooks/useUsers";
 import { Header } from "../../components/header/Header";
 import { Loading } from "../../components/loading/Loading";
+import { CreateUser } from "../../components/user/CreateUser";
 import { PageTitle } from "../../components/pageTitle/PageTitle";
-import { AlertErrorMessage } from "../../components/alert-error-message/AlertErrorMessage";
+import { AlertMessage } from "../../components/alert-error-message/AlertMessage";
+import { EditUser } from "../../components/user/EditUser";
 
 export const User = () => {
   const cancelRef = React.useRef()
-  const [userId, setUserId] = useState();
+  const [id, setId] = useState();
   const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('');
+  const [active, setActive] = useState(0);
   const [user, setUser] = useState({});
   const [userList, setUserList] = useState([]);
-  
+  const [options, setOptions] = useState({});
   const [search, setSearch] = useState('');
-  const onClose = () => setIsOpen(false);
-  const [ isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [modalType, setModalType] = useState();
-  const [errorMessage, setErrorMessage] = useState('');
-  const { loading, getUsers, deleteUsers, editUsers } = useUsers();
-   
+  const [errorMessage, setErrorMessage] = useState(null);
+  const { loading, getUsers, deleteUsers } = useUsers();
+  
+  const onClose = () => setIsOpen(false);
+
+  const editUsers = (user) => {
+    setUser({ ...user });
+    setOptions('edit');
+  }
+  
+  const toolBar = () => {
+    return (
+      <Center gap='3' mb="6" padding="1" width="30%" mx="auto" border="1px" borderRadius="10" borderColor="gray.200">
+        <Button onClick={ () => setOptions("search") }>
+          Pesquisar
+        </Button>
+        <Button onClick={ () => setOptions("create") }>
+          Novo
+        </Button>
+      </Center>
+    );
+  }
+
   const searchUsers = async (event) => {
     event.preventDefault();
     if (event.key !== 'Enter' && event.type !== 'click') return;
     
     setErrorMessage('');
-    const result = await getUsers(5, 0);
+    const result = await getUsers(search, 200, 0);
 
     if (result.errorMessage) {
       setErrorMessage(result.errorMessage);
@@ -69,17 +83,25 @@ export const User = () => {
     }
   }
 
+  useEffect(() => {
+    setUser({ id, name, email, role, active });
+  },[id, name, email, role, active]);
+
   const renderingTable = () => {
-    if (errorMessage) return <AlertErrorMessage errorMessage={ errorMessage } />
+    if (errorMessage) return <AlertMessage status="error" alertTitle="Error:" message={ errorMessage } />
+    
+    if (userList.length === 0) return null;
+    
     return (
-      <TableContainer my='4' mx="auto" p="15px" w="900px" border="1px" borderRadius="10px" borderColor="gray.200" align='center'>
-        <Table variant='striped' colorScheme='gray'>
+      <TableContainer my="4" mx="auto" p="15px" w="900px" border="1px" borderRadius="10px" borderColor="gray.200" align="center">
+        <Table variant="striped" colorScheme="gray">
           <Thead>
             <Tr>
               <Th>id</Th>
               <Th>Nome</Th>
               <Th>E-mail</Th>
               <Th>Função</Th>
+              <Th>Ativo</Th>
               <Th>Ações</Th>
             </Tr>
           </Thead>
@@ -91,22 +113,27 @@ export const User = () => {
                   <Td>{ user.name }</Td>
                   <Td>{ user.email }</Td>
                   <Td>{ user.role }</Td>
+                  <Td>{ <Switch isDisabled isChecked={user.active} /> }</Td>
                   <Td padding='0'>
-                    <Stack spacing={4} direction='row' align='center'>
-                      <IconButton
-                        colorScheme='blue'
-                        variant='ghost'
-                        fontSize='20'
-                        icon={ <EditIcon /> }
-                        onClick={ () => openModalEditUser(user) }
-                      />
-                      <IconButton
-                        colorScheme='red'
-                        variant='ghost'
-                        fontSize='20'
-                        icon={ <DeleteIcon /> }
-                        onClick={ () => openDialogDeleteUser(user) }
-                      />
+                    <Stack spacing="4" direction="row" align="center">
+                      <Tooltip hasArrow label="Editar" bg="blue.600">
+                        <IconButton
+                          colorScheme="blue"
+                          variant="ghost"
+                          fontSize="20"
+                          icon={ <EditIcon /> }
+                          onClick={ () => editUsers(user) }
+                        />
+                      </Tooltip>
+                      <Tooltip hasArrow label="Remover" bg="red.600">
+                        <IconButton
+                          colorScheme="red"
+                          variant="ghost"
+                          fontSize="20"
+                          icon={ <DeleteIcon /> }
+                          onClick={ () => openDialogDeleteUser(user) }
+                        />
+                      </Tooltip>
                     </Stack>
                   </Td>
                 </Tr>
@@ -118,93 +145,6 @@ export const User = () => {
     );
   }
 
-  const renderingModalEditUser = () => {
-    return (
-      <>
-        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Editar Usuário</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <FormControl>
-                <FormLabel htmlFor="name">Nome:</FormLabel>
-                <Input
-                  autoFocus
-                  id="name"
-                  type="text"
-                  name="name"
-                  value={ name }
-                  onChange={({ target }) => setName(target.value)}
-                />
-                <FormLabel mt={4} htmlFor="email">E-mail:</FormLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  name="email"
-                  value={ email }
-                  onChange={({ target }) => setEmail(target.value)}
-                />
-                <FormLabel mt={4} htmlFor="password">Senha:</FormLabel>
-                <Input
-                  disabled={true}
-                  id="password"
-                  type="password"
-                  name="password"
-                  value={ password }
-                  onChange={({ target }) => setPassword(target.value)}
-                />
-                <RadioGroup mt={4} onChange={ setRole } value={role}>
-                  <Stack spacing={5} direction="row">
-                    <Radio colorScheme="red" value="ADMIN">Administrador</Radio>
-                    <Radio colorScheme="blue" value="USER">Usuário</Radio>
-                  </Stack>
-                </RadioGroup>
-              </FormControl>
-              { errorMessage && <AlertErrorMessage errorMessage={ errorMessage } /> }
-            </ModalBody>
-
-            <ModalFooter>
-              <Button
-                mr={3}
-                onClick={onClose}>Cancelar</Button>
-              <Button
-                colorScheme='blue'
-                onClick={ editUser }
-              >
-                Salvar
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    )
-  }
-
-  const openModalEditUser = (user) => {
-    setUserId(user.id);
-    setName(user.name);
-    setEmail(user.email);
-    // setPassword(user.password)
-    setRole(user.role);
-    setModalType('edit');
-    setIsOpen(true);
-  }
-
-  useEffect(() => {
-    setUser({ id: userId, name, email, role, active: 1 });
-  },[userId, name, email, role]);
-
-  const editUser = async () => {
-    const result = await editUsers(user);
-    if (result.errorMessage) {
-      setErrorMessage(result.errorMessage);
-    } else {
-      setIsOpen(false);
-      setUserList([]);
-    }
-  }
-
   const renderingDialogDeleteUser = () => {
     return (
       <>
@@ -213,48 +153,47 @@ export const User = () => {
           leastDestructiveRef={cancelRef}
           onClose={onClose}
         >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Remover Usuário
-            </AlertDialogHeader>
+          <AlertDialogOverlay>
+            <AlertDialogContent>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                Remover Usuário
+              </AlertDialogHeader>
 
-            <AlertDialogBody>
-              { `Tem certeza que deseja remover o usuário ${name}?` }
-            </AlertDialogBody>
+              <AlertDialogBody>
+                { `Tem certeza que deseja remover o usuário ${name}?` }
+              </AlertDialogBody>
 
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancelar
-              </Button>
-              <Button colorScheme='red' onClick={ deleteUser } ml={3}>
-                Remover
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+              <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={onClose}>
+                  Cancelar
+                </Button>
+                <Button colorScheme="red" onClick={ deleteUser } ml="3">
+                  Remover
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
       </>
     );
   }
 
   const openDialogDeleteUser = (user) => {
+    setId(user.id);
     setName(user.name);
     setModalType('delete');
     setIsOpen(true);
   }
 
   const deleteUser = async () => {
-    await deleteUsers(userId);
+    await deleteUsers(id);
     setIsOpen(false);
   }
 
-  return (
-    <>
-      <Header />
-      <PageTitle title="Controle de usuários" />
-      <Box mx="auto" p="15px" width="500px" border="1px" borderRadius="10px" borderColor="gray.200" align='center'>
-        <FormControl>
+  const renderingSearchUser = () => {
+    return (
+      <>
+        <FormControl mx="auto" p="15px" width="500px" border="1px" borderRadius="10px" borderColor="gray.200" align="center">
           <FormLabel htmlFor="search">Pesquisar:</FormLabel>
           <Input
             autoFocus
@@ -270,10 +209,20 @@ export const User = () => {
             { loading && <Loading /> }
           </Button>
         </FormControl>
-      </Box>
-      { userList.length && renderingTable() }
-      { modalType === 'delete' && renderingDialogDeleteUser() }
-      { modalType === 'edit' && renderingModalEditUser() }
+        { userList.length && renderingTable() }
+        { modalType === 'delete' && renderingDialogDeleteUser() }
+      </>
+    );
+  }
+  
+  return (
+    <>
+      <Header />
+      <PageTitle title="Controle de usuários" />
+      { toolBar() }
+      { options === "create" ? <CreateUser /> : null}
+      { options === 'search' ? renderingSearchUser() : null }
+      { options === "edit" ? <EditUser user={ user } /> : null}
     </>
   );
 }
