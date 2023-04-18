@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(routes);
 
+// eslint-disable-next-line no-unused-vars
 app.use((err, _req, res, _next) => {
   if (err.status) return res.status(err.status).json({ message: err.message });
   return res.status(InternalServerError).json({ message: err.message });
@@ -23,7 +24,7 @@ const scheduledTime = () => {
   const finalTime = moment(new Date('2022-01-01 19:00:00')).format('HH:mm:ss');
   const currentTime = moment(new Date()).format('HH:mm:ss');
   const weekday = moment().format('dddd');
-  
+
   if (process.env.RELOGIN_MARGIN === 'false') {
     return false;
   }
@@ -31,20 +32,20 @@ const scheduledTime = () => {
   if (weekday === 'Saturday' || weekday === 'Sunday') {
     return false;
   }
-  
+
   if (currentTime < initialTime || currentTime > finalTime) {
     return false;
   }
 
   return true;
-}
+};
 
 setInterval(async () => {
   if (scheduledTime()) {
     try {
       const margin = require('./portalConsignado/services/margin');
       console.log(await margin.getMargins('1'));
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }
@@ -55,8 +56,7 @@ setInterval(async () => {
     try {
       const marginMunicipio = require('./portalConsignadoMunicipio/services/margin');
       console.log(await marginMunicipio.getMargins('2'));
-  
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }

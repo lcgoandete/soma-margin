@@ -15,7 +15,7 @@ const browser = async () => {
     driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
   }
   return driver;
-}
+};
 
 module.exports = {
   browser,

@@ -1,15 +1,15 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
 const createUser = async (user) => {
   await prisma.user.create({ data: user });
-}
+};
 
 const findAllUsers = async (take, skip) => {
   const result = await prisma.user.findMany({
-    take: take,
-    skip: skip,
+    take,
+    skip,
     select: {
       id: true,
       name: true,
@@ -19,13 +19,13 @@ const findAllUsers = async (take, skip) => {
     },
   });
   return result;
-}
+};
 
 const findUsersByName = async (name, take, skip) => {
   const result = await prisma.user.findMany({
-    where: { name: { contains: name.toUpperCase() }},
-    take: take,
-    skip: skip,
+    where: { name: { contains: name.toUpperCase() } },
+    take,
+    skip,
     select: {
       id: true,
       name: true,
@@ -35,36 +35,36 @@ const findUsersByName = async (name, take, skip) => {
     },
   });
   return result;
-}
+};
 
 const findUserByName = async (name) => {
-  const result = await prisma.user.findMany({ where: { name }});
+  const result = await prisma.user.findMany({ where: { name } });
   return result[0];
-}
+};
 
 const findUserById = async (id) => {
-  const result = await prisma.user.findMany({ where: { id }});
+  const result = await prisma.user.findMany({ where: { id } });
   return result[0];
-}
+};
 
 const findUserByEmail = async (email) => {
-  const result = await prisma.user.findMany({ where: { email: email }});
+  const result = await prisma.user.findMany({ where: { email } });
   return result[0];
-}
+};
 
 const deleteUser = async (id) => {
-  await prisma.user.update({ where: { id: id }, data: { active: 0 }});
-}
+  await prisma.user.update({ where: { id }, data: { active: 0 } });
+};
 
 const updateUser = async (user) => {
   const result = await prisma.user.update({
     where: { id: user.id },
-    data: { 
+    data: {
       name: user.name,
       email: user.email,
       role: user.role,
       active: user.active,
-      updated_at: new Date,
+      updated_at: new Date(),
     },
     select: {
       id: true,
@@ -75,7 +75,7 @@ const updateUser = async (user) => {
     },
   });
   return result;
-}
+};
 
 module.exports = {
   createUser,
@@ -86,4 +86,4 @@ module.exports = {
   findUserByName,
   findUserByEmail,
   findUsersByName,
-}
+};

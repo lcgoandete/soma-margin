@@ -1,19 +1,15 @@
 const margin = require('../models/margin');
+const { delay } = require('../../helpers/helpers');
 const { setMarginManager } = require('../../helpers/margin-db');
 
 let isFree = true;
 
-const delay = (seconds) => {
-  return new Promise(function(resolve){
-      setTimeout(resolve, seconds * 1000);
-  });
-}
-
 const getMargins = async (cpf) => {
+  // eslint-disable-next-line no-await-in-loop
   while (!isFree) { await delay(3); }
-  
+
   if (isFree) { isFree = false; }
-  
+
   await setMarginManager('state');
 
   try {

@@ -8,7 +8,7 @@ const { validateCpf } = require('../../middlewares/validate-cpf');
 oleRoutes.post('/banks/ole/complementary-withdrawal', rescue(
   validateCpf,
   validateToken,
-  ole.getComplementaryWithdrawal
+  ole.getComplementaryWithdrawal,
 ));
 
 module.exports = oleRoutes;

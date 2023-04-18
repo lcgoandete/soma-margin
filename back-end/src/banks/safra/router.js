@@ -5,37 +5,43 @@ const safra = require('./controllers/safra');
 const { validateCpf } = require('../../middlewares/validate-cpf');
 const { validateToken } = require('../../middlewares/token');
 
-safraRoutes.post('/banks/safra/agreement',
+safraRoutes.post(
+  '/banks/safra/agreement',
   validateCpf,
   validateToken,
-  rescue(safra.getAgreements)
+  rescue(safra.getAgreements),
 );
 
-safraRoutes.post('/banks/safra/formalization',
+safraRoutes.post(
+  '/banks/safra/formalization',
   validateCpf,
   validateToken,
-  rescue(safra.getFormalization)
+  rescue(safra.getFormalization),
 );
 
-safraRoutes.post('/banks/safra/fgtsbalance',
+safraRoutes.post(
+  '/banks/safra/fgtsbalance',
   validateCpf,
   validateToken,
-  rescue(safra.getFgtsBalance)
+  rescue(safra.getFgtsBalance),
 );
 
-safraRoutes.post('/banks/safra/simulation',
+safraRoutes.post(
+  '/banks/safra/simulation',
   validateToken,
-  rescue(safra.getSimulation)
+  rescue(safra.getSimulation),
 );
 
-safraRoutes.post('/banks/safra/simulationSettings',
+safraRoutes.post(
+  '/banks/safra/simulationSettings',
   validateToken,
-  rescue(safra.setSimulationSettings)
+  rescue(safra.setSimulationSettings),
 );
 
-safraRoutes.get('/banks/safra/simulationSettings',
+safraRoutes.get(
+  '/banks/safra/simulationSettings',
   validateToken,
-  rescue(safra.getSimulationSettings)
+  rescue(safra.getSimulationSettings),
 );
 
 module.exports = safraRoutes;

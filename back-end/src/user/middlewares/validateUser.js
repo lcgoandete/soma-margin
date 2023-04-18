@@ -2,25 +2,7 @@ const yup = require('yup');
 const md5 = require('md5');
 
 const users = require('../models/user');
-const { Conflict, BadRequest} = require('../../helpers/httpStatus');
-
-const validateUserFields = async (req, _res, next) => {
-  const { id, name, email, password, role, active } = req.body;
-  const user = { id, name, email, password, role, active };
-
-  try {
-    await validateFields(user);
-    const formattedUser = formatData(user);
-    validateRoles(formattedUser.role);
-    validateActive(formattedUser.active);
-    if (!user.id) await emailExist(formattedUser.email);
-    if (!user.id) await nameExist(formattedUser.name);
-    req.body = formattedUser;
-    next();
-  } catch (error) {
-    next(error);
-  }
-}
+const { Conflict, BadRequest } = require('../../helpers/httpStatus');
 
 const validateFields = async (user) => {
   let schema = {};
@@ -44,9 +26,10 @@ const validateFields = async (user) => {
   try {
     await schema.validate(user);
   } catch (error) {
-    throw { status: BadRequest, message: error.message }
+    const newError = { status: BadRequest, message: error.message };
+    throw newError;
   }
-}
+};
 
 const formatData = (user) => {
   const newUser = { ...user };
@@ -56,38 +39,64 @@ const formatData = (user) => {
   newUser.role = user.role.toUpperCase();
   newUser.active = user.active;
   return newUser;
-}
+};
 
 const validateRoles = (role) => {
   const roleList = ['USER', 'ADMIN'];
-  
+
   if (!roleList.includes(role)) {
-    throw { status: BadRequest, message: 'Role does not exist' }
+    const newError = { status: BadRequest, message: 'Role does not exist' };
+    throw newError;
   }
-}
+};
 
 const validateActive = (active) => {
   const activeList = [0, 1];
-  
+
   if (!activeList.includes(active)) {
-    throw { status: BadRequest, message: 'Active does not valid' }
+    const newError = { status: BadRequest, message: 'Active does not valid' };
+    throw newError;
   }
-}
+};
 
 const emailExist = async (email) => {
   const result = await users.findUserByEmail(email);
   if (result) {
-    throw { status: Conflict, message: 'This email is already registered' };
+    const newError = { status: Conflict, message: 'This email is already registered' };
+    throw newError;
   }
-}
+};
 
 const nameExist = async (name) => {
   const result = await users.findUserByName(name);
   if (result) {
-    throw { status: Conflict, message: 'This name is already registered' };
+    const newError = { status: Conflict, message: 'This name is already registered' };
+    throw newError;
   }
-}
+};
+
+const validateUserFields = async (req, _res, next) => {
+  const {
+    id, name, email, password, role, active,
+  } = req.body;
+  const user = {
+    id, name, email, password, role, active,
+  };
+
+  try {
+    await validateFields(user);
+    const formattedUser = formatData(user);
+    validateRoles(formattedUser.role);
+    validateActive(formattedUser.active);
+    if (!user.id) await emailExist(formattedUser.email);
+    if (!user.id) await nameExist(formattedUser.name);
+    req.body = formattedUser;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   validateUserFields,
-}
+};

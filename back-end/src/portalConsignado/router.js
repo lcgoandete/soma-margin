@@ -5,10 +5,11 @@ const margin = require('./controllers/margin');
 const { validateToken } = require('../middlewares/token');
 const { validateCpf } = require('../middlewares/validate-cpf');
 
-portalConsignadoRoutes.post('/margins/',
+portalConsignadoRoutes.post(
+  '/margins/',
   validateCpf,
   validateToken,
-  rescue(margin.getMargins)
+  rescue(margin.getMargins),
 );
 
 module.exports = portalConsignadoRoutes;

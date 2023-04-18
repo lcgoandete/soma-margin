@@ -20,7 +20,7 @@ module.exports = {
         dataAdmissao: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[1]/div/div[3]/div[2]/div/div/span[2]/div[2]/div[2]/div[3]/input',
         tipoVinculo: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[1]/div/div[3]/div[2]/div/div/span[2]/div[2]/div[2]/div[4]/input',
         dataFinalContrato: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[1]/div/div[3]/div[2]/div/div/span[2]/div[2]/div[2]/div[5]/input',
-      }
+      },
     },
     margemDisponivel: {
       provimento: '/html/body/div[1]/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[1]/div/div[4]/div[2]/div/div/span/div/div[1]/span',
@@ -50,7 +50,7 @@ module.exports = {
         dataAdmissao: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span/div/div[3]/div[2]/div/div/span[4]/div[2]/div[2]/div[3]/input',
         tipoVinculo: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span/div/div[3]/div[2]/div/div/span[4]/div[2]/div[2]/div[4]/input',
         dataFinalContrato: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span/div/div[3]/div[2]/div/div/span[4]/div[2]/div[2]/div[5]/input',
-      }
+      },
     },
     margemDisponivel: {
       provimento: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span/div/div[4]/div[2]/div/div/span[2]/div/div[1]/span',
@@ -80,7 +80,7 @@ module.exports = {
         dataAdmissao: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[2]/div/div[3]/div[2]/div/div/span[2]/div[2]/div[2]/div[3]/input',
         tipoVinculo: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[2]/div/div[3]/div[2]/div/div/span[2]/div[2]/div[2]/div[4]/input',
         dataFinalContrato: '/html/body/div[1]/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[2]/div/div[3]/div[2]/div/div/span[2]/div[2]/div[2]/div[5]/input',
-      }
+      },
     },
     margemDisponivel: {
       provimento: '/html/body/div[1]/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[2]/div/div[4]/div[2]/div/div/span/div/div[1]/span',
@@ -110,7 +110,7 @@ module.exports = {
         dataAdmissao: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[3]/div/div[3]/div[2]/div/div/span[2]/div[2]/div[2]/div[3]/input',
         tipoVinculo: '/html/body/div/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[3]/div/div[3]/div[2]/div/div/span[2]/div[2]/div[2]/div[4]/input',
         dataFinalContrato: '/html/body/div[1]/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[3]/div/div[3]/div[2]/div/div/span[2]/div[2]/div[2]/div[5]/input',
-      }
+      },
     },
     margemDisponivel: {
       provimento: '/html/body/div[1]/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[3]/div/div[4]/div[2]/div/div/span/div/div[1]/span',
@@ -119,4 +119,4 @@ module.exports = {
       cartaoBenefico: '/html/body/div[1]/div/div[2]/div/form/div[2]/div/div[4]/div[1]/div/span[3]/div/div[4]/div[2]/div/div/span/div/table/tbody/tr[3]/td[2]/span',
     },
   },
-}
+};

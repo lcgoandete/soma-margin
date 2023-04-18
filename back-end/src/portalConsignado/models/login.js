@@ -3,15 +3,14 @@ const { By } = require('selenium-webdriver');
 
 const { browser } = require('./browser');
 
-const createDriver = async () => {
-  return await browser();
-}
+// eslint-disable-next-line no-return-await
+const createDriver = async () => await browser();
 
 const loginRumola = async (driver) => {
-  const USER_RUMOLA = process.env.USER_RUMOLA;
-  const PASSWORD_RUMOLA = process.env.PASSWORD_RUMOLA;
+  const { USER_RUMOLA } = process.env;
+  const { PASSWORD_RUMOLA } = process.env;
 
-  await driver.get("chrome-extension://bjjgbdlbgjeoankjijbmheneoekbghcg/options.html");
+  await driver.get('chrome-extension://bjjgbdlbgjeoankjijbmheneoekbghcg/options.html');
   await driver.findElement(By.css('#tie_form > div > div:nth-child(2) > input[type=text]')).sendKeys(USER_RUMOLA);
   await driver.findElement(By.css('#tie_form > div > div:nth-child(3) > input[type=password]')).sendKeys(PASSWORD_RUMOLA);
   await driver.findElement(By.css('#tie_form > div > div:nth-child(4) > input[type=submit]')).click();
@@ -19,13 +18,13 @@ const loginRumola = async (driver) => {
   await driver.findElement(By.css('#login-email')).sendKeys(USER_RUMOLA);
   await driver.findElement(By.css('#login-pass#login-pass')).sendKeys(PASSWORD_RUMOLA);
   await driver.findElement(By.css('#login-btn')).click();
-}
+};
 
 const loginPortalDoConsignado = async (driver) => {
-  const USER_PORTAL = process.env.USER_PORTAL;
-  const PASSWORD_PORTAL = process.env.PASSWORD_PORTAL;
+  const { USER_PORTAL } = process.env;
+  const { PASSWORD_PORTAL } = process.env;
 
-  await driver.get("https://www.portaldoconsignado.com.br");
+  await driver.get('https://www.portaldoconsignado.com.br');
   await driver.findElement(By.css('#guias > div.guia.guiaInativa.tab1 > span > span')).click();
   // await driver.navigate().refresh();
   await driver.navigate().refresh();
@@ -37,15 +36,15 @@ const loginPortalDoConsignado = async (driver) => {
   await driver.sleep(10000);
   await driver.findElement(By.css('#divLogin > div:nth-child(6)')).click();
   await driver.sleep(3000);
-  await driver.get("https://www.portaldoconsignado.com.br/consignatario/pesquisarMargem");
+  await driver.get('https://www.portaldoconsignado.com.br/consignatario/pesquisarMargem');
   await driver.sleep(1000);
-}
+};
 
 const isLogin = async () => {
   const driver = await createDriver();
-  
+
   const pesquisarMargem = await driver.findElements(By.xpath('/html/body/div/div/div[2]/div/form/div[2]/div/h1'));
-  if(pesquisarMargem.length === 0) {
+  if (pesquisarMargem.length === 0) {
     await loginRumola(driver);
     await loginPortalDoConsignado(driver);
   }

@@ -1,4 +1,4 @@
-const { Unauthorized } = require("../helpers/httpStatus");
+const { Unauthorized } = require('../helpers/httpStatus');
 
 const private = (req, _res, next) => {
   const { role } = req.params;
@@ -7,8 +7,8 @@ const private = (req, _res, next) => {
     throw { status: Unauthorized, message: 'Ação não permitida.' };
   }
   next();
-}
+};
 
 module.exports = {
   private,
-}
+};

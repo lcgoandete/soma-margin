@@ -11,23 +11,25 @@ const generateToken = (req, _res, next) => {
 
   const jwtConfig = { expiresIn: '12h', algorithm: 'HS256' };
   const token = jwt.sign(payload, TOKEN_SECRET, jwtConfig);
-  req.header.authorization =  token;
+  req.header.authorization = token;
   next();
 };
 
 const validateToken = (req, _res, next) => {
   const authorization = req.header('Authorization');
-  
+
   if (!authorization) {
-    throw { status: Unauthorized, message: 'Token not found' };
+    const newError = { status: Unauthorized, message: 'Token not found' };
+    throw newError;
   }
-  
+
   try {
     const decoded = jwt.verify(authorization, TOKEN_SECRET);
     req.params.role = decoded.role;
     next();
   } catch (error) {
-    throw { status: Unauthorized, message: 'Expired or invalid token' };
+    const newError = { status: Unauthorized, message: 'Expired or invalid token' };
+    throw newError;
   }
 };
 

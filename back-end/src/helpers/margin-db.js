@@ -8,7 +8,7 @@ const marginData = {
   state: 0,
   county: 0,
   createdAt: 0,
-}
+};
 
 const QUERY_LIMIT = 449;
 
@@ -24,16 +24,17 @@ const getMarginData = async () => {
   marginData.county = margin.county;
   marginData.state = margin.state;
   marginData.createdAt = margin.created_at;
-}
+};
 
 const checkNumberOfQueries = (field) => {
   if (marginData[field] > QUERY_LIMIT) {
-    throw {
+    const newError = {
       status: Unauthorized,
       message: 'Limite de consultas de margem atingido',
     };
+    throw newError;
   }
-}
+};
 
 const verifyDate = async () => {
   const currentDate = moment(new Date()).format('YYYY-MM-DD');
@@ -48,7 +49,7 @@ const verifyDate = async () => {
     marginData.state = margin.state;
     marginData.createdAt = margin.created_at;
   }
-}
+};
 
 const setMarginManager = async (field) => {
   await getMarginData();
@@ -61,8 +62,8 @@ const setMarginManager = async (field) => {
   });
   marginData[field] = margin[field];
   return margin;
-}
+};
 
 module.exports = {
   setMarginManager,
-}
+};

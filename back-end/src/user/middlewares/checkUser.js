@@ -1,6 +1,7 @@
-const users = require("../models/user");
-const { NotFound } = require("../../helpers/httpStatus");
+const users = require('../models/user');
+const { NotFound } = require('../../helpers/httpStatus');
 
+// eslint-disable-next-line consistent-return
 const findUserById = async (req, res, next) => {
   let id = null;
   if (req.body.id) {
@@ -9,13 +10,13 @@ const findUserById = async (req, res, next) => {
     id = req.params.id;
   }
 
-  const editUser = await users.findUserById(parseInt(id));
+  const editUser = await users.findUserById(parseInt(id, 10));
 
   if (!editUser) {
     return res.status(NotFound).json({ message: 'User does not exist.' });
   }
   next();
-}
+};
 
 module.exports = {
   findUserById,

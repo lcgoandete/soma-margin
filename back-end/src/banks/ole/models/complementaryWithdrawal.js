@@ -14,12 +14,12 @@ const getAccessToken = async () => {
     },
   });
   return response.headers['access-token'];
-}
+};
 
 const getComplementaryWithdrawal = async (cpf) => {
   const result = await `result - ${cpf}`;
   return result;
-}
+};
 
 module.exports = {
   getAccessToken,

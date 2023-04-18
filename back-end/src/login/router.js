@@ -1,7 +1,7 @@
 const rescue = require('express-rescue');
 const loginRoutes = require('express').Router();
 
-const login = require('./controllers/login')
+const login = require('./controllers/login');
 const { validateLogin } = require('./middlewares/validateLogin');
 const { validateToken, generateToken } = require('../middlewares/token');
 

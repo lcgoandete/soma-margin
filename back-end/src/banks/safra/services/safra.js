@@ -3,102 +3,102 @@ const safra = require('../models/safra');
 
 const getAgreements = async (cpf) => {
   const agreements = await safra.getAgreements(cpf);
-  
+
   if (!agreements || agreements.length === 0) {
-    throw {
+    const newError = {
       status: NotFound,
-      message: 'Contrato não encontrado.'
-    }
+      message: 'Contrato não encontrado.',
+    };
+    throw newError;
   }
-  
+
   const result = agreements.map((agreement) => ({
-      cpf: agreement.nrCpfCliente,
-      agreement: agreement.nrContrato,
-      name: agreement.nmCliente,
-      dateTime: agreement.dtHoraInclusao,
-      status: agreement.dsStatusContrato,
-      situation: agreement.dsSituacaoContrato,
+    cpf: agreement.nrCpfCliente,
+    agreement: agreement.nrContrato,
+    name: agreement.nmCliente,
+    dateTime: agreement.dtHoraInclusao,
+    status: agreement.dsStatusContrato,
+    situation: agreement.dsSituacaoContrato,
   }));
   return result;
-}
+};
 
 const phaseDescription = (formalizations) => {
-  let phaseDescription = {};
+  let phaseDescriptions = {};
 
-  phaseDescription = formalizations.find((formalization) => formalization.descricaoFase.slice(0, 2) === '70');
-  if (phaseDescription) {
+  phaseDescriptions = formalizations.find((formalization) => formalization.descricaoFase.slice(0, 2) === '70');
+  if (phaseDescriptions) {
     return {
-      agreement: phaseDescription.idProposta,
-      phaseDescription: 'Formalização concluída com sucesso',
-    }
+      agreement: phaseDescriptions.idProposta,
+      phaseDescriptions: 'Formalização concluída com sucesso',
+    };
   }
 
-  phaseDescription = formalizations.find((formalization) => formalization.descricaoFase.slice(0, 2) === '10');
-  if (phaseDescription) {
+  phaseDescriptions = formalizations.find((formalization) => formalization.descricaoFase.slice(0, 2) === '10');
+  if (phaseDescriptions) {
     return {
-      agreement: phaseDescription.idProposta,
-      phaseDescription: 'Formalização iniciada e não concluída',
-    }
+      agreement: phaseDescriptions.idProposta,
+      phaseDescriptions: 'Formalização iniciada e não concluída',
+    };
   }
 
-  phaseDescription = formalizations.find((formalization) => formalization.descricaoFase.slice(0, 2) === '00');
-  if (phaseDescription) {
+  phaseDescriptions = formalizations.find((formalization) => formalization.descricaoFase.slice(0, 2) === '00');
+  if (phaseDescriptions) {
     return {
-      agreement: phaseDescription.idProposta,
-      phaseDescription: 'Formalização não iniciada',
-      link: phaseDescription.descricaoFase.split('. ')[1],
-    }
+      agreement: phaseDescriptions.idProposta,
+      phaseDescriptions: 'Formalização não iniciada',
+      link: phaseDescriptions.descricaoFase.split('. ')[1],
+    };
   }
 
   return {
-    phaseDescription: 'Aguardando geração do link',
-  }
-}
+    phaseDescriptions: 'Aguardando geração do link',
+  };
+};
 
 const getFormalization = async (cpf) => {
   const agreements = await safra.getAgreements(cpf);
-  const agreement = agreements.find((agreement) => (
-    agreement.dsSituacaoContrato === 'ATIVO' &&
-    agreement.dsStatusContrato === 'Em Análise')
-  );
-  
+  const agreement = agreements.find((element) => (
+    element.dsSituacaoContrato === 'ATIVO' && element.dsStatusContrato === 'Em Análise'));
+
   if (!agreement) {
-    throw {
+    const newError = {
       status: NotFound,
-      message: 'Contrato não encontrado.'
-    }
+      message: 'Contrato não encontrado.',
+    };
+    throw newError;
   }
 
-  const idAgreement = parseInt(agreement.nrContrato);
+  const idAgreement = parseInt(agreement.nrContrato, 10);
   const formalizations = await safra.getFormalization(idAgreement);
-  
+
   const cpfCustomer = agreement.nrCpfCliente;
   const nameCustomer = agreement.nmCliente;
   const formalization = phaseDescription(formalizations);
-  
+
   const result = { cpfCustomer, nameCustomer, ...formalization };
   return result;
-}
+};
 
 const getFgtsBalance = async (cpf) => {
   const result = await safra.getFgtsBalance(cpf);
   return result;
-}
+};
 
 const getSimulation = async (payload) => {
   const result = await safra.getSimulation(payload);
   return result;
-}
+};
 
 const setSimulationSettings = async (taxaJuros) => {
   const result = await safra.setSimulationSettings(taxaJuros);
   return result;
-}
+};
 
 const getSimulationSettings = async () => {
   const result = await safra.getSimulationSettings();
   return result;
-}
+};
 
 module.exports = {
   getAgreements,
@@ -107,4 +107,4 @@ module.exports = {
   getSimulation,
   setSimulationSettings,
   getSimulationSettings,
-}
+};
