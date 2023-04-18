@@ -1,2 +1,3 @@
 # soma-margin
-consulta margem
+Sistema de consulta e gestão.
+
