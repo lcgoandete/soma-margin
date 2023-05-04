@@ -61,15 +61,15 @@ export const useSimulation = () => {
       return { errorMessage: errorMessage };
     }
 
-    if (criticas) {
-      if (criticas.length > 0) {
-        return { errorMessage: criticas[0] };
-      }
-    }
-    
     if (simulacoes) {
       if (simulacoes.length > 0) {
         return await _taxaJurosFiltered(newPayload.idConvenio, result.simulacoes);
+      }
+    }
+
+    if (criticas) {
+      if (criticas.length > 0) {
+        return { errorMessage: criticas[0] };
       }
     }
   };
