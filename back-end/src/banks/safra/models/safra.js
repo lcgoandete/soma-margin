@@ -131,6 +131,27 @@ const sendApproveStop = async (proposalId) => {
   return data;
 };
 
+const includeDocumentInProposal = async (payload) => {
+  await checkToken();
+
+  const {
+    proposalId, idDocumento, nomeArquivo, conteudoArquivo,
+  } = payload;
+
+  const { data } = await axios({
+    method: 'POST',
+    url: `${SAFRA_API_URL}/Propostas/${proposalId}/DocumentoAnexo`,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${authentication.accessToken}`,
+    },
+    data: {
+      idDocumento, nomeArquivo, conteudoArquivo,
+    },
+  });
+  return data;
+};
+
 const setSimulationSettings = async (taxaJuros) => {
   const {
     newTaxaJurosSefaz, newTaxaJurosPM, newTaxaJurosSpprev, newTaxaJurosPrefSP,
@@ -172,4 +193,5 @@ module.exports = {
   getFormalization,
   setSimulationSettings,
   getSimulationSettings,
+  includeDocumentInProposal,
 };
