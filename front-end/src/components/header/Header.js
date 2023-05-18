@@ -74,16 +74,19 @@ export const Header = () => {
           </MenuButton>
           <MenuList>
             <MenuItem>
-              <Link to="/agreement">Contrato</Link>
+              <Link to="/banks/safra/agreement">Contrato</Link>
             </MenuItem>
             <MenuItem>
-              <Link to="/formalization">Formalização</Link>
+              <Link to="/banks/safra/formalization">Formalização</Link>
             </MenuItem>
             <MenuItem>
-              <Link to="/fgtsBalance">Saldo do FGTS</Link>
+              <Link to="/banks/safra/fgtsBalance">Saldo do FGTS</Link>
             </MenuItem>
             <MenuItem>
-              <Link to="/simulation">Simulação</Link>
+              <Link to="/banks/safra/simulation">Simulação</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/banks/safra/margin">Consultar Margem</Link>
             </MenuItem>
           </MenuList>
         </Menu>
