@@ -80,11 +80,17 @@ const updateCardField = async (cardId, fieldId, responseMessage) => {
 const getReportId = async (pipeId, pipeReportId) => {
   const graphqlMutation = {
     operationName: 'getReportId',
-    query: `mutation {
-      exportPipeReport(input: { pipeId: ${pipeId}, pipeReportId: ${pipeReportId} }) {
+    query: `mutation exportPipeReport($input: ExportPipeReportInput!) {
+      exportPipeReport(input: $input) {
         pipeReportExport { id }
       }
     }`,
+    variables: {
+      input: {
+        pipeId,
+        pipeReportId,
+      },
+    },
   };
 
   const { data } = await axios({
@@ -93,6 +99,11 @@ const getReportId = async (pipeId, pipeReportId) => {
     headers,
     data: graphqlMutation,
   });
+
+  if (data.exportPipeReport === 'undefined') {
+    return data;
+  }
+
   const reportId = parseInt(data.data.exportPipeReport.pipeReportExport.id, 10);
   return reportId;
 };
@@ -121,20 +132,19 @@ const getReportUrl = async (id) => {
   return reportUrl;
 };
 
-const saveReport = async (urlReport) => {
-  const filePath = path.join(__dirname, '..', '..', 'downloads');
+const getStream = async (urlStream) => {
   const { data } = await axios({
-    url: urlReport,
+    url: urlStream,
     method: 'GET',
     headers,
     responseType: 'stream',
   });
-  data.pipe(fs.createWriteStream(`${filePath}/report.xlsx`));
+  return data;
 };
 
 module.exports = {
   moveCard,
-  saveReport,
+  getStream,
   getCardData,
   getReportId,
   getReportUrl,

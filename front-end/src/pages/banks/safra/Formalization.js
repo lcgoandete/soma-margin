@@ -57,7 +57,7 @@ export const Formalization = () => {
               <Tbody>
                 <Tr>
                   <Td>{ formalization.agreement }</Td>
-                  <Td>{ formalization.phaseDescription }</Td>
+                  <Td>{ formalization.phaseDescriptions }</Td>
                   <Td>{ formalization.link }</Td>
                 </Tr>
               </Tbody>

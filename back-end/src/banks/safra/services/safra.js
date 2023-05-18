@@ -100,11 +100,17 @@ const getSimulationSettings = async () => {
   return result;
 };
 
+const getMargin = async (payload) => {
+  const result = await safra.getMargin(payload);
+  return result;
+};
+
 module.exports = {
-  getAgreements,
-  getFormalization,
-  getFgtsBalance,
+  getMargin,
   getSimulation,
+  getAgreements,
+  getFgtsBalance,
+  getFormalization,
   setSimulationSettings,
   getSimulationSettings,
 };

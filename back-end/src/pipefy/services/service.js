@@ -1,6 +1,8 @@
 /* eslint-disable no-return-await */
-// const path = require('path');
-// const reader = require('xlsx');
+
+const fs = require('fs');
+const path = require('path');
+const reader = require('xlsx');
 
 const pipefy = require('../models/model');
 const safra = require('../../banks/safra/models/safra');
@@ -129,7 +131,8 @@ const convertProposalDataToProposal = async (cardData) => {
       idTipoPagamentoBeneficio: 1,
       idUFBeneficio: 'SP',
       matricula: cardData.Matricula,
-      valorRenda: convertStringToCurrency(cardData.Valor_Renda),
+      valorRenda: convertStringToCurrency(cardData.Renda_Bruta),
+      valorRendaLiquida: convertStringToCurrency(cardData.Renda_Liquida),
       dataAdmissao: '2001-01-01',
     },
     dadosPessoais: {
@@ -199,6 +202,24 @@ const registerProposalId = async (cardId, response) => {
   await pipefy.updateCardField(cardId, fieldId, `proposta numero: ${response.idProposta}`);
 };
 
+const getExportPipeReport = async () => {
+  const pipeId = 301602217;
+  const pipeReportId = 300442811;
+  const reportId = await pipefy.getReportId(pipeId, pipeReportId);
+
+  if (reportId == null) {
+    return null;
+  }
+
+  const reportUrl = await pipefy.getReportUrl(reportId);
+  const streamReport = await pipefy.getStream(reportUrl);
+
+  const filePath = path.join(__dirname, '..', '..', 'downloads');
+  streamReport.pipe(fs.createWriteStream(`${filePath}/report.xlsx`));
+
+  return true;
+};
+
 const getCardMoved = async (data) => {
   const {
     action, from, to, card,
@@ -229,30 +250,27 @@ const getCardMoved = async (data) => {
   }
 };
 
-// const getExportPipeReport = async () => {
-//   try {
-//     const pipeId = 301602217;
-//     const pipeReportId = 300442811;
-//     const reportId = await pipefy.getReportId(pipeId, pipeReportId);
-//     const reportUrl = await pipefy.getReportUrl(reportId);
-//     await pipefy.saveReport(reportUrl);
+// const getDocLink = async () => {
+//   await getExportPipeReport();
+//   // const exportPipeReport = await getExportPipeReport();
 
-//     console.log('arquivo xlsx carregado');
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-// getExportPipeReport();
-
-// const getDocLink = () => {
 //   const filePath = path.join(__dirname, '..', '..', 'downloads', 'report.xlsx');
-//   const file = reader.readFile(filePath);
 
-//   const report = reader.utils.sheet_to_json(
-//     file.Sheets[file.SheetNames[0]]
-//   );
-//   console.log(report);
-//   console.log('arquivo xlsx lido');
+//   const fileExists = fs.existsSync(filePath);
+//   if (fileExists) {
+//     const file = reader.readFile(filePath);
+//     const report = reader.utils.sheet_to_json(
+//       file.Sheets[file.SheetNames[0]],
+//     );
+//     // console.log(report);
+//     console.log('arquivo xlsx lido');
+//     const streamDoc = await pipefy.getStream(report[0].Documento_de_Identificacao);
+//     const filePath2 = path.join(__dirname, '..', '..', 'downloads');
+//     console.log(streamDoc);
+//     streamDoc.pipe(fs.createWriteStream(`${filePath2}/report.jpg`));
+//     console.log(streamDoc);
+//     console.log('fim');
+//   }
 // };
 // getDocLink();
 

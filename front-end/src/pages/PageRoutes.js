@@ -4,6 +4,7 @@ import { User } from './user/User';
 import { Home } from './home/Home';
 import { Login } from './login/Login';
 import { NotFound } from './notFound/NotFound';
+import SafrasMargin from './banks/safra/Margin';
 import { Forbidden } from './forbidden/Forbidden';
 import { CardLimit } from './banks/bmg/CardLimit';
 import { Margin } from './consigned-portal/Margin';
@@ -22,10 +23,11 @@ const PageRoutes = () => {
         <Route path="/login" element={ <Login /> } />
         <Route path="/margin" element={ <Private><Margin /></Private> } />
         <Route path="/card-limit" element={ <Private><CardLimit /></Private> } />
-        <Route path="/agreement" element={ <Private><Agreement /></Private> } />
-        <Route path="/formalization" element={ <Private><Formalization /></Private> } />
-        <Route path="/fgtsBalance" element={ <Private><FgtsBalance /></Private> } />
-        <Route path="/simulation" element={
+        <Route path="/banks/safra/agreement" element={ <Private><Agreement /></Private> } />
+        <Route path="/banks/safra/margin" element={ <Private><SafrasMargin /></Private> } />
+        <Route path="/banks/safra/formalization" element={ <Private><Formalization /></Private> } />
+        <Route path="/banks/safra/fgtsBalance" element={ <Private><FgtsBalance /></Private> } />
+        <Route path="/banks/safra/simulation" element={
           <Private>
             <SimulationSettingsProvider>
               <Simulation />

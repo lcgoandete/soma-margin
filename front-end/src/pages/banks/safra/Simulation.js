@@ -47,6 +47,7 @@ export const Simulation = () => {
       setCpf(formatCpf(cpfNumber));
     }
   }
+  
   const cleanFields = () => {
     setIdConvenio('');
     setValorPrincipal('');

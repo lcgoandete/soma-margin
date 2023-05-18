@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const url = process.env.REACT_APP_URL;
-const TIMEOUT = 15000;
+const TIMEOUT = 20000;
 
 export const getAgremmentsApi = async (cpf) => {
   const token = sessionStorage.getItem('token');
@@ -115,6 +115,27 @@ export const getSimulationSettingsApi = async () => {
       method: 'GET',
       url: `${url}/banks/safra/simulationSettings`,
       headers: { Authorization: token },
+      timeout: TIMEOUT,
+    });
+    return data;
+  } catch (error) {
+    if (error.response) {
+      if (error.response.data.message) {
+        return { errorMessage: error.response.data.message };
+      }
+    }
+    return { errorMessage: error.message };
+  }
+}
+
+export const getMarginsApi = async (payload) => {
+  const token = sessionStorage.getItem('token');
+  try {
+    const { data } = await axios({
+      method: 'POST',
+      url: `${url}/banks/safra/consultMargin`,
+      headers: { Authorization: token },
+      data: payload,
       timeout: TIMEOUT,
     });
     return data;
