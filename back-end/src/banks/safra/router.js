@@ -44,4 +44,11 @@ safraRoutes.get(
   rescue(safra.getSimulationSettings),
 );
 
+safraRoutes.post(
+  '/banks/safra/consultMargin',
+  validateCpf,
+  validateToken,
+  rescue(safra.getMargin),
+);
+
 module.exports = safraRoutes;

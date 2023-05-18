@@ -152,6 +152,20 @@ const includeDocumentInProposal = async (payload) => {
   return data;
 };
 
+const getMargin = async (payload) => {
+  await checkToken();
+  const { data } = await axios({
+    method: 'POST',
+    url: `${SAFRA_API_URL}/ConsultaMargem/Bpo`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authentication.accessToken}`,
+    },
+    data: payload,
+  });
+  return data;
+};
+
 const setSimulationSettings = async (taxaJuros) => {
   const {
     newTaxaJurosSefaz, newTaxaJurosPM, newTaxaJurosSpprev, newTaxaJurosPrefSP,
@@ -185,6 +199,7 @@ const getSimulationSettings = async () => {
 
 module.exports = {
   getRole,
+  getMargin,
   sendProposal,
   getAgreements,
   getSimulation,
