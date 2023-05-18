@@ -5,6 +5,8 @@ export const formatDate = (date) => {
 };
 
 export const formatDateTime = (dateTime) => {
+  if (!dateTime) return null;
+
   return moment(dateTime).format('DD/MM/YYYY HH:mm:ss');
 };
 
