@@ -273,7 +273,7 @@ const getDocLink = async () => {
   const teste1 = document.toString();
   console.log(teste1);
 };
-getDocLink();
+// getDocLink();
 
 module.exports = {
   getCardMoved,
