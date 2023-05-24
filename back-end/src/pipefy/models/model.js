@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const axios = require('axios');
 
 const url = process.env.PIPEFY_URL;
@@ -104,6 +102,7 @@ const getReportId = async (pipeId, pipeReportId) => {
     return data;
   }
 
+  // TODO: verificar retorno nulo (undefined)
   const reportId = parseInt(data.data.exportPipeReport.pipeReportExport.id, 10);
   return reportId;
 };
@@ -132,21 +131,21 @@ const getReportUrl = async (id) => {
   return reportUrl;
 };
 
-const getStream = async (urlStream) => {
+const downloadDocument = async (urlStream) => {
   const { data } = await axios({
-    url: urlStream,
     method: 'GET',
+    url: urlStream,
     headers,
-    responseType: 'stream',
+    responseType: 'arraybuffer',
   });
   return data;
 };
 
 module.exports = {
   moveCard,
-  getStream,
   getCardData,
   getReportId,
   getReportUrl,
   updateCardField,
+  downloadDocument,
 };
