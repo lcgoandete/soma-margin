@@ -4,5 +4,3 @@ node_modules/
 extras.txt
 back-end/prisma/database.db
 pm2.config.yml
-back-end/src/downloads/
-

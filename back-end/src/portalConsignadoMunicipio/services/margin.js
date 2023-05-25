@@ -10,10 +10,8 @@ const getMargins = async (cpf) => {
 
   if (isFree) { isFree = false; }
 
-  await setMarginManager('county');
-
   try {
-    // await delay(3);
+    await setMarginManager('county');
     return await margin.getMargins(cpf);
   } finally {
     isFree = true;

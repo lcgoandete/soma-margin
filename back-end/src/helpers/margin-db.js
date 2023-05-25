@@ -10,7 +10,7 @@ const marginData = {
   createdAt: 0,
 };
 
-const QUERY_LIMIT = 449;
+const QUERY_LIMIT = 445;
 
 const getMarginData = async () => {
   let margin = await prisma.margin.findUnique({ where: { id: 1 } });
@@ -53,7 +53,7 @@ const verifyDate = async () => {
 
 const setMarginManager = async (field) => {
   await getMarginData();
-  checkNumberOfQueries(field);
+  await checkNumberOfQueries(field);
   await verifyDate();
 
   const margin = await prisma.margin.update({
