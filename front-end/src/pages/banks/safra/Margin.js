@@ -22,7 +22,7 @@ import { Loading } from '../../../components/loading/Loading';
 import { useMargin } from '../../../hooks/banks/safra/useMargin';
 import { PageTitle } from '../../../components/pageTitle/PageTitle';
 
-import convenioList from './convenioList.json'
+import convenioList from './convenioList.json';
 
 const Margin = () => {
   const toast = useToast();
