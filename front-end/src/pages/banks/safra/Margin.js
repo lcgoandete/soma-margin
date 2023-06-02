@@ -22,6 +22,8 @@ import { Loading } from '../../../components/loading/Loading';
 import { useMargin } from '../../../hooks/banks/safra/useMargin';
 import { PageTitle } from '../../../components/pageTitle/PageTitle';
 
+import convenioList from './convenioList.json';
+
 const Margin = () => {
   const toast = useToast();
   const [convenio, setConvenio] = useState('');
@@ -163,10 +165,11 @@ const Margin = () => {
               onChange={ ({ target }) => setConvenio(target.value) }
             >
               <option value="">Selecione...</option>
-              <option value={ 50008 }>50008 - GOV SP - SEFAZ</option>
-              <option value={ 50009 }>50009 - GOV SP - POLÍCIA MILITAR</option>
-              <option value={ 50010 }>50010 - GOV SP - SPPREV</option>
-              <option value={ 10110 }>10110 - PREF SÃO PAULO</option>
+              {
+                convenioList.map(({id, title}) => (
+                  <option key={id} value={id}>{title}</option>
+                ))
+              }
             </Select>
 
             <FormLabel htmlFor="cpf" mt="10px">CPF:</FormLabel>

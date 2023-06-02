@@ -8,7 +8,7 @@ const {
 } = require('./handleXml');
 
 const requestBMG = async (soapAction, xml) => {
-  const url = process.env.BMG_URL;
+  const url = `${process.env.BMG_URL}/SaqueComplementar?wsdl`;
   const headers = {
     'Content-Type': 'text/xml;charset=UTF-8',
     soapAction: `${soapAction}`,

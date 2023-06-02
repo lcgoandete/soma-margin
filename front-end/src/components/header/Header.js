@@ -63,7 +63,10 @@ export const Header = () => {
           </MenuButton>
           <MenuList>
             <MenuItem>
-              <Link to="/card-limit">Consultar Saque</Link>
+              <Link to="/banks/bmg/card-limit">Consultar Limite Cartao</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/banks/bmg/withdrawalLimit">Consultar Limite Saque</Link>
             </MenuItem>
           </MenuList>
         </Menu>
