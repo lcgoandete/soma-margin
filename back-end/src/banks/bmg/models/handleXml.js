@@ -51,8 +51,47 @@ const getLimitCardBody = (availableCard) => {
   );
 };
 
+const createBodyWithdrawalLimit = (payload) => {
+  const cpf = '12345678901';
+  const matricula = 12345;
+  const grauInstrucao = '7';
+  const ddd = '31';
+  const numero = '00000000';
+  const ramal = '';
+  const {
+    dataNascimento,
+    valorMargem,
+    codigoEntidade,
+    sequencialOrgao,
+  } = payload;
+
+  return (
+    `<soapenv:Body>
+      <web:buscarLimiteSaque soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+        <param xsi:type="web:BuscarLimiteSaqueParameter">
+          <login xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${login}</login>
+          <senha xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${password}</senha>
+          <cpf xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${cpf}</cpf>
+          <matricula xsi:type="soapenc:string">${matricula}</matricula>
+          <dataNascimento xsi:type="xsd:dateTime">${dataNascimento}</dataNascimento>
+          <grauInstrucao xsi:type="soapenc:string">${grauInstrucao}</grauInstrucao>
+          <valorMargem xsi:type="xsd:double">${valorMargem}</valorMargem>
+          <codigoEntidade xsi:type="soapenc:string">${codigoEntidade}</codigoEntidade>
+          <sequencialOrgao xsi:type="soapenc:int">${sequencialOrgao}</sequencialOrgao>
+          <telefone xsi:type="web:TelefoneParameter">
+            <ddd xsi:type="soapenc:string">${ddd}</ddd>
+            <numero xsi:type="soapenc:string">${numero}</numero>
+            <ramal xsi:type="soapenc:string">${ramal}</ramal>
+          </telefone>
+        </param>
+      </web:buscarLimiteSaque>
+    </soapenv:Body>`
+  );
+};
+
 module.exports = {
-  getAvailableCardBody,
   getLimitCardBody,
   buildXmlToRequest,
+  getAvailableCardBody,
+  createBodyWithdrawalLimit,
 };
