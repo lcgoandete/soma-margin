@@ -1,12 +1,19 @@
+const fs = require('fs');
+const path = require('path');
 const cors = require('cors');
+const https = require('https');
 const moment = require('moment');
 const express = require('express');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
 const routes = require('./router');
 const { InternalServerError } = require('./helpers/httpStatus');
 
-const PORT = 5000;
+const PORT = 5001;
+const PORT_HTTPS = 5000;
+const { SSL_CERTIFICATE_PATH, SSL_KEY_PATH } = process.env;
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -62,4 +69,9 @@ setInterval(async () => {
   }
 }, 1000 * 60 * 26);
 
-app.listen(PORT);
+app.listen(PORT, () => console.log(`rodando http ${PORT}`));
+
+https.createServer({
+  cert: fs.readFileSync(path.join(SSL_CERTIFICATE_PATH)),
+  key: fs.readFileSync(path.join(SSL_KEY_PATH)),
+}, app).listen(PORT_HTTPS, () => console.log(`rodando https ${PORT_HTTPS}`));

@@ -6,8 +6,10 @@ const prisma = new PrismaClient();
 
 const marginData = {
   state: 0,
+  state_api: 0,
   county: 0,
-  createdAt: 0,
+  county_api: 0,
+  created_at: 0,
 };
 
 const QUERY_LIMIT = 445;
@@ -17,13 +19,17 @@ const getMarginData = async () => {
 
   if (!margin) {
     margin = await prisma.margin.create({
-      data: { id: 1, state: 0, county: 0 },
+      data: {
+        id: 1, state: 0, state_api: 0, county: 0, county_api: 0,
+      },
     });
   }
 
   marginData.county = margin.county;
+  marginData.county_api = margin.county_api;
   marginData.state = margin.state;
-  marginData.createdAt = margin.created_at;
+  marginData.state_api = margin.state_api;
+  marginData.created_at = margin.created_at;
 };
 
 const checkNumberOfQueries = (field) => {
@@ -38,16 +44,20 @@ const checkNumberOfQueries = (field) => {
 
 const verifyDate = async () => {
   const currentDate = moment(new Date()).format('YYYY-MM-DD');
-  const marginDate = moment(marginData.createdAt).format('YYYY-MM-DD');
+  const marginDate = moment(marginData.created_at).format('YYYY-MM-DD');
 
   if (currentDate > marginDate) {
     const margin = await prisma.margin.update({
-      data: { state: 0, county: 0, created_at: new Date() },
+      data: {
+        state: 0, state_api: 0, county: 0, county_api: 0, created_at: new Date(),
+      },
       where: { id: 1 },
     });
     marginData.county = margin.county;
+    marginData.county_api = margin.county_api;
     marginData.state = margin.state;
-    marginData.createdAt = margin.created_at;
+    marginData.state_api = margin.state_api;
+    marginData.created_at = margin.created_at;
   }
 };
 
