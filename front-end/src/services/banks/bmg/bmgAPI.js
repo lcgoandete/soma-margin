@@ -23,3 +23,24 @@ export const getWithdralwalLimitApi = async (payload) => {
     return { errorMessage: error.message };
   }
 }
+
+export const registerProposalCardApi = async (payload) => {
+  const token = sessionStorage.getItem('token');
+  try {
+    const { data } = await axios({
+      method: 'POST',
+      url: `${url}/banks/bmg/register-proposal-card/`,
+      headers: { Authorization: token },
+      data: payload,
+      timeout: TIMEOUT,
+    });
+    return data;
+  } catch (error) {
+    if (error.response) {
+      if (error.response.data.message) {
+        return { errorMessage: error.response.data.message };
+      }
+    }
+    return { errorMessage: error.message };
+  }
+}

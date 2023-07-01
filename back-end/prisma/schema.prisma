@@ -13,7 +13,9 @@ datasource db {
 model Margin {
   id         Int      @id @default(autoincrement())
   state      Int      @default(0)
+  state_api  Int      @default(0)
   county     Int      @default(0)
+  county_api Int      @default(0)
   created_at DateTime @default(now())
 }
 
