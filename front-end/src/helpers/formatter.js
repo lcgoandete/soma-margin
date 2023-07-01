@@ -20,8 +20,16 @@ export const formatCpf = (cpfNumber) => {
   let value = cpfNumber;
   value = value.replace(/\D/g, '');
   value = value.replace(/^(\d{1,3})(\d{1,3})(\d{1,3})(\d{1,2})/, '$1.$2.$3-$4');
-  cpfNumber = value;
-  return cpfNumber;
+  const newCpf = value;
+  return newCpf;
+}
+
+export const formatCep = (cep) => {
+  let value = cep;
+  value = value.replace(/\D/g, '');
+  value = value.replace(/^(\d{1,5})(\d{1,3})/, '$1-$2');
+  const newCep = value;
+  return newCep;
 }
 
 export const formatCurrencyMask = (currency) => {
