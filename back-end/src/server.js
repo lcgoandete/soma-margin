@@ -10,9 +10,9 @@ require('dotenv').config();
 const routes = require('./router');
 const { InternalServerError } = require('./helpers/httpStatus');
 
-const PORT = 5001;
-const PORT_HTTPS = 5000;
-const { SSL_CERTIFICATE_PATH, SSL_KEY_PATH } = process.env;
+const {
+  PORT_HTTPS, PORT_HTTP, SSL_CERTIFICATE_PATH, SSL_KEY_PATH,
+} = process.env;
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -69,9 +69,9 @@ setInterval(async () => {
   }
 }, 1000 * 60 * 26);
 
-app.listen(PORT, () => console.log(`rodando http ${PORT}`));
-
 https.createServer({
   cert: fs.readFileSync(path.join(SSL_CERTIFICATE_PATH)),
   key: fs.readFileSync(path.join(SSL_KEY_PATH)),
 }, app).listen(PORT_HTTPS, () => console.log(`rodando https ${PORT_HTTPS}`));
+
+app.listen(PORT_HTTP, () => console.log(`rodando http ${PORT_HTTP}`));

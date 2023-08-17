@@ -6,6 +6,7 @@ const { validateCpf } = require('../../middlewares/validate-cpf');
 const withdrawalLimit = require('./controllers/withdrawal-limit');
 const complementaryWithdrawal = require('./controllers/complementaryWithdrawal');
 const registerProposal = require('./controllers/register-proposal-card');
+const proposalStatus = require('./controllers/proposal-status');
 
 complementaryWithdrawalRoutes.post(
   '/banks/bmg/complementary-withdrawal/card-limit',
@@ -22,8 +23,14 @@ complementaryWithdrawalRoutes.post(
 
 complementaryWithdrawalRoutes.post(
   '/banks/bmg/register-proposal-card',
+  // validateToken,
+  registerProposal.registerProposalCard,
+);
+
+complementaryWithdrawalRoutes.get(
+  '/banks/bmg/proposal-status',
   validateToken,
-  rescue(registerProposal.registerProposalCard),
+  rescue(proposalStatus.getProposalStatus),
 );
 
 module.exports = complementaryWithdrawalRoutes;

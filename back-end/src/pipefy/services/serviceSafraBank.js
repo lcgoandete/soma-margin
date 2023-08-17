@@ -2,7 +2,6 @@
 
 const reader = require('xlsx');
 
-const pipefy = require('../models/model');
 const safra = require('../../banks/safra/models/safra');
 
 const convertCardFieldsToProposalData = (cardFields) => {
@@ -160,7 +159,7 @@ const convertProposalDataToProposal = async (cardData) => {
       uf: cardData.Uf,
     },
     dadosBancarios: {
-      banco: parseInt(cardData.Banco.substring(2, 5), 10),
+      banco: parseInt(cardData.Banco.match(/\d+/g)[0], 10),
       agencia: parseInt(cardData.Agencia, 10),
       tipoConta: cardData.Tipo_de_Conta.substring(0, 2),
       conta: cardData.Numero_da_Conta,
@@ -220,23 +219,17 @@ const getExportedPipeReport = async () => {
 // envia proposta para o banco safra,
 // move o cartao para a coluna final
 const getCardMoved = async (data) => {
-  const {
-    action, from, to, card,
-  } = data;
+  const { card } = data;
   const phase = { pending: 310620145, success: 310620144 };
 
   try {
-    if (action === 'card.move') {
-      if (from.name === 'Inicio' && to.name === 'Caixa de entrada') {
-        const cardFields = await pipefy.getCardData(card.id);
-        const proposalData = convertCardFieldsToProposalData(cardFields);
-        const proposal = await convertProposalDataToProposal(proposalData);
-        const responseProposal = await safra.sendProposal(proposal);
-        await registerProposalId(card.id, responseProposal);
-        await approveStop(responseProposal);
-        await moveFinishedCard(card.id, phase.success);
-      }
-    }
+    const cardFields = await pipefy.getCardData(card.id);
+    const proposalData = convertCardFieldsToProposalData(cardFields);
+    const proposal = await convertProposalDataToProposal(proposalData);
+    const responseProposal = await safra.sendProposal(proposal);
+    await registerProposalId(card.id, responseProposal);
+    await approveStop(responseProposal);
+    await moveFinishedCard(card.id, phase.success);
   } catch (error) {
     const fieldId = 'observacao';
 

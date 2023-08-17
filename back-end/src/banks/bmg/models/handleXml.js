@@ -1,25 +1,30 @@
 require('dotenv').config();
 
-const login = process.env.BMG_LOGIN;
-const password = process.env.BMG_PASSWORD;
+const {
+  BMG_LOGIN, BMG_PASSWORD, BMG_LOGIN_WEBSERVICE, BMG_PASSWORD_WEBSERVICE,
+} = process.env;
 
-const buildXmlToRequest = (body) => (
-  `<soapenv:Envelope
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-    xmlns:web="http://webservice.econsig.bmg.com">
-    <soapenv:Header/>
-    ${body}
-  </soapenv:Envelope>`
-);
+const buildXmlToRequest = (body) => {
+  const newBody = body.replace(/\s{2,}/g, '');
+  const xml = ''
+    .concat('<soapenv:Envelope ')
+    .concat('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ')
+    .concat('xmlns:xsd="http://www.w3.org/2001/XMLSchema" ')
+    .concat('xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" ')
+    .concat('xmlns:web="http://webservice.econsig.bmg.com" ')
+    .concat('xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">')
+    .concat('<soapenv:Header/>')
+    .concat(newBody)
+    .concat('</soapenv:Envelope>');
+  return xml;
+};
 
 const getAvailableCardBody = (codigoEntidade, cpf, sequencialOrgao) => (
   `<soapenv:Body>
     <web:buscarCartoesDisponiveis soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
       <param xsi:type="web:CartaoDisponivelParameter">
-        <login xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${login}</login>
-        <senha xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${password}</senha>
+        <login xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_LOGIN}</login>
+        <senha xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_PASSWORD}</senha>
         <codigoEntidade xsi:type="xsd:int">${codigoEntidade}</codigoEntidade>
         <cpf xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${cpf}</cpf>
         <sequencialOrgao xsi:type="soapenc:int" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${sequencialOrgao}</sequencialOrgao>
@@ -38,8 +43,8 @@ const getLimitCardBody = (availableCard) => {
     `<soapenv:Body>
       <web:buscarLimiteSaque soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         <param xsi:type="web:DadosCartaoParameter">
-          <login xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${login}</login>
-          <senha xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${password}</senha>
+          <login xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_LOGIN}</login>
+          <senha xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_PASSWORD}</senha>
           <codigoEntidade xsi:type="xsd:int">${codigoEntidade}</codigoEntidade>
           <cpf xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${cpf}</cpf>
           <sequencialOrgao xsi:type="soapenc:int" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${sequencialOrgao}</sequencialOrgao>
@@ -70,8 +75,8 @@ const createBodyWithdrawalLimit = (payload) => {
     `<soapenv:Body>
       <web:buscarLimiteSaque soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         <param xsi:type="web:BuscarLimiteSaqueParameter">
-          <login xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${login}</login>
-          <senha xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${password}</senha>
+          <login xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_LOGIN}</login>
+          <senha xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_PASSWORD}</senha>
           <cpf xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${cpf}</cpf>
           <matricula xsi:type="soapenc:string">${matricula}</matricula>
           <dataNascimento xsi:type="xsd:dateTime">${dataNascimento}</dataNascimento>
@@ -91,102 +96,166 @@ const createBodyWithdrawalLimit = (payload) => {
 };
 
 const createBodyRegisterProposalCard = (payload) => {
-  const { teste } = payload;
+  const {
+    dadosProposta, dadosBancarios, dadosPessoais, celular, identidade, endereco, credenciais,
+  } = payload;
+  const aberturaContaPagamento = 0;
+  const bancoOrdemPagamento = 0;
+  const dataAdmissao = '2011-02-02T00:00:00';
+  const tipoSaque = 1;
+  const unidadePagadora = '';
+  const tipoDomicilioBancario = 1;
+  const sequencialOrgao = '';
+  const formaCredito = 2;
+  const matriculaInstituidor = '';
+  const codigoLoja = 55878;
+  const codigoServico = '080';
+  const tipoSeguro = 1;
+  const codigoPlano = 128;
+  const codigoFormaEnvioTermo = '21';
 
   return (
     `<soapenv:Body>
       <web:gravarPropostaCartao soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
         <proposta xsi:type="web:CartaoParameter">
-          <login xsi:type="soapenc:string">${login}</login>
-          <senha xsi:type="soapenc:string">${password}</senha>
-          <aberturaContaPagamento xsi:type="xsd:int">0</aberturaContaPagamento>
-          <agencia xsi:type="web:AgenciaParameter">
-            <digitoVerificador xsi:type="soapenc:string"></digitoVerificador>
-            <numero xsi:type="soapenc:string">1</numero>
-          </agencia>
+          <login xsi:type="soapenc:string">${BMG_LOGIN_WEBSERVICE}</login>
+          <senha xsi:type="soapenc:string">${BMG_PASSWORD_WEBSERVICE}</senha>
+          <aberturaContaPagamento xsi:type="xsd:int">${aberturaContaPagamento}</aberturaContaPagamento>
+          <bancoOrdemPagamento xsi:type="xsd:int">${bancoOrdemPagamento}</bancoOrdemPagamento>
+          <dataAdmissao xsi:type="xsd:dateTime">${dataAdmissao}</dataAdmissao>
+          <tipoSaque xsi:type="soapenc:int">${tipoSaque}</tipoSaque>
+          <unidadePagadora xsi:type="soapenc:string">${unidadePagadora}</unidadePagadora>
+          <tipoDomicilioBancario xsi:type="soapenc:short">${tipoDomicilioBancario}</tipoDomicilioBancario>
+          <sequencialOrgao xsi:type="soapenc:int">${sequencialOrgao}</sequencialOrgao>
+          <formaCredito xsi:type="xsd:int">${formaCredito}</formaCredito>
+          <matriculaInstituidor xsi:type="soapenc:string">${matriculaInstituidor}</matriculaInstituidor>
+          <codigoLoja xsi:type="soapenc:int">${codigoLoja}</codigoLoja>
+          <codigoServico xsi:type="soapenc:string">${codigoServico}</codigoServico>
+
+          <seguros xsi:type="web:ArrayOfSeguro" soapenc:arrayType="web:Seguro[]">
+            <seguro xsi:type="web:Seguro">
+              <tipoSeguro>${tipoSeguro}</tipoSeguro>
+              <codigoPlano xsi:type="xsd:int">${codigoPlano}</codigoPlano>
+            </seguro>
+          </seguros>
+
+          <codigoFormaEnvioTermo xsi:type="soapenc:string">${codigoFormaEnvioTermo}</codigoFormaEnvioTermo>
+          <loginConsig xsi:type="soapenc:string">${credenciais.loginConsig}</loginConsig>
+          <senhaConsig xsi:type="soapenc:string">${credenciais.senhaConsig}</senhaConsig>
+          <token xsi:type="soapenc:string">${credenciais.token}</token>
+
+          <codigoEntidade xsi:type="soapenc:string">${dadosProposta.codigoEntidade}</codigoEntidade>
+          <codigoSituacaoServidor xsi:type="soapenc:int">${dadosProposta.codigoSituacaoServidor}</codigoSituacaoServidor>
+          <cpf xsi:type="soapenc:string">${dadosProposta.cpf}</cpf>
+          <matricula xsi:type="soapenc:string">${dadosProposta.matricula}</matricula>
+          <margem xsi:type="xsd:double">${dadosProposta.margem}</margem>
+          <valorRenda xsi:type="xsd:double">${dadosProposta.valorRenda}</valorRenda>
+          <dataRenda xsi:type="xsd:dateTime">${dadosProposta.dataRenda}</dataRenda>
+          <valorSolicitado xsi:type="xsd:double">${dadosProposta.valorSaque}</valorSolicitado>
+          <valorParcela xsi:type="soapenc:double">${dadosProposta.valorParcela}</valorParcela>
+          <valorSaque xsi:type="soapenc:double">${dadosProposta.valorSaque}</valorSaque>
+
           <banco xsi:type="web:BancoParameter">
-            <numero xsi:type="xsd:int">1</numero>
+            <numero xsi:type="xsd:int">${dadosBancarios.banco}</numero>
           </banco>
-          <bancoOrdemPagamento xsi:type="xsd:int">0</bancoOrdemPagamento>
+          <agencia xsi:type="web:AgenciaParameter">
+            <digitoVerificador xsi:type="soapenc:string">${dadosBancarios.digitoVerificadorDaAgencia}</digitoVerificador>
+            <numero xsi:type="soapenc:string">${dadosBancarios.agencia}</numero>
+          </agencia>
+          <conta xsi:type="web:ContaParameter">
+            <digitoVerificador xsi:type="soapenc:string">${dadosBancarios.digitoVerificadorDaConta}</digitoVerificador>
+            <numero xsi:type="soapenc:string">${dadosBancarios.numeroDaConta}</numero>
+          </conta>
+          <finalidadeCredito xsi:type="xsd:int">${dadosBancarios.finalidadeCredito}</finalidadeCredito>
+
           <cliente xsi:type="web:ClienteParameter">
+            <nome xsi:type="soapenc:string">${dadosPessoais.nome}</nome>
+            <dataNascimento xsi:type="xsd:dateTime">${dadosPessoais.dataNascimento}</dataNascimento>
+            <sexo xsi:type="soapenc:string">${dadosPessoais.sexo}</sexo>
+            <email xsi:type="soapenc:string">${dadosPessoais.email}</email>
+            <nomeMae xsi:type="soapenc:string">${dadosPessoais.nomeMae}</nomeMae>
+            <nomePai xsi:type="soapenc:string">${dadosPessoais.nomePai}</nomePai>
+            <estadoCivil xsi:type="soapenc:string">${dadosPessoais.estadoCivil}</estadoCivil>
+            <nomeConjuge xsi:type="soapenc:string">${dadosPessoais.nomeConjuge}</nomeConjuge>
+            <grauInstrucao xsi:type="soapenc:string">${dadosPessoais.grauInstrucao}</grauInstrucao>
+            <nacionalidade xsi:type="soapenc:string">${dadosPessoais.nacionalidade}</nacionalidade>
+            <ufNascimento xsi:type="soapenc:string">${dadosPessoais.ufNascimento}</ufNascimento>
+            <cidadeNascimento xsi:type="soapenc:string">${dadosPessoais.cidadeNascimento}</cidadeNascimento>
+
             <celular1 xsi:type="web:TelefoneParameter">
-              <ddd xsi:type="soapenc:string">31</ddd>
-              <numero xsi:type="soapenc:string">000000000</numero>
+              <ddd xsi:type="soapenc:string">${celular.ddd}</ddd>
+              <numero xsi:type="soapenc:string">${celular.numero}</numero>
               <ramal xsi:type="soapenc:string"></ramal>
             </celular1>
-            <cidadeNascimento xsi:type="soapenc:string">${teste}</cidadeNascimento>
-            <dataNascimento xsi:type="xsd:dateTime">1956-10-21T05:00:00</dataNascimento>
-            <email xsi:type="soapenc:string"></email>
-            <endereco xsi:type="web:EnderecoParamter">
-              <bairro xsi:type="soapenc:string">Santo Agostinho</bairro>
-              <cep xsi:type="soapenc:string">30170914</cep>
-              <cidade xsi:type="soapenc:string">Belo Horizonte</cidade>
-              <complemento xsi:type="soapenc:string">Sala301</complemento>
-              <logradouro xsi:type="soapenc:string">Rua Matias Cardoso</logradouro>
-              <numero xsi:type="soapenc:string">63</numero>
-              <uf xsi:type="soapenc:string">MG</uf>
-            </endereco>
-            <estadoCivil xsi:type="soapenc:string">C</estadoCivil>
-            <grauInstrucao xsi:type="soapenc:string">7</grauInstrucao>
-            <identidade xsi:type="web:IdentidadeParameter">
-              <dataEmissao xsi:type="xsd:dateTime">2008-11-24T05:00:00</dataEmissao>
-              <emissor xsi:type="soapenc:string">SSP</emissor>
-              <numero xsi:type="soapenc:string">0000</numero>
-              <tipo xsi:type="soapenc:string">CNH</tipo>
-              <uf xsi:type="soapenc:string">MG</uf>
-            </identidade>
-            <nacionalidade xsi:type="soapenc:string">BRASILEIRA</nacionalidade>
-            <nome xsi:type="soapenc:string">teste teste </nome>
-            <nomeConjuge xsi:type="soapenc:string">teste teste </nomeConjuge>
-            <nomeMae xsi:type="soapenc:string">teste teste </nomeMae>
-            <nomePai xsi:type="soapenc:string">teste teste</nomePai>
-            <sexo xsi:type="soapenc:string">M</sexo>
             <telefone xsi:type="web:TelefoneParameter">
-              <ddd xsi:type="soapenc:string">31</ddd>
-              <numero xsi:type="soapenc:string">00000000</numero>
+              <ddd xsi:type="soapenc:string"></ddd>
+              <numero xsi:type="soapenc:string"></numero>
               <ramal xsi:type="soapenc:string"></ramal>
             </telefone>
-            <ufNascimento xsi:type="soapenc:string">MG</ufNascimento>
+
+            <identidade xsi:type="web:IdentidadeParameter">
+              <dataEmissao xsi:type="xsd:dateTime">${identidade.dataEmissao}</dataEmissao>
+              <emissor xsi:type="soapenc:string">${identidade.emissor}</emissor>
+              <numero xsi:type="soapenc:string">${identidade.numero}</numero>
+              <tipo xsi:type="soapenc:string">${identidade.tipo}</tipo>
+              <uf xsi:type="soapenc:string">${identidade.uf}</uf>
+            </identidade>
+
+            <endereco xsi:type="web:EnderecoParamter">
+              <logradouro xsi:type="soapenc:string">${endereco.logradouro}</logradouro>
+              <numero xsi:type="soapenc:string">${endereco.numero}</numero>
+              <complemento xsi:type="soapenc:string">${endereco.complemento}</complemento>
+              <bairro xsi:type="soapenc:string">${endereco.bairro}</bairro>
+              <cep xsi:type="soapenc:string">${endereco.cep}</cep>
+              <cidade xsi:type="soapenc:string">${endereco.cidade}</cidade>
+              <uf xsi:type="soapenc:string">${endereco.uf}</uf>
+            </endereco>
           </cliente>
-          <codEnt xsi:type="soapenc:int"/>
-          <codigoEntidade xsi:type="soapenc:string">164-11</codigoEntidade>
-          <codigoFormaEnvioTermo xsi:type="soapenc:string">15</codigoFormaEnvioTermo>
-          <codigoLoja xsi:type="soapenc:int">0000</codigoLoja>
-          <codigoServico xsi:type="soapenc:string">080</codigoServico>
-          <codigoSituacaoServidor xsi:type="soapenc:int">1</codigoSituacaoServidor>
-          <conta xsi:type="web:ContaParameter">
-            <digitoVerificador xsi:type="soapenc:string">1</digitoVerificador>
-            <numero xsi:type="soapenc:string">10110</numero>
-          </conta>
-          <cpf xsi:type="soapenc:string">00000000000</cpf>
-          <dataAdmissao xsi:type="xsd:dateTime">2018-02-28T00:00:00</dataAdmissao>
-          <dataRenda xsi:type="xsd:dateTime">2018-02-28T00:00:00</dataRenda>
-          <finalidadeCredito xsi:type="xsd:int">1</finalidadeCredito>
-          <formaCredito xsi:type="xsd:int">2</formaCredito>
-          <loginConsig xsi:type="soapenc:string">teste.01</loginConsig>
-          <margem xsi:type="xsd:double">50</margem>
-          <matricula xsi:type="soapenc:string">14361</matricula>
-          <matriculaInstituidor xsi:type="soapenc:string"></matriculaInstituidor>
-          <seguros xsi:type="web:ArrayOfSeguro" soapenc:arrayType="web:Seguro[]"/>
-          <senhaConsig xsi:type="soapenc:string">zzz</senhaConsig>
-          <sequencialOrgao xsi:type="soapenc:int">11</sequencialOrgao>
-          <tipoDomicilioBancario xsi:type="soapenc:short">1</tipoDomicilioBancario>
-          <unidadePagadora xsi:type="soapenc:string">12160</unidadePagadora>
-          <valorRenda xsi:type="xsd:double">954</valorRenda>
-          <valorSolicitado xsi:type="xsd:double">500</valorSolicitado>
-          <tipoSaque xsi:type="soapenc:int">1</tipoSaque>
-          <valorParcela xsi:type="soapenc:double">0</valorParcela>
-          <valorSaque xsi:type="soapenc:double">500</valorSaque>
         </proposta>
       </web:gravarPropostaCartao>
     </soapenv:Body>`
   );
 };
 
+const getProposalStatusXML = (payload) => {
+  const {
+    initialDate, finalDate, loginConsig, senhaConsig,
+  } = payload;
+
+  const body = `
+    <soapenv:Body>
+      <web:consultaStatusAde soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+        <param xsi:type="web:ConsultaStatusAdeParameter">
+          <login xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_LOGIN_WEBSERVICE}</login>
+          <senha xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_PASSWORD_WEBSERVICE}</senha>
+          <dataInicial xsi:type="xsd:dateTime">${initialDate}</dataInicial> 
+          <dataFinal xsi:type="xsd:dateTime">${finalDate}</dataFinal>
+          <listaAdes xsi:type="con:ArrayOf_soapenc_string" soapenc:arrayType="soapenc:string[]" xmlns:con="http://localhost:8080/webservices/ConsultaStatusAde" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/>
+          <loginConsig xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${loginConsig}</loginConsig>
+          <senhaConsig xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${senhaConsig}</senhaConsig>
+        </param>
+      </web:consultaStatusAde>
+    </soapenv:Body>`;
+
+  const rawXML = ''
+    .concat('<soapenv:Envelope ')
+    .concat('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ')
+    .concat('xmlns:xsd="http://www.w3.org/2001/XMLSchema" ')
+    .concat('xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" ')
+    .concat('xmlns:web="http://webservice.econsig.bmg.com">')
+    .concat('<soapenv:Header/>')
+    .concat(body)
+    .concat('</soapenv:Envelope>');
+
+  const xml = rawXML.replace(/\s{2,}/g, '');
+  return xml;
+};
+
 module.exports = {
   getLimitCardBody,
   buildXmlToRequest,
   getAvailableCardBody,
+  getProposalStatusXML,
   createBodyWithdrawalLimit,
   createBodyRegisterProposalCard,
 };
