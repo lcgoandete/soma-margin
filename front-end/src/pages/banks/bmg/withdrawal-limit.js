@@ -164,7 +164,7 @@ export const WithdrawalLimit = () => {
   return (
     <>
       <Header />
-      <PageTitle title=" Consutar Limite de Saque" />
+      <PageTitle title=" Consutar Limite de Cartão" />
       { renderingForm() }
       { renderingWithdrawalLimit() }
     </>

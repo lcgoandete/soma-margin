@@ -68,7 +68,7 @@ export const CardLimit = () => {
   return (
     <>
       <Header />
-      <PageTitle title="Consulta saque BMG" />
+      <PageTitle title="Consultar Saque Complentar" />
       <CpfForm loading={ loading } onClickCpf={ onClickCpf } />
       { renderingTable() }
     </>

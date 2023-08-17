@@ -15,7 +15,9 @@ export const getAgremmentsApi = async (cpf) => {
     });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -36,7 +38,9 @@ export const getFormalizationApi = async (cpf) => {
     });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -57,7 +61,9 @@ export const getFgtsBalanceApi = async (cpf) => {
     });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -78,7 +84,9 @@ export const getSimulationApi = async (payload) => {
     });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -99,7 +107,9 @@ export const setSimulationSettingsApi = async (payload) => {
     });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -119,7 +129,9 @@ export const getSimulationSettingsApi = async () => {
     });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -140,7 +152,9 @@ export const getMarginsApi = async (payload) => {
     });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }

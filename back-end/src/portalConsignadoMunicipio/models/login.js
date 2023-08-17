@@ -8,19 +8,19 @@ const createDriver = async () => {
   return result;
 };
 
-const loginRumola = async (driver) => {
-  const { USER_RUMOLA } = process.env;
-  const { PASSWORD_RUMOLA } = process.env;
+// const loginRumola = async (driver) => {
+//   const { USER_RUMOLA } = process.env;
+//   const { PASSWORD_RUMOLA } = process.env;
 
-  await driver.get('chrome-extension://bjjgbdlbgjeoankjijbmheneoekbghcg/options.html');
-  await driver.findElement(By.css('#tie_form > div > div:nth-child(2) > input[type=text]')).sendKeys(USER_RUMOLA);
-  await driver.findElement(By.css('#tie_form > div > div:nth-child(3) > input[type=password]')).sendKeys(PASSWORD_RUMOLA);
-  await driver.findElement(By.css('#tie_form > div > div:nth-child(4) > input[type=submit]')).click();
-  await driver.sleep(1000);
-  await driver.findElement(By.css('#login-email')).sendKeys(USER_RUMOLA);
-  await driver.findElement(By.css('#login-pass#login-pass')).sendKeys(PASSWORD_RUMOLA);
-  await driver.findElement(By.css('#login-btn')).click();
-};
+//   await driver.get('chrome-extension://bjjgbdlbgjeoankjijbmheneoekbghcg/options.html');
+//   await driver.findElement(By.css('#tie_form > div > div:nth-child(2) > input[type=text]')).sendKeys(USER_RUMOLA);
+//   await driver.findElement(By.css('#tie_form > div > div:nth-child(3) > input[type=password]')).sendKeys(PASSWORD_RUMOLA);
+//   await driver.findElement(By.css('#tie_form > div > div:nth-child(4) > input[type=submit]')).click();
+//   await driver.sleep(1000);
+//   await driver.findElement(By.css('#login-email')).sendKeys(USER_RUMOLA);
+//   await driver.findElement(By.css('#login-pass#login-pass')).sendKeys(PASSWORD_RUMOLA);
+//   await driver.findElement(By.css('#login-btn')).click();
+// };
 
 const loginPortalDoConsignado = async (driver) => {
   const { USER_PORTAL_MUNICIPIO } = process.env;
@@ -46,7 +46,7 @@ const isLogin = async () => {
 
   const pesquisarMargem = await driver.findElements(By.xpath('/html/body/div/div/div[2]/div/form/div[2]/div/h1'));
   if (pesquisarMargem.length === 0) {
-    await loginRumola(driver);
+    // await loginRumola(driver);
     await loginPortalDoConsignado(driver);
   }
   return driver;

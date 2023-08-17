@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const url = process.env.REACT_APP_URL;
-const TIMEOUT = 15000;
+const TIMEOUT = 60000;
 
 export const setAuthenticationApi = async (credendials) => {
   try {
@@ -13,12 +13,15 @@ export const setAuthenticationApi = async (credendials) => {
     });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
     }
-    return { errorMessage: error.message };
+    const newError = { errorMessage: error.message };
+    return newError;
   }
 }
 
@@ -34,7 +37,9 @@ export const getCardLimitApi = async (cpf) => {
     });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -51,11 +56,13 @@ export const getConsignedPortalMarginApi = async (queryType, cpf) => {
         url: `${url}/${queryType}`,
         headers: { Authorization: token },
         data: { cpf },
-        timeout: 40000,
+        timeout: TIMEOUT,
       });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -75,7 +82,9 @@ export const isValidTokenApi = async () => {
       });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }

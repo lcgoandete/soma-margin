@@ -9,7 +9,7 @@ const requestBMG = async (soapAction, xml, urlComplement) => {
   };
 
   const { response } = await soapRequest({
-    url, headers, xml, timeout: 20000,
+    url, headers, xml, timeout: 60000,
   });
   return response;
 };

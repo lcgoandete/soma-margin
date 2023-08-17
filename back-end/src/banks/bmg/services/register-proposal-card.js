@@ -1,87 +1,67 @@
-const registerProposal = require('../models/register-proposal-card');
-// const { InternalServerError, BadRequest } = require('../../../helpers/httpStatus');
+const { decode } = require('html-entities');
 
-// const xmlToJson = (xmlString) => {
-//   if (xmlString === '') {
-//     const newError = {
-//       status: InternalServerError,
-//       message: 'XML inválido.',
-//     };
-//     throw newError;
-//   }
+const ProposalBmg = require('../../../common/models/ProposalBmg');
+const Pipefy = require('../../../common/services/Pipefy');
 
-//   const regexFaultString = /<faultstring>(.*?)<\/faultstring>/;
-//   const faultStringMatch = xmlString.match(regexFaultString);
-//   const faultString = faultStringMatch ? faultStringMatch[1] : null;
-//   if (faultString) {
-//     const newError = {
-//       status: BadRequest,
-//       message: faultString,
-//     };
-//     throw newError;
-//   }
+const extractDataFromErrorResponse = (error) => {
+  const { data } = error.response;
+  let newData = decode(data);
+  newData = data.replace(/\s{2,}/g, '');
+  const regexFaultString = /<faultstring>(.*?)<\/faultstring>/;
+  const faultStringMatch = newData.match(regexFaultString);
+  return faultStringMatch ? faultStringMatch[1] : '- não foi possíel extrair a resposta de erro do banco BMG';
+};
 
-//   const regexMensagemDeErro = /<mensagemDeErro xsi:type="soapenc:string".+?>(.+?)<\/mensagemDeErro>/;
-//   const mensagemDeErroMatch = xmlString.match(regexMensagemDeErro);
-//   const mensagemDeErro = mensagemDeErroMatch ? mensagemDeErroMatch[1] : null;
-//   if (mensagemDeErro) {
-//     const newError = {
-//       status: BadRequest,
-//       message: mensagemDeErro,
-//     };
-//     throw newError;
-//   }
+const extractDataFromSuccessResponse = (successResponse) => {
+  let newSuccessResponse = decode(successResponse);
+  newSuccessResponse = newSuccessResponse.replace(/\s{2,}/g, '');
+  const regexSuccessResponse = /<gravarPropostaCartaoReturn xsi:type="soapenc:string" xmlns:soapenc="http:\/\/schemas.xmlsoap.org\/soap\/encoding\/">(.*?)<\/gravarPropostaCartaoReturn>/;
+  const successResponseMatch = newSuccessResponse.match(regexSuccessResponse);
+  return successResponseMatch ? successResponseMatch[1] : null;
+};
 
-//   const regexTaxaJurosAnual = /<taxaJurosAnual xsi:type="xsd:double">([\d.]+)<\/taxaJurosAnual>/;
-//   const taxaJurosAnualMatch = xmlString.match(regexTaxaJurosAnual);
-//   const taxaJurosAnual = taxaJurosAnualMatch ? taxaJurosAnualMatch[1] : null;
+const validateMovedCard = (cardMoved) => {
+  const { action, from, to } = cardMoved.data;
 
-//   const regexTaxaJurosMensal = /<taxaJurosMensal xsi:type="xsd:double">([\d.]+)<\/taxaJurosMensal>/;
-//   const taxaJurosMensalMatch = xmlString.match(regexTaxaJurosMensal);
-//   const taxaJurosMensal = taxaJurosMensalMatch ? taxaJurosMensalMatch[1] : null;
+  if (action === 'card.move') {
+    if (from.name === 'Inicio' && to.name === 'Caixa de Entrada') {
+      return true;
+    }
+  }
+  return false;
+};
 
-//   const regexValorCetAnual = /<valorCetAnual xsi:type="xsd:double">([\d.]+)<\/valorCetAnual>/;
-//   const valorCetAnualMatch = xmlString.match(regexValorCetAnual);
-//   const valorCetAnual = valorCetAnualMatch ? valorCetAnualMatch[1] : null;
+const registerProposalCard = async (cardMoved) => {
+  const pipefy = new Pipefy();
+  const cardId = cardMoved.data.card.id;
 
-//   const regexValorCetMensal = /<valorCetMensal xsi:type="xsd:double">([\d.]+)<\/valorCetMensal>/;
-//   const valorCetMensalMatch = xmlString.match(regexValorCetMensal);
-//   const valorCetMensal = valorCetMensalMatch ? valorCetMensalMatch[1] : null;
+  try {
+    const movedCardIsValidated = validateMovedCard(cardMoved);
+    if (movedCardIsValidated) {
+      const cardData = await pipefy.getCardData(cardId);
 
-//   const regexLimiteCartao = /<limiteCartao xsi:type="xsd:double">([\d.]+)<\/limiteCartao>/;
-//   const limiteCartaoMatch = xmlString.match(regexLimiteCartao);
-//   const limiteCartao = limiteCartaoMatch ? limiteCartaoMatch[1] : null;
+      const credentials = await pipefy.getCredentials();
+      const newCardData = [...cardData.data.card.fields, ...credentials.data.card.fields];
 
-//   const regexValorMargem = /<valorMargem xsi:type="xsd:double">([\d.]+)<\/valorMargem>/;
-//   const valorMargemMatch = xmlString.match(regexValorMargem);
-//   const valorMargem = valorMargemMatch ? valorMargemMatch[1] : null;
+      const proposalBmg = new ProposalBmg(newCardData);
+      await proposalBmg.convertCardFieldsToProposalData();
 
-//   const regexValorSaqueMaximo = /<valorSaqueMaximo xsi:type="xsd:double">([\d.]+)<\/valorSaqueMaximo>/;
-//   const valorSaqueMaximoMatch = xmlString.match(regexValorSaqueMaximo);
-//   const valorSaqueMaximo = valorSaqueMaximoMatch ? valorSaqueMaximoMatch[1] : null;
+      const registeredProposal = await proposalBmg.registerProposal();
 
-//   const regexValorSaqueMinimo = /<valorSaqueMinimo xsi:type="xsd:double">([\d.]+)<\/valorSaqueMinimo>/;
-//   const valorSaqueMinimoMatch = xmlString.match(regexValorSaqueMinimo);
-//   const valorSaqueMinimo = valorSaqueMinimoMatch ? valorSaqueMinimoMatch[1] : null;
+      const successResponse = extractDataFromSuccessResponse(registeredProposal);
+      await pipefy.saveRegisteredProposal(cardId, 'idproposta', successResponse);
+      await pipefy.saveRegisteredProposal(cardId, 'observacao', '');
 
-//   const withdrawalLimitObj = {
-//     taxaJurosAnual: parseFloat(taxaJurosAnual),
-//     taxaJurosMensal: parseFloat(taxaJurosMensal),
-//     valorCetAnual: parseFloat(valorCetAnual),
-//     valorCetMensal: parseFloat(valorCetMensal),
-//     limiteCartao: parseFloat(limiteCartao),
-//     valorMargem: parseFloat(valorMargem),
-//     valorSaqueMaximo: parseFloat(valorSaqueMaximo),
-//     valorSaqueMinimo: parseFloat(valorSaqueMinimo),
-//   };
-
-//   return withdrawalLimitObj;
-// };
-
-const registerProposalCard = async (payload) => {
-  const response = await registerProposal.registerProposalCard(payload);
-  // const result = xmlToJson(response);
-  return response;
+      const successPhase = 321262258;
+      pipefy.moveCard(cardId, successPhase);
+    }
+  } catch (error) {
+    const pendingPhase = 321258609;
+    const errorResponse = await extractDataFromErrorResponse(error);
+    await pipefy.saveRegisteredProposal(cardId, 'observacao', errorResponse);
+    await pipefy.saveRegisteredProposal(cardId, 'idproposta', '');
+    await pipefy.moveCard(cardId, pendingPhase);
+  }
 };
 
 module.exports = {

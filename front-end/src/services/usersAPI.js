@@ -14,7 +14,9 @@ export const getUsersApi = async (take, skip) => {
       });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -34,7 +36,9 @@ export const getUsersByNameApi = async (name, take, skip) => {
       });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -54,7 +58,9 @@ export const deleteUsersApi = async (id) => {
       });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -75,7 +81,9 @@ export const editUsersApi = async (user) => {
       });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
@@ -96,7 +104,9 @@ export const registerUsersApi = async (user) => {
       });
     return data;
   } catch (error) {
-    if (error.response) {
+    if (error.code === 'ECONNABORTED') {
+      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+    } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
       }
