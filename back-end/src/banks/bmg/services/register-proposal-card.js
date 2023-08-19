@@ -9,7 +9,7 @@ const extractDataFromErrorResponse = (error) => {
   newData = data.replace(/\s{2,}/g, '');
   const regexFaultString = /<faultstring>(.*?)<\/faultstring>/;
   const faultStringMatch = newData.match(regexFaultString);
-  return faultStringMatch ? faultStringMatch[1] : '- não foi possíel extrair a resposta de erro do banco BMG';
+  return faultStringMatch ? faultStringMatch[1] : `- não foi possíel extrair a resposta de erro do banco BMG\n ${newData}`;
 };
 
 const extractDataFromSuccessResponse = (successResponse) => {
@@ -56,8 +56,15 @@ const registerProposalCard = async (cardMoved) => {
       pipefy.moveCard(cardId, successPhase);
     }
   } catch (error) {
+    let errorResponse;
+    if (error.response) {
+      if (error.response.data) {
+        errorResponse = await extractDataFromErrorResponse(error);
+      }
+    } else {
+      errorResponse = error;
+    }
     const pendingPhase = 321258609;
-    const errorResponse = await extractDataFromErrorResponse(error);
     await pipefy.saveRegisteredProposal(cardId, 'observacao', errorResponse);
     await pipefy.saveRegisteredProposal(cardId, 'idproposta', '');
     await pipefy.moveCard(cardId, pendingPhase);

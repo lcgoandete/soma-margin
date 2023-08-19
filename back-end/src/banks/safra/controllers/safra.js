@@ -1,4 +1,5 @@
 const safra = require('../services/safra');
+const proposal = require('../services/registerProposalCard');
 const { Ok } = require('../../../helpers/httpStatus');
 
 const getAgreements = async (req, res) => {
@@ -42,12 +43,19 @@ const getMargin = async (req, res) => {
   return res.status(Ok).json(result);
 };
 
+const registerProposalCard = (req, res) => {
+  const movedCard = req.body;
+  proposal.registerProposalCard(movedCard);
+  return res.status(Ok).json({ message: 'OK' });
+};
+
 module.exports = {
   getMargin,
   getAgreements,
   getSimulation,
   getFgtsBalance,
   getFormalization,
+  registerProposalCard,
   setSimulationSettings,
   getSimulationSettings,
 };

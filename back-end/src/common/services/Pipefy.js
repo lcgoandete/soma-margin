@@ -5,6 +5,18 @@ class PipefyService {
     this.pipefyModel = new PipefyModel();
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  validateMovedCard(cardMoved) {
+    const { action, from, to } = cardMoved.data;
+
+    if (action === 'card.move') {
+      if (from.name === 'Inicio' && to.name === 'Caixa de Entrada') {
+        return true;
+      }
+    }
+    return false;
+  }
+
   getCardData(cardId) {
     return this.pipefyModel.getCardData(cardId);
   }

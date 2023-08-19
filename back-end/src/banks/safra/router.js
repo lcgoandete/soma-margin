@@ -51,4 +51,10 @@ safraRoutes.post(
   rescue(safra.getMargin),
 );
 
+safraRoutes.post(
+  '/banks/safra/register-proposal-card',
+  // validateToken,
+  safra.registerProposalCard,
+);
+
 module.exports = safraRoutes;
