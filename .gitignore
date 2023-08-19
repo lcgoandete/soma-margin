@@ -1,8 +1,9 @@
 node_modules/
-.vscode/
 .env
 extras.txt
 back-end/prisma/database.db
 pm2.config.yml
 back-end/src/ssl/key.pem
 back-end/src/ssl/cert.pem
+front-end/build/
+rebuild_react.sh

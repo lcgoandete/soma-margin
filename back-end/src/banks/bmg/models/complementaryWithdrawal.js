@@ -1,11 +1,7 @@
 require('dotenv').config();
 const soapRequest = require('easy-soap-request');
 
-const {
-  getAvailableCardBody,
-  getLimitCardBody,
-  buildXmlToRequest,
-} = require('./handleXml');
+const { getAvailableCardXML, getLimitCardXML } = require('./handleXml');
 
 const requestBMG = async (soapAction, xml) => {
   const url = `${process.env.BMG_URL}/SaqueComplementar?wsdl`;
@@ -26,8 +22,7 @@ const requestBMG = async (soapAction, xml) => {
 
 const getAvailableCard = async (codigoEntidade, cpf, sequencialOrgao) => {
   const soapAction = 'buscarCartoesDisponiveis';
-  const body = getAvailableCardBody(codigoEntidade, cpf, sequencialOrgao);
-  const xml = buildXmlToRequest(body);
+  const xml = getAvailableCardXML(codigoEntidade, cpf, sequencialOrgao);
 
   try {
     const response = await requestBMG(soapAction, xml);
@@ -39,8 +34,7 @@ const getAvailableCard = async (codigoEntidade, cpf, sequencialOrgao) => {
 
 const getCardLimit = async (availableCard) => {
   const soapAction = 'buscarLimiteSaque';
-  const body = getLimitCardBody(availableCard);
-  const xml = buildXmlToRequest(body);
+  const xml = getLimitCardXML(availableCard);
 
   try {
     const response = await requestBMG(soapAction, xml);
