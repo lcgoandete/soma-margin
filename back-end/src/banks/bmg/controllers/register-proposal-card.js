@@ -7,6 +7,13 @@ const registerProposalCard = (req, res) => {
   return res.status(Ok).json({ message: 'OK' });
 };
 
+const registerProposalBenefitCard = (req, res) => {
+  const cardMoved = req.body;
+  proposal.registerProposalBenefitCard(cardMoved);
+  return res.status(Ok).json({ message: 'OK' });
+};
+
 module.exports = {
   registerProposalCard,
+  registerProposalBenefitCard,
 };

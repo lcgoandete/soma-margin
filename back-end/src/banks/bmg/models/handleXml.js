@@ -106,7 +106,40 @@ const createWithdrawalLimitXML = (payload) => {
   return xml;
 };
 
-const createRegisterProposalCardXML = (payload) => {
+const createBenefitCardWithdrawalLimitXML = (payload) => {
+  const rawXML = ''
+    .concat('<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ')
+    .concat('xmlns:xsd="http://www.w3.org/2001/XMLSchema" ')
+    .concat('xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" ')
+    .concat('xmlns:web="http://webservice.econsig.bmg.com">')
+    .concat(`<soapenv:Header/>
+      <soapenv:Body>
+        <web:buscarLimiteSaque soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+          <param xsi:type="web:BuscarLimiteSaqueParameter">
+            <login xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_LOGIN_WEBSERVICE}</login>
+            <senha xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${BMG_PASSWORD_WEBSERVICE}</senha>
+            <cpf xsi:type="soapenc:string" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">${payload.cpf}</cpf>
+            <matricula xsi:type="soapenc:string">${payload.matricula}</matricula>
+            <dataNascimento xsi:type="xsd:dateTime">${payload.dataNascimento}</dataNascimento>
+            <grauInstrucao xsi:type="soapenc:string">${payload.grauInstrucao}</grauInstrucao>
+            <valorMargem xsi:type="xsd:double">${payload.valorMargem}</valorMargem>
+            <codigoEntidade xsi:type="soapenc:string">${payload.codigoEntidade}</codigoEntidade>
+            <sequencialOrgao xsi:type="soapenc:int">${payload.sequencialOrgao}</sequencialOrgao>
+            <telefone xsi:type="web:TelefoneParameter">
+              <ddd xsi:type="soapenc:string">${payload.ddd}</ddd>
+              <numero xsi:type="soapenc:string">${payload.numero}</numero>
+              <ramal xsi:type="soapenc:string">${payload.ramal}</ramal>
+            </telefone>
+          </param>
+        </web:buscarLimiteSaque>
+      </soapenv:Body>
+    </soapenv:Envelope>`);
+
+  const xml = rawXML.replace(/\s{2,}/g, '');
+  return xml;
+};
+
+const createProposalCardXML = (payload) => {
   const {
     dadosProposta, dadosBancarios, dadosPessoais, celular, identidade, endereco, credenciais,
   } = payload;
@@ -267,10 +300,132 @@ const getProposalStatusXML = (payload) => {
   return minifyXML(rawXML);
 };
 
+const createProposalBenefitCardXML = (payload) => {
+  const {
+    dadosProposta, dadosBancarios, dadosPessoais, celular,
+    identidade, endereco, credenciais, camposFixos,
+  } = payload;
+
+  const rawXML = ''
+    .concat('<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ')
+    .concat('xmlns:xsd="http://www.w3.org/2001/XMLSchema" ')
+    .concat('xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" ')
+    .concat('xmlns:web="http://webservice.econsig.bmg.com" ')
+    .concat('xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">')
+    .concat(`<soapenv:Header/>
+      <soapenv:Body>
+        <web:gravarPropostaCartao soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+          <proposta xsi:type="web:CartaoParameter">
+            <login xsi:type="soapenc:string">${BMG_LOGIN_WEBSERVICE}</login>
+            <senha xsi:type="soapenc:string">${BMG_PASSWORD_WEBSERVICE}</senha>
+            <aberturaContaPagamento xsi:type="xsd:int">${camposFixos.aberturaContaPagamento}</aberturaContaPagamento>
+            <bancoOrdemPagamento xsi:type="xsd:int">${camposFixos.bancoOrdemPagamento}</bancoOrdemPagamento>
+            <dataAdmissao xsi:type="xsd:dateTime">${camposFixos.dataAdmissao}</dataAdmissao>
+            <tipoSaque xsi:type="soapenc:int">${camposFixos.tipoSaque}</tipoSaque>
+            <unidadePagadora xsi:type="soapenc:string">${camposFixos.unidadePagadora}</unidadePagadora>
+            <tipoDomicilioBancario xsi:type="soapenc:short">${camposFixos.tipoDomicilioBancario}</tipoDomicilioBancario>
+            
+            <formaCredito xsi:type="xsd:int">${camposFixos.formaCredito}</formaCredito>
+            <matriculaInstituidor xsi:type="soapenc:string">${camposFixos.matriculaInstituidor}</matriculaInstituidor>
+            <codigoLoja xsi:type="soapenc:int">${camposFixos.codigoLoja}</codigoLoja>
+            <codigoServico xsi:type="soapenc:string">${camposFixos.codigoServico}</codigoServico>
+
+            <seguros xsi:type="web:ArrayOfSeguro" soapenc:arrayType="web:Seguro[]">
+              <seguro xsi:type="web:Seguro">
+                <tipoSeguro>${camposFixos.tipoSeguro}</tipoSeguro>
+                <codigoPlano xsi:type="xsd:int">${camposFixos.codigoPlano}</codigoPlano>
+              </seguro>
+            </seguros>
+
+            <codigoFormaEnvioTermo xsi:type="soapenc:string">${camposFixos.codigoFormaEnvioTermo}</codigoFormaEnvioTermo>
+            <loginConsig xsi:type="soapenc:string">${credenciais.loginConsig}</loginConsig>
+            <senhaConsig xsi:type="soapenc:string">${credenciais.senhaConsig}</senhaConsig>
+            <token xsi:type="soapenc:string">${credenciais.token}</token>
+
+            <codigoEntidade xsi:type="soapenc:string">${dadosProposta.codigoEntidade}</codigoEntidade>
+            <codigoSituacaoServidor xsi:type="soapenc:int">${dadosProposta.codigoSituacaoServidor}</codigoSituacaoServidor>
+            <cpf xsi:type="soapenc:string">${dadosProposta.cpf}</cpf>
+            <matricula xsi:type="soapenc:string">${dadosProposta.matricula}</matricula>
+            <margem xsi:type="xsd:double">${dadosProposta.margem}</margem>
+            <valorRenda xsi:type="xsd:double">${dadosProposta.valorRenda}</valorRenda>
+            <dataRenda xsi:type="xsd:dateTime">${dadosProposta.dataRenda}</dataRenda>
+            <valorSolicitado xsi:type="xsd:double">${dadosProposta.valorSaque}</valorSolicitado>
+            <valorParcela xsi:type="soapenc:double">${dadosProposta.valorParcela}</valorParcela>
+            <valorSaque xsi:type="soapenc:double">${dadosProposta.valorSaque}</valorSaque>
+
+            <tipoBeneficio xsi:type="soapenc:int"></tipoBeneficio>
+            <ufContaBeneficio xsi:type="soapenc:string"></ufContaBeneficio>
+            <cargo xsi:type="soapenc:string"></cargo>
+
+            <finalidadeCredito xsi:type="xsd:int">${dadosBancarios.finalidadeCredito}</finalidadeCredito>
+            <banco xsi:type="web:BancoParameter">
+              <numero xsi:type="xsd:int">${dadosBancarios.banco}</numero>
+            </banco>
+
+            <agencia xsi:type="web:AgenciaParameter">
+              <digitoVerificador xsi:type="soapenc:string">${dadosBancarios.digitoVerificadorDaAgencia}</digitoVerificador>
+              <numero xsi:type="soapenc:string">${dadosBancarios.agencia}</numero>
+            </agencia>
+
+            <conta xsi:type="web:ContaParameter">
+              <digitoVerificador xsi:type="soapenc:string">${dadosBancarios.digitoVerificadorDaConta}</digitoVerificador>
+              <numero xsi:type="soapenc:string">${dadosBancarios.numeroDaConta}</numero>
+              <tipoConta xsi:type="soapenc:int"></tipoConta>
+            </conta>
+
+            <cliente xsi:type="web:ClienteParameter">
+              <nome xsi:type="soapenc:string">${dadosPessoais.nome}</nome>
+              <cpf xsi:type="soapenc:string">${dadosProposta.cpf}</cpf>
+              <dataNascimento xsi:type="xsd:dateTime">${dadosPessoais.dataNascimento}</dataNascimento>
+              <sexo xsi:type="soapenc:string">${dadosPessoais.sexo}</sexo>
+              <email xsi:type="soapenc:string">${dadosPessoais.email}</email>
+              <nomeMae xsi:type="soapenc:string">${dadosPessoais.nomeMae}</nomeMae>
+              <nomePai xsi:type="soapenc:string">${dadosPessoais.nomePai}</nomePai>
+              <estadoCivil xsi:type="soapenc:string">${dadosPessoais.estadoCivil}</estadoCivil>
+              <nomeConjuge xsi:type="soapenc:string">${dadosPessoais.nomeConjuge}</nomeConjuge>
+              <grauInstrucao xsi:type="soapenc:string">${dadosPessoais.grauInstrucao}</grauInstrucao>
+              <nacionalidade xsi:type="soapenc:string">${dadosPessoais.nacionalidade}</nacionalidade>
+              <ufNascimento xsi:type="soapenc:string">${dadosPessoais.ufNascimento}</ufNascimento>
+              <cidadeNascimento xsi:type="soapenc:string">${dadosPessoais.cidadeNascimento}</cidadeNascimento>
+
+              <identidade xsi:type="web:IdentidadeParameter">
+                <dataEmissao xsi:type="xsd:dateTime">${identidade.dataEmissao}</dataEmissao>
+                <emissor xsi:type="soapenc:string">${identidade.emissor}</emissor>
+                <numero xsi:type="soapenc:string">${identidade.numero}</numero>
+                <tipo xsi:type="soapenc:string">${identidade.tipo}</tipo>
+                <uf xsi:type="soapenc:string">${identidade.uf}</uf>
+              </identidade>
+
+              <celular1 xsi:type="web:TelefoneParameter">
+                <ddd xsi:type="soapenc:string">${celular.ddd}</ddd>
+                <numero xsi:type="soapenc:string">${celular.numero}</numero>
+                <ramal xsi:type="soapenc:string"></ramal>
+              </celular1>
+
+              <endereco xsi:type="web:EnderecoParamter">
+                <bairro xsi:type="soapenc:string">${endereco.bairro}</bairro>
+                <cep xsi:type="soapenc:string">${endereco.cep}</cep>
+                <cidade xsi:type="soapenc:string">${endereco.cidade}</cidade>
+                <complemento xsi:type="soapenc:string">${endereco.complemento}</complemento>
+                <logradouro xsi:type="soapenc:string">${endereco.logradouro}</logradouro>
+                <numero xsi:type="soapenc:string">${endereco.numero}</numero>
+                <uf xsi:type="soapenc:string">${endereco.uf}</uf>
+              </endereco>
+            </cliente>
+          </proposta>
+        </web:gravarPropostaCartao>
+      </soapenv:Body>
+    </soapenv:Envelope>`);
+
+  return minifyXML(rawXML);
+};
+
 module.exports = {
   getLimitCardXML,
   getAvailableCardXML,
   getProposalStatusXML,
+  createProposalCardXML,
   createWithdrawalLimitXML,
-  createRegisterProposalCardXML,
+  createProposalBenefitCardXML,
+  createBenefitCardWithdrawalLimitXML,
 };

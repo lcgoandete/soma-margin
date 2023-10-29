@@ -42,14 +42,7 @@ class ProposalConverterBMG {
   }
 
   #setServerStatus(proposalData) {
-    const codigoEntidade = this.#extractEntityCode(proposalData.Codigo_Entidade);
-    let serverStatus = 31;
-
-    if (codigoEntidade === '4194-1') {
-      const newStatus = proposalData.Codigo_Situacao_Servidor.match(/\d+/g)[0];
-      serverStatus = parseInt(newStatus, 10);
-    }
-    return serverStatus;
+    return proposalData.Codigo_Situacao_Servidor.match(/\d+/g)[0];
   }
 
   #dadosProposta(proposalData) {
@@ -116,7 +109,7 @@ class ProposalConverterBMG {
     return {
       logradouro: proposalData.Logradouro,
       numero: proposalData.Numero_Endereco,
-      complemento: proposalData.Complemento,
+      complemento: proposalData.Complemento !== undefined ? proposalData.Complemento : '',
       cep: proposalData.CEP,
       bairro: proposalData.Bairro,
       cidade: proposalData.Cidade,
@@ -132,6 +125,26 @@ class ProposalConverterBMG {
     };
   }
 
+  #camposFixos() {
+    return {
+      aberturaContaPagamento: 0,
+      bancoOrdemPagamento: 0,
+      dataAdmissao: '2011-02-02T00:00:00',
+      tipoSaque: 1,
+      unidadePagadora: '',
+      tipoDomicilioBancario: 1,
+      sequencialOrgao: '',
+      formaCredito: 2,
+      matriculaInstituidor: '',
+      codigoLoja: 55878,
+      codigoServico: '140',
+      tipoSeguro: 1,
+      codigoPlano: 128,
+      codigoFormaEnvioTermo: '21',
+      ufContaBeneficio: '',
+    };
+  }
+
   execute(proposalData) {
     const result = {
       dadosProposta: this.#dadosProposta(proposalData),
@@ -141,6 +154,7 @@ class ProposalConverterBMG {
       identidade: this.#identidade(proposalData),
       endereco: this.#endereco(proposalData),
       credenciais: this.#credenciais(proposalData),
+      camposFixos: this.#camposFixos(),
     };
     return result;
   }

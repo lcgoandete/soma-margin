@@ -13,10 +13,11 @@ import { Simulation } from "./banks/safra/Simulation";
 import { Private } from '../components/private/Private';
 import { FgtsBalance } from "./banks/safra/FgtsBalance";
 import { Formalization } from './banks/safra/Formalization';
+import { ProposalStatus } from './banks/bmg/proposal-status';
 import { WithdrawalLimit } from './banks/bmg/withdrawal-limit';
 import { RegisterProposalCard } from './banks/bmg/register-proposal-card';
-import { ProposalStatus } from './banks/bmg/proposal-status';
 import { SimulationSettingsProvider } from "../contexts/simulationSettingsContext";
+import { WithdrawalLimitBenefitCard } from './banks/bmg/withdrawal-limit-benefit-card';
 
 const PageRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const PageRoutes = () => {
         <Route path="/margin" element={ <Private><Margin /></Private> } />
         <Route path="/banks/bmg/card-limit" element={ <Private><CardLimit /></Private> } />
         <Route path="/banks/bmg/withdrawalLimit" element={ <Private><WithdrawalLimit /></Private> } />
+        <Route path="/banks/bmg/withdrawalLimitBenefitCard" element={ <Private><WithdrawalLimitBenefitCard /></Private> } />
         <Route path="/banks/bmg/registerProposalCard" element={ <Private><RegisterProposalCard /></Private> } />
         <Route path="/banks/bmg/proposalStatus" element={ <Private><ProposalStatus /></Private> } />
         <Route path="/banks/safra/agreement" element={ <Private><Agreement /></Private> } />

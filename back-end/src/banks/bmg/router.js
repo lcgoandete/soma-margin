@@ -21,10 +21,20 @@ complementaryWithdrawalRoutes.post(
   rescue(withdrawalLimit.getWithdrawalLimit),
 );
 
+complementaryWithdrawalRoutes.get(
+  '/banks/bmg/benefit-card-withdrawal-limit',
+  validateToken,
+  rescue(withdrawalLimit.getBenefitCardWithdrawalLimit),
+);
+
 complementaryWithdrawalRoutes.post(
   '/banks/bmg/register-proposal-card',
-  // validateToken,
   registerProposal.registerProposalCard,
+);
+
+complementaryWithdrawalRoutes.post(
+  '/banks/bmg/register-proposal-benefit-card',
+  registerProposal.registerProposalBenefitCard,
 );
 
 complementaryWithdrawalRoutes.get(

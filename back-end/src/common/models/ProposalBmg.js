@@ -1,6 +1,7 @@
 const Proposal = require('./Proposal');
 const ProposalConverterBMG = require('./ProposalConverterBMG');
 const { registerProposalCard } = require('../../banks/bmg/models/register-proposal-card');
+const { registerProposalBenefitCard } = require('../../banks/bmg/models/register-proposal-benefit-card');
 
 class ProposalBmg extends Proposal {
   #convertedProposal;
@@ -20,6 +21,12 @@ class ProposalBmg extends Proposal {
   registerProposal = async () => {
     await this.#createProposal();
     const registeredProposal = await registerProposalCard(this.#convertedProposal);
+    return registeredProposal;
+  };
+
+  registerProposalBenefit = async () => {
+    await this.#createProposal();
+    const registeredProposal = await registerProposalBenefitCard(this.#convertedProposal);
     return registeredProposal;
   };
 }
