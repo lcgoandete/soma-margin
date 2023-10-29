@@ -2,9 +2,10 @@ require('dotenv').config();
 const { By } = require('selenium-webdriver');
 
 const { browser } = require('./browser');
-
+const { report, solveCaptcha } = require('../../helpers/solveCaptcha');
 // eslint-disable-next-line no-return-await
 const createDriver = async () => await browser();
+let numberOfLoginAttempts = 0;
 
 // const loginRumola = async (driver) => {
 //   const { USER_RUMOLA } = process.env;
@@ -21,6 +22,10 @@ const createDriver = async () => await browser();
 // };
 
 const loginPortalDoConsignado = async (driver) => {
+  if (numberOfLoginAttempts >= 5) {
+    throw new Error('Não foi possível fazer login no portal consignado. Número de tentativas 5');
+  }
+
   const { USER_PORTAL } = process.env;
   const { PASSWORD_PORTAL } = process.env;
 
@@ -31,13 +36,36 @@ const loginPortalDoConsignado = async (driver) => {
 
   await driver.findElement(By.css('#username')).sendKeys(USER_PORTAL);
   await driver.findElement(By.css('#password')).sendKeys(PASSWORD_PORTAL);
-  await driver.sleep(1000);
-  await driver.findElement(By.css('#captcha')).click();
-  await driver.sleep(10000);
-  await driver.findElement(By.css('#divLogin > div:nth-child(6)')).click();
-  await driver.sleep(3000);
-  await driver.get('https://www.portaldoconsignado.com.br/consignatario/pesquisarMargem');
-  await driver.sleep(1000);
+  await driver.sleep(5000);
+
+  const captchaImageElement = await driver.findElement(By.xpath('/html/body/div/div[2]/form/div[3]/div/div/div/div[5]/div/div[1]/div[1]/img'));
+  const encodedString = await captchaImageElement.takeScreenshot(true);
+  const solvedCaptcha = await solveCaptcha(encodedString);
+
+  if (solvedCaptcha) {
+    if (solvedCaptcha.text === '' || solvedCaptcha.text.startsWith('[[')) {
+      numberOfLoginAttempts += 1;
+      await loginPortalDoConsignado(driver);
+    }
+    numberOfLoginAttempts = 0;
+
+    await driver.findElement(By.css('#captcha')).click();
+    await driver.findElement(By.css('#captcha')).sendKeys(solvedCaptcha.text);
+    await driver.findElement(By.css('#divLogin > div:nth-child(6)')).click();
+    await driver.sleep(3000);
+    await driver.get('https://www.portaldoconsignado.com.br/consignatario/pesquisarMargem');
+    await driver.sleep(1000);
+
+    const pesquisarMargem = await driver.findElements(By.xpath('/html/body/div/div/div[2]/div/form/div[2]/div/h1'));
+    if (pesquisarMargem.length === 0) {
+      numberOfLoginAttempts += 1;
+      await report(solvedCaptcha.captcha);
+      await loginPortalDoConsignado(driver);
+    }
+  } else {
+    numberOfLoginAttempts += 1;
+    await loginPortalDoConsignado(driver);
+  }
 };
 
 const isLogin = async () => {

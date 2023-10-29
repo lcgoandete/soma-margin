@@ -71,6 +71,47 @@ const registerProposalCard = async (cardMoved) => {
   }
 };
 
+const registerProposalBenefitCard = async (cardMoved) => {
+  const pipefy = new Pipefy();
+  const cardId = cardMoved.data.card.id;
+
+  try {
+    const movedCardIsValidated = validateMovedCard(cardMoved);
+    if (movedCardIsValidated) {
+      const cardData = await pipefy.getCardData(cardId);
+
+      const credentials = await pipefy.getCredentials();
+      const newCardData = [...cardData.data.card.fields, ...credentials.data.card.fields];
+
+      const proposalBmg = new ProposalBmg(newCardData);
+      await proposalBmg.convertCardFieldsToProposalData();
+
+      const registeredProposal = await proposalBmg.registerProposalBenefit();
+
+      const successResponse = extractDataFromSuccessResponse(registeredProposal);
+      await pipefy.saveRegisteredProposal(cardId, 'idproposta', successResponse);
+      await pipefy.saveRegisteredProposal(cardId, 'observacao', '');
+
+      const successPhase = 322565645;
+      pipefy.moveCard(cardId, successPhase);
+    }
+  } catch (error) {
+    let errorResponse;
+    if (error.response) {
+      if (error.response.data) {
+        errorResponse = await extractDataFromErrorResponse(error);
+      }
+    } else {
+      errorResponse = error.message;
+    }
+    const pendingPhase = 322565644;
+    await pipefy.saveRegisteredProposal(cardId, 'observacao', errorResponse);
+    await pipefy.saveRegisteredProposal(cardId, 'idproposta', '');
+    await pipefy.moveCard(cardId, pendingPhase);
+  }
+};
+
 module.exports = {
   registerProposalCard,
+  registerProposalBenefitCard,
 };

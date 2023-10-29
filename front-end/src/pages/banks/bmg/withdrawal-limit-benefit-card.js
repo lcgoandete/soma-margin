@@ -19,16 +19,16 @@ import { Header } from '../../../components/header/Header';
 import { Loading } from '../../../components/loading/Loading';
 import { PageTitle } from '../../../components/pageTitle/PageTitle';
 import { formatCurrency, formatCurrencyMask } from '../../../helpers/formatter';
-import { useWithdrawalLimit } from '../../../hooks/banks/bmg/useWithdrawalLimit';
 import { ShowProposalLink } from '../../../components/bmg/proposal-card/ShowProposalLink';
+import { useWithdrawalLimitBenefitCard } from '../../../hooks/banks/bmg/useWithdrawalLimitBenefitCard';
 
-export const WithdrawalLimit = () => {
+export const WithdrawalLimitBenefitCard = () => {
   const toast = useToast();
   const [convenio, setConvenio] = useState('');
   const [valorMargem, setValorMargem] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
-  const [withdrawalLimit, setWithdrawalLimit] = useState(null);
-  const { getWithdrawalLimit, loading } = useWithdrawalLimit();
+  const [withdrawalLimitBenefitCard, setWithdrawalLimitBenefitCard] = useState(null);
+  const { getWithdrawalLimitBenefitCard, loading } = useWithdrawalLimitBenefitCard();
 
   const cleanFields = () => {
     setConvenio('');
@@ -36,12 +36,12 @@ export const WithdrawalLimit = () => {
     setDataNascimento('');
   };
 
-  const getWithdrawalLimits = async (event) => {
+  const getWithdrawalLimitsBenefitCard = async (event) => {
     event.preventDefault();
-    setWithdrawalLimit(null);
+    setWithdrawalLimitBenefitCard(null);
 
     const payload = { convenio, valorMargem, dataNascimento };
-    const result = await getWithdrawalLimit(payload);
+    const result = await getWithdrawalLimitBenefitCard(payload);
 
     if (result.errorMessage) {
       toast({
@@ -53,7 +53,7 @@ export const WithdrawalLimit = () => {
         position: "top",
       });
     } else {
-      setWithdrawalLimit(result);
+      setWithdrawalLimitBenefitCard(result);
       cleanFields();
     }
   }
@@ -72,10 +72,10 @@ export const WithdrawalLimit = () => {
               onChange={ ({ target }) => setConvenio(target.value) }
             >
               <option value="">Selecione...</option>
-              <option value={ 4195 }>4195 - GOV SP - SEFAZ</option>
-              <option value={ 4193 }>4193 - GOV SP - POLÍCIA MILITAR</option>
-              <option value={ 4194 }>4194 - GOV SP - SPPREV</option>
-              <option value={ 128 }>128 - PREF SÃO PAULO</option>
+              <option value={ 4267 }>4267 - GOV SP - SEFAZ</option>
+              <option value={ 4279 }>4193 - GOV SP - POLÍCIA MILITAR</option>
+              <option value={ 4278 }>4194 - GOV SP - SPPREV</option>
+              <option value={ 4281 }>4281 - PREF SÃO PAULO</option>
             </Select>
 
             <FormLabel htmlFor="valorMargem" mt="10px">Valor Margem:</FormLabel>
@@ -102,7 +102,7 @@ export const WithdrawalLimit = () => {
         </SimpleGrid>
 
         <Box mt="4">
-          <Button colorScheme='blue' onClick={ (event) => getWithdrawalLimits(event) }>
+          <Button colorScheme='blue' onClick={ (event) => getWithdrawalLimitsBenefitCard(event) }>
             Consultar
             { loading && <Loading /> }
           </Button>
@@ -112,7 +112,7 @@ export const WithdrawalLimit = () => {
   }
 
   const renderingWithdrawalLimit = () => {
-    if (!withdrawalLimit) {
+    if (!withdrawalLimitBenefitCard) {
       return (
         <Box my="4" mx="auto" p="15px" w="650px" border="1px" borderRadius="10px" borderColor="gray.200" align="center">
           Dados inexistentes
@@ -121,40 +121,40 @@ export const WithdrawalLimit = () => {
     }
     
     return(
-      <TableContainer my="25px" mx="auto" p="15px" w="650px" border="1px" borderRadius="10px" borderColor="gray.200">
+      <TableContainer my="4" mx="auto" p="15px" w="650px" border="1px" borderRadius="10px" borderColor="gray.200">
         <Table variant='striped'>
           <Tbody>
             <Tr>
               <Td>Taxa de Juros Anual:</Td>
-              <Td>{ formatCurrency(withdrawalLimit.taxaJurosAnual) } %</Td>
+              <Td>{ formatCurrency(withdrawalLimitBenefitCard.taxaJurosAnual) } %</Td>
             </Tr>
             <Tr>
               <Td>Taxa de Juros Mensal:</Td>
-              <Td>{ formatCurrency(withdrawalLimit.taxaJurosMensal) } %</Td>
+              <Td>{ formatCurrency(withdrawalLimitBenefitCard.taxaJurosMensal) } %</Td>
             </Tr>
             <Tr>
               <Td>Valor Cet Anual:</Td>
-              <Td>{ formatCurrency(withdrawalLimit.valorCetAnual) } %</Td>
+              <Td>{ formatCurrency(withdrawalLimitBenefitCard.valorCetAnual) } %</Td>
             </Tr>
             <Tr>
               <Td>Valor Cet Mensal:</Td>
-              <Td>{ formatCurrency(withdrawalLimit.valorCetMensal) } %</Td>
+              <Td>{ formatCurrency(withdrawalLimitBenefitCard.valorCetMensal) } %</Td>
             </Tr>
             <Tr>
               <Td>Limite do Cartao:</Td>
-              <Td>R$ { formatCurrency(withdrawalLimit.limiteCartao) }</Td>
+              <Td>R$ { formatCurrency(withdrawalLimitBenefitCard.limiteCartao) }</Td>
             </Tr>
             <Tr>
               <Td>Valor da Margem:</Td>
-              <Td>R$ { formatCurrency(withdrawalLimit.valorMargem) }</Td>
+              <Td>R$ { formatCurrency(withdrawalLimitBenefitCard.valorMargem) }</Td>
             </Tr>
             <Tr>
               <Td>Valor de Saque Máximo:</Td>
-              <Td>R$ { formatCurrency(withdrawalLimit.valorSaqueMaximo) }</Td>
+              <Td>R$ { formatCurrency(withdrawalLimitBenefitCard.valorSaqueMaximo) }</Td>
             </Tr>
             <Tr>
               <Td>Valor de Saque Mínimo:</Td>
-              <Td>R$ { formatCurrency(withdrawalLimit.valorSaqueMinimo) }</Td>
+              <Td>R$ { formatCurrency(withdrawalLimitBenefitCard.valorSaqueMinimo) }</Td>
             </Tr>
           </Tbody>
         </Table>
@@ -165,9 +165,9 @@ export const WithdrawalLimit = () => {
   return (
     <>
       <Header />
-      <PageTitle title=" Consutar Limite de Cartão" />
+      <PageTitle title=" Consutar Limite de Cartão Benefício" />
       { renderingForm() }
-      <ShowProposalLink color="orange" data={ withdrawalLimit } link="https://app.pipefy.com/public/form/YRtd-Tyk" />
+      <ShowProposalLink color="purple" data={ withdrawalLimitBenefitCard } link="https://app.pipefy.com/public/form/ZsKJpVTu" />
       { renderingWithdrawalLimit() }
     </>
   );

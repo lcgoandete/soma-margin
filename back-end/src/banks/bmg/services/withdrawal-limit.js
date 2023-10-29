@@ -80,10 +80,27 @@ const xmlToJson = (xmlString) => {
 
 const getWithdrawalLimit = async (payload) => {
   const response = await withdrawalLimit.getWithdrawalLimit(payload);
-  const result = xmlToJson(response);
-  return result;
+  return xmlToJson(response);
+};
+
+const getBenefitCardWithdrawalLimit = async (payload) => {
+  const newPayload = {
+    cpf: '12345678901',
+    matricula: '12345',
+    grauInstrucao: '7',
+    ddd: '31',
+    numero: '00000000',
+    ramal: '',
+    dataNascimento: payload.dataNascimento,
+    valorMargem: parseFloat(payload.valorMargem),
+    codigoEntidade: payload.codigoEntidade,
+    sequencialOrgao: parseInt(payload.sequencialOrgao, 10),
+  };
+  const response = await withdrawalLimit.getBenefitCardWithdrawalLimit(newPayload);
+  return xmlToJson(response);
 };
 
 module.exports = {
   getWithdrawalLimit,
+  getBenefitCardWithdrawalLimit,
 };
