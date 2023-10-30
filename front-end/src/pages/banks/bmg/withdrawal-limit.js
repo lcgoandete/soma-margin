@@ -167,7 +167,7 @@ export const WithdrawalLimit = () => {
       <Header />
       <PageTitle title=" Consutar Limite de Cartão" />
       { renderingForm() }
-      <ShowProposalLink color="orange" data={ withdrawalLimit } link="https://app.pipefy.com/public/form/YRtd-Tyk" />
+      <ShowProposalLink color="orange" data={ withdrawalLimit } link="https://app.pipefy.com/organizations/277137/portals?pipeId=303474268&pipeUuid=df0aaf83-da2a-46fa-9e92-1d1e94022b9b" />
       { renderingWithdrawalLimit() }
     </>
   );

@@ -167,7 +167,7 @@ export const WithdrawalLimitBenefitCard = () => {
       <Header />
       <PageTitle title=" Consutar Limite de Cartão Benefício" />
       { renderingForm() }
-      <ShowProposalLink color="purple" data={ withdrawalLimitBenefitCard } link="https://app.pipefy.com/public/form/ZsKJpVTu" />
+      <ShowProposalLink color="purple" data={ withdrawalLimitBenefitCard } link="https://app.pipefy.com/organizations/277137/portals?pipeId=303699099&pipeUuid=22ecbb12-6ec2-4e0b-a5bf-6877cc67d102" />
       { renderingWithdrawalLimit() }
     </>
   );
