@@ -1,5 +1,6 @@
 const { decode } = require('html-entities');
 
+const { delay } = require('../../../helpers/helpers');
 const ProposalBmg = require('../../../common/models/ProposalBmg');
 const Pipefy = require('../../../common/services/Pipefy');
 
@@ -52,6 +53,8 @@ const registerProposalCard = async (cardMoved) => {
       await pipefy.saveRegisteredProposal(cardId, 'idproposta', successResponse);
       await pipefy.saveRegisteredProposal(cardId, 'observacao', '');
 
+      delay(3);
+
       const successPhase = 321262258;
       pipefy.moveCard(cardId, successPhase);
     }
@@ -91,6 +94,8 @@ const registerProposalBenefitCard = async (cardMoved) => {
       const successResponse = extractDataFromSuccessResponse(registeredProposal);
       await pipefy.saveRegisteredProposal(cardId, 'idproposta', successResponse);
       await pipefy.saveRegisteredProposal(cardId, 'observacao', '');
+
+      delay(3);
 
       const successPhase = 322565645;
       pipefy.moveCard(cardId, successPhase);
