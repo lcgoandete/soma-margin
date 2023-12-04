@@ -23,7 +23,7 @@ export const useRegisterProposalCard = () => {
     });
   
     try {
-      await schema.validate(payload);
+      return await schema.validate(payload);
     } catch (error) {
       return { errorMessage: `"${error.path}" ${error.message}` };
     }

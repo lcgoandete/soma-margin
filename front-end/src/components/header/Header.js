@@ -41,6 +41,16 @@ export const Header = () => {
     }
   }
 
+  const renderChatMenu = () => {
+    return (
+      <Menu>
+        <Button type='button'>
+          <Link to="/chatgpt">Chat GPT</Link>
+        </Button>
+      </Menu>
+    );
+  }
+
   return (
     <Flex direction='row' width='99%' my='2' mx='auto' px='3' border='1px' borderRadius='10' borderColor='gray.200'>
       <Image boxSize='70px' objectFit='scale-down' src={ logo } alt='enterprise logo'/>
@@ -101,6 +111,7 @@ export const Header = () => {
         </Menu>
 
         { renderUserMenu() }
+        { renderChatMenu() }
       </Center>
       <Spacer />
       <Center>

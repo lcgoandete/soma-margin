@@ -9,12 +9,15 @@ export const setAuthenticationApi = async (credendials) => {
       method: 'POST',
       url: `${url}/login/`,
       data: credendials,
-      timeout: TIMEOUT,
+      timeout: 10000,
     });
     return data;
   } catch (error) {
+    if (error.code === 'ERR_NETWORK') {
+      return { errorMessage: 'Não foi possivel se comunicar com o servidor.' };
+    }
     if (error.code === 'ECONNABORTED') {
-      return { errorMessage: `O tempo limite de espera ${TIMEOUT / 1000} segundos foi excedido.` };
+      return { errorMessage: 'O tempo limite de espera 10 segundos foi excedido.' };
     } else if (error.response) {
       if (error.response.data.message) {
         return { errorMessage: error.response.data.message };
