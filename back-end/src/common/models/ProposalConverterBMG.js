@@ -73,18 +73,18 @@ class ProposalConverterBMG {
 
   #dadosPessoais(proposalData) {
     return {
-      nome: proposalData.Nome_Completo,
+      nome: proposalData.Nome_Completo.trim(),
       dataNascimento: this.#dateConverter(proposalData.Data_de_Nascimento),
       sexo: proposalData.Sexo,
-      email: proposalData.Email,
-      nomeMae: proposalData.Nome_da_Mae,
-      nomePai: proposalData.Nome_do_Pai,
+      email: proposalData.Email.trim(),
+      nomeMae: proposalData.Nome_da_Mae.trim(),
+      nomePai: proposalData.Nome_do_Pai.trim(),
       estadoCivil: 'S',
       nomeConjuge: '',
       grauInstrucao: 7,
-      nacionalidade: proposalData.Nacionalidade,
+      nacionalidade: proposalData.Nacionalidade.trim(),
       ufNascimento: proposalData.Uf_Nascimento.toUpperCase(),
-      cidadeNascimento: proposalData.Cidade_de_Nascimento,
+      cidadeNascimento: proposalData.Cidade_de_Nascimento.trim(),
     };
   }
 
@@ -107,12 +107,12 @@ class ProposalConverterBMG {
 
   #endereco(proposalData) {
     return {
-      logradouro: proposalData.Logradouro,
-      numero: proposalData.Numero_Endereco,
+      logradouro: proposalData.Logradouro.trim(),
+      numero: proposalData.Numero_Endereco.trim(),
       complemento: proposalData.Complemento !== undefined ? proposalData.Complemento : '',
       cep: proposalData.CEP,
-      bairro: proposalData.Bairro,
-      cidade: proposalData.Cidade,
+      bairro: proposalData.Bairro.trim(),
+      cidade: proposalData.Cidade.trim(),
       uf: proposalData.Uf.toUpperCase(),
     };
   }

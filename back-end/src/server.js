@@ -69,9 +69,9 @@ setInterval(async () => {
   }
 }, 1000 * 60 * 26);
 
-https.createServer({
-  cert: fs.readFileSync(path.join(SSL_CERTIFICATE_PATH)),
-  key: fs.readFileSync(path.join(SSL_KEY_PATH)),
-}, app).listen(PORT_HTTPS, () => console.log(`rodando https ${PORT_HTTPS}`));
+// https.createServer({
+//   cert: fs.readFileSync(path.join(SSL_CERTIFICATE_PATH)),
+//   key: fs.readFileSync(path.join(SSL_KEY_PATH)),
+// }, app).listen(PORT_HTTPS, () => console.log(`rodando https ${PORT_HTTPS}`));
 
 app.listen(PORT_HTTP, () => console.log(`rodando http ${PORT_HTTP}`));

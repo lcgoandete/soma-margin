@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { User } from './user/User';
 import { Home } from './home/Home';
 import { Login } from './login/Login';
+import { Chatgpt } from './chatgpt/chatgpt';
 import { NotFound } from './notFound/NotFound';
 import SafrasMargin from './banks/safra/Margin';
 import { Forbidden } from './forbidden/Forbidden';
@@ -43,6 +44,7 @@ const PageRoutes = () => {
           </Private> }
         />
         <Route path="/user" element={ <Private><User /></Private> } />
+        <Route path="/chatgpt" element={ <Private><Chatgpt /></Private> } />
         <Route path="/forbidden" element={ <Forbidden /> } />
         <Route path="*" element={<NotFound />} />
       </Routes>
