@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { Box,
   Center,
+  Flex,
   FormControl,
   FormLabel,
   Input,
+  ListItem,
   Select,
   SimpleGrid,
-  Textarea,
+  Text,
+  UnorderedList,
   useToast
 } from '@chakra-ui/react';
 
@@ -17,11 +20,11 @@ import { PageTitle } from '../../components/pageTitle/PageTitle';
 import { Loading } from '../../components/loading/Loading';
 
 export const Chatgpt = () => {
-  const [age, setAge] = useState('');
-  const [margin, setMargin] = useState('');
-  const [question, setQuestion] = useState('');
-  const [name, setName] = useState('');
-  const [answer, setAnswer] = useState();
+  const [age, setAge] = useState();
+  const [margin, setMargin] = useState();
+  const [question, setQuestion] = useState();
+  const [name, setName] = useState();
+  const [chat] = useState([]);
   
   const toast = useToast();
   const { loading, getChat } = useChatgpt();
@@ -44,8 +47,7 @@ export const Chatgpt = () => {
         position: "top",
       });
     } else {
-      setAnswer(result.message);
-      setQuestion('');
+      addChat(result.message);
     }
   }
 
@@ -94,22 +96,47 @@ export const Chatgpt = () => {
           </Box>
         </SimpleGrid>
       </FormControl>
-      
     );
   }
 
-  const renderingAnswer = () => {
+  const createAnswer = (message) => {
+    chat.push(
+      <ListItem key={ Math.random() }>
+        <Flex p="1" flexDirection={"row"} justifyContent="left">
+          <Text maxW="70%" p="2" color="white" bgColor="gray.500" borderRadius="6">{ message }</Text>
+        </Flex>
+      </ListItem>);
+  }
+
+  const createQuestion = () => {
+    chat.push(
+      <ListItem key={ Math.random() }>
+        <Flex p="1" flexDirection="row" justifyContent="right">
+          <Text maxW="70%" p="2" bgColor="green.400" borderRadius="6">{ question }</Text>
+        </Flex>
+      </ListItem>);
+  }
+
+  const addChat = (message) => {
+    createQuestion();
+    createAnswer(message);
+    setQuestion('');
+  }
+
+  const renderingChat = () => {
     return (
-      <Box mx="auto" my="4" p="15px" w="900px" h="410" border="1px" borderRadius="10px" borderColor="gray.200" align='center'>
+      <Box mx="auto" my="4" p="15px" w="900px" h="410" border="1px" borderRadius="10px" borderColor="gray.200" align="center">
         
-        <Textarea
-          h="300"
-          resize="none"
-          id="answer"
-          name="answer"
-          value={ answer }
-          readOnly
-        />
+        <Flex overflowY="auto" flexDirection={"column-reverse"} mx="auto" h="300" border="1px" borderRadius="10px" borderColor="gray.200" align="center">
+          <UnorderedList ml="0" w="100%" css={"list-style: none"}>
+            {
+              chat.map((message) => (
+                message
+              ))
+            }
+          </UnorderedList>
+        </Flex>
+        
         <Box my="2">
           <FormLabel htmlFor="question">Pergunta:</FormLabel>
           <Input
@@ -133,7 +160,7 @@ export const Chatgpt = () => {
       <PageTitle title="Chat GPT" />
       { renderingForm() }
       <Center>{ loading && <Loading /> }</Center>
-      { renderingAnswer() }
+      { renderingChat() }
     </>
   );
 }
