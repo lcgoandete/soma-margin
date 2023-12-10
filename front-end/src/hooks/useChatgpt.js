@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { object, string } from 'yup';
 
 import { getChatAPI } from '../services/chatgptAPI';
-import { object, string } from 'yup';
+import { validateCurrency } from '../helpers/validate'
 
 export const useChatgpt = () => {
   const [loading, setLoading] = useState(false);
@@ -9,7 +10,7 @@ export const useChatgpt = () => {
   const checkPayload = async (payload) => {
     const schema = object().shape({
       margin: string().required().min(5),
-      age: string().required().min(2),
+      age: string().required().min(2).max(2),
       name: string().required().min(3),
       question: string().required().min(3),
     });
@@ -32,7 +33,7 @@ export const useChatgpt = () => {
 
     const newPayload = {
       ...payload,
-      margin: parseFloat(payload.margin),
+      margin: validateCurrency(payload.margin),
       age: parseInt(payload.age ,10)
     }
 
