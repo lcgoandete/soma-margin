@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const url = process.env.REACT_APP_URL;
+const urlSpring = process.env.REACT_APP_SPRING_URL;
 const TIMEOUT = 60000;
 
 export const setAuthenticationApi = async (credendials) => {
@@ -55,10 +56,9 @@ export const getConsignedPortalMarginApi = async (queryType, cpf) => {
   const token = sessionStorage.getItem('token');
   try {
     const { data } = await axios({
-      method: 'POST',
-        url: `${url}/${queryType}`,
+      method: 'GET',
+        url: `${urlSpring}/consignmentportal/${queryType}/margins/${cpf}`,
         headers: { Authorization: token },
-        data: { cpf },
         timeout: TIMEOUT,
       });
     return data;

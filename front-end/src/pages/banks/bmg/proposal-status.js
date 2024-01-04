@@ -104,7 +104,7 @@ export const ProposalStatus = () => {
     }
 
     return (
-      <TableContainer my="25px" mx="auto" p="15px" w="1170px" border="1px" borderRadius="10px" borderColor="gray.200">
+      <TableContainer my="25px" mx="auto" p="15px" w="70%" border="1px" borderRadius="10px" borderColor="gray.200">
         <Table variant='striped'>
           <Thead>
             <Tr>

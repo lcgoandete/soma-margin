@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Center, FormLabel, Select, Table, TableContainer, Tbody, Td, Text, Tr } from '@chakra-ui/react';
+import { Box, FormLabel, Select, Table, TableContainer, Tbody, Td, Text, Tr } from '@chakra-ui/react';
 
 import { Header } from '../../components/header/Header';
 import { CpfForm } from '../../components/cpf-form/CpfForm';
@@ -33,7 +33,7 @@ export const Margin = () => {
         setErrorMessage(result.errorMessage);
       } else {
         setQueryType('');
-        setMargin(result);
+        setMargin(result.provisions);
       }
     }
   }
@@ -41,9 +41,8 @@ export const Margin = () => {
   const renderingTable = () => {
     if (errorMessage) return <AlertMessage status="error" alertTitle="Error:" message={ errorMessage } />
 
-    // if (!margin || margin.length === 0) return null;
     return (
-      <Center>
+      <Box my="25px" mx="auto" p="15px" w="850px" border="1px" borderRadius="10px" borderColor="gray.200">
         { margin?.map((client, index) => (
           <Box marginY='7' key={index}>
             <Box padding='3' border='1px' borderColor='gray.200' borderTopRadius="10px">
@@ -53,16 +52,16 @@ export const Margin = () => {
               <Table variant='simple'>
                 <Tbody>
                   <Tr>
-                    <Td>CPF - {client.dadosIdentificacao.cpf}</Td>
-                    <Td>Nome - {client.dadosIdentificacao.nome}</Td>
+                    <Td>CPF - {client.identificationInfo?.cpf}</Td>
+                    <Td>Nome - {client.identificationInfo?.name}</Td>
                   </Tr>
                   <Tr>
-                    <Td>Órgão - {client.dadosIdentificacao.orgao}</Td>
-                    <Td>Identificação - {client.dadosIdentificacao.identificacao}</Td>
+                    <Td>Órgão - {client.identificationInfo?.agency}</Td>
+                    <Td>Identificação - {client.identificationInfo?.identification}</Td>
                   </Tr>
                   <Tr>
-                    <Td>Mês de Referência da Margem - {client.dadosIdentificacao.mesReferencia}</Td>
-                    <Td>Data de Processamento da Próxima Folha - {client.dadosIdentificacao.dataProcessamento}</Td>
+                    <Td>Mês de Referência da Margem - {client.identificationInfo?.referenceMonth}</Td>
+                    <Td>Data de Processamento da Próxima Folha - {client.identificationInfo?.processingDate}</Td>
                   </Tr>
                 </Tbody>
               </Table>
@@ -71,7 +70,7 @@ export const Margin = () => {
                 <Text fontSize='19' as='b'>Margem Bruta</Text>
               </Box>
               <Box padding='3' border='1px' borderColor='gray.200'>
-                <Text fontSize='19' as='b'>{client.margemBruta.provimento}</Text>
+                <Text fontSize='19' as='b'>{client.grossMargin?.provision}</Text>
               </Box>
               <Table variant='simple'>
                 <Tbody>
@@ -81,43 +80,48 @@ export const Margin = () => {
                   </Tr>
                   <Tr>
                     <Td>Consignações Facultativas</Td>
-                    <Td>{client.margemBruta.consignacoesFacultativas}</Td>
+                    <Td>{client.grossMargin?.optionalConsignments}</Td>
                   </Tr>
                   <Tr>
                     <Td>Cartão de Crédito</Td>
-                    <Td>{client.margemBruta.cartaoCredito}</Td>
+                    <Td>{client.grossMargin?.creditCard}</Td>
                   </Tr>
                   <Tr>
                     <Td>Cartão de Benefício</Td>
-                    <Td>{client.margemBruta.cartaoBenefico}</Td>
+                    <Td>{client.grossMargin?.benefitCard}</Td>
                   </Tr>  
                 </Tbody>
               </Table>
 
-              <Box padding='3' border='1px' borderColor='gray.200'>
-                <Text fontSize='19' as='b'>Dados Funcionais</Text>
-              </Box>
-              <Table variant='simple'>
-                <Tbody>
-                  <Tr>
-                    <Td>Lotação - {client.margemBruta.dadosFuncionais.lotacao}</Td>
-                    <Td>Cargo - {client.margemBruta.dadosFuncionais.cargo}</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>Data de Nomeação/Admissão - {client.margemBruta.dadosFuncionais.dataAdmissao}</Td>
-                    <Td>Tipo de Vínculo - {client.margemBruta.dadosFuncionais.tipoVinculo}</Td>
-                  </Tr>
-                  <Tr border='none'>
-                    <Td>Data Fim do Contrato - {client.margemBruta.dadosFuncionais.dataFinalContrato}</Td>
-                  </Tr>
-                </Tbody>
-              </Table>
+              { client.grossMargin?.functionalData ? (
+                  <Box>
+                    <Box padding='3' border='1px' borderColor='gray.200'>
+                      <Text fontSize='19' as='b'>Dados Funcionais</Text>
+                    </Box>
+                    <Table variant='simple'>
+                      <Tbody>
+                        <Tr>
+                          <Td>Lotação - {client.grossMargin?.functionalData.staffAllocation}</Td>
+                          <Td>Cargo - {client.grossMargin?.functionalData.role}</Td>
+                        </Tr>
+                        <Tr>
+                          <Td>Data de Nomeação/Admissão - {client.grossMargin?.functionalData.admissionDate}</Td>
+                          <Td>Tipo de Vínculo - {client.grossMargin?.functionalData.typeOfBond}</Td>
+                        </Tr>
+                        <Tr border='none'>
+                          <Td>Data Fim do Contrato - {client.grossMargin?.functionalData.endDateContract}</Td>
+                        </Tr>
+                      </Tbody>
+                    </Table>
+                  </Box>
+                ) : null
+              }
 
               <Box mt='7' padding='3' border='1px' borderColor='gray.200' borderTopRadius="10px">
                 <Text fontSize='19' as='b'>Margem Disponível - Total</Text>
               </Box>
               <Box padding='3' border='1px' borderColor='gray.200'>
-                <Text fontSize='19' as='b'>{client.margemBruta.provimento}</Text>
+                <Text fontSize='19' as='b'>{client.availableMargin?.provision}</Text>
               </Box>
               <Table variant='simple'>
                 <Tbody>
@@ -127,22 +131,22 @@ export const Margin = () => {
                   </Tr>
                   <Tr>
                     <Td>Consignações Facultativas</Td>
-                    <Td>{client.margemDisponivel.consignacoesFacultativas}</Td>
+                    <Td>{client.availableMargin?.optionalConsignments}</Td>
                   </Tr>
                   <Tr>
                     <Td>Cartão de Crédito</Td>
-                    <Td>{client.margemDisponivel.cartaoCredito}</Td>
+                    <Td>{client.availableMargin?.creditCard}</Td>
                   </Tr>
                   <Tr>
                     <Td>Cartão de Benefício</Td>
-                    <Td>{client.margemDisponivel.cartaoBenefico}</Td>
+                    <Td>{client.availableMargin?.benefitCard}</Td>
                   </Tr>
                 </Tbody>
               </Table>
             </TableContainer>
           </Box>
         ))}
-      </Center>
+      </Box>
     );
   }
 
@@ -162,8 +166,8 @@ export const Margin = () => {
               onChange={({ target }) => setQueryType(target.value)}
             >
               <option value="">Selecione...</option>
-              <option value="margins">Estado de São Paulo</option>
-              <option value="municipio-margins">Município de São Paulo</option>
+              <option value="stategovernment">Estado de São Paulo</option>
+              <option value="cityhall">Município de São Paulo</option>
             </Select>
           </Box>
         }
