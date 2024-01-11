@@ -42,13 +42,17 @@ export const Header = () => {
   }
 
   const renderChatMenu = () => {
-    return (
-      <Menu>
-        <Button type='button'>
-          <Link to="/chatgpt">Chat GPT</Link>
-        </Button>
-      </Menu>
-    );
+    if (user.role) {
+      if (user.role === 'ADMIN') {
+        return (
+          <Menu>
+            <Button type='button'>
+              <Link to="/chatgpt">Chat GPT</Link>
+            </Button>
+          </Menu>
+        );
+      }
+    }
   }
 
   return (
