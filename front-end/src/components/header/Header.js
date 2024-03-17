@@ -42,13 +42,17 @@ export const Header = () => {
   }
 
   const renderChatMenu = () => {
-    return (
-      <Menu>
-        <Button type='button'>
-          <Link to="/chatgpt">Chat GPT</Link>
-        </Button>
-      </Menu>
-    );
+    if (user.role) {
+      if (user.role === 'ADMIN') {
+        return (
+          <Menu>
+            <Button type='button'>
+              <Link to="/chatgpt">Chat GPT</Link>
+            </Button>
+          </Menu>
+        );
+      }
+    }
   }
 
   return (
@@ -83,6 +87,9 @@ export const Header = () => {
             </MenuItem>
             <MenuItem>
               <Link to="/banks/bmg/withdrawalLimitBenefitCard">Consultar Limite de Cartão Benefício</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/banks/bmg/loanLimitSimulation">Consultar Limite de Empréstimo</Link>
             </MenuItem>
           </MenuList>
         </Menu>

@@ -5,7 +5,7 @@ const getUser = () => JSON.parse(sessionStorage.getItem('user'));
 
 export const Private = ({ children }) => {
   const [user] = useState(getUser);
-  const [blockedPagesList] = useState(['User','FgtsBalance']);
+  const [blockedPagesList] = useState(['User','FgtsBalance', 'Chatgpt']);
   const [componentList] = useState(['simulationSettings']);
 
   if (user) {

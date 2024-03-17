@@ -9,7 +9,20 @@ export const validateWithdrawalPayload = (payload) => {
     codigoEntidade: payload.convenio,
     sequencialOrgao: payload.convenio === '128' ? 13 : 1,
     valorMargem: validateCurrency(payload.valorMargem),
-    dataNascimento: `${payload.dataNascimento}T00:00:00`,
+    dataNascimento: `${payload.dataNascimento}T01:01:01`,
+  }
+}
+
+export const validateLoanLimitSimulationPayload = (payload) => {
+  if (!payload.convenio) return { errorMessage: 'Convênio inválido' };
+  if (!payload.dataNascimento) return { errorMessage: 'Data de nascimento inválida' };
+  if (!payload.valorParcela || payload.valorParcela < 50) return { errorMessage: 'Valor da margem inválido' };
+
+  return {
+    agreement: payload.convenio,
+    sequentialAgency: payload.convenio === '128' ? 13 : 1,
+    installmentValue: validateCurrency(payload.valorParcela),
+    birthDate: `${payload.dataNascimento}T01:01:01`,
   }
 }
 
