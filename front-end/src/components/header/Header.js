@@ -88,6 +88,9 @@ export const Header = () => {
             <MenuItem>
               <Link to="/banks/bmg/withdrawalLimitBenefitCard">Consultar Limite de Cartão Benefício</Link>
             </MenuItem>
+            <MenuItem>
+              <Link to="/banks/bmg/loanLimitSimulation">Consultar Limite de Empréstimo</Link>
+            </MenuItem>
           </MenuList>
         </Menu>
 

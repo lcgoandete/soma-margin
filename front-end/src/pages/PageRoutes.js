@@ -8,6 +8,7 @@ import { NotFound } from './notFound/NotFound';
 import SafrasMargin from './banks/safra/Margin';
 import { Forbidden } from './forbidden/Forbidden';
 import { CardLimit } from './banks/bmg/CardLimit';
+import { LoanLimitSimulation } from './banks/bmg/loanLimitSimulation';
 import { Margin } from './consigned-portal/Margin';
 import { Agreement } from './banks/safra/Agreement';
 import { Simulation } from "./banks/safra/Simulation";
@@ -32,6 +33,7 @@ const PageRoutes = () => {
         <Route path="/banks/bmg/withdrawalLimitBenefitCard" element={ <Private><WithdrawalLimitBenefitCard /></Private> } />
         <Route path="/banks/bmg/registerProposalCard" element={ <Private><RegisterProposalCard /></Private> } />
         <Route path="/banks/bmg/proposalStatus" element={ <Private><ProposalStatus /></Private> } />
+        <Route path="/banks/bmg/loanLimitSimulation" element={ <Private><LoanLimitSimulation /></Private> } />
         <Route path="/banks/safra/agreement" element={ <Private><Agreement /></Private> } />
         <Route path="/banks/safra/margin" element={ <Private><SafrasMargin /></Private> } />
         <Route path="/banks/safra/formalization" element={ <Private><Formalization /></Private> } />
