@@ -117,6 +117,21 @@ export const Header = () => {
           </MenuList>
         </Menu>
 
+
+        <Menu>
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            Banco MASTER
+          </MenuButton>
+          <MenuList>
+            <MenuItem>
+              <Link to="/banks/master/loanLimitSimulationCredcesta">Consultar Limite CredCesta</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/banks/master/loanLimitSimulationMfacil">Consultar Limite MFácil</Link>
+            </MenuItem>
+          </MenuList>
+        </Menu>
+
         { renderUserMenu() }
         { renderChatMenu() }
       </Center>

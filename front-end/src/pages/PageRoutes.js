@@ -8,7 +8,6 @@ import { NotFound } from './notFound/NotFound';
 import SafrasMargin from './banks/safra/Margin';
 import { Forbidden } from './forbidden/Forbidden';
 import { CardLimit } from './banks/bmg/CardLimit';
-import { LoanLimitSimulation } from './banks/bmg/loanLimitSimulation';
 import { Margin } from './consigned-portal/Margin';
 import { Agreement } from './banks/safra/Agreement';
 import { Simulation } from "./banks/safra/Simulation";
@@ -17,9 +16,12 @@ import { FgtsBalance } from "./banks/safra/FgtsBalance";
 import { Formalization } from './banks/safra/Formalization';
 import { ProposalStatus } from './banks/bmg/proposal-status';
 import { WithdrawalLimit } from './banks/bmg/withdrawal-limit';
+import { LoanLimitSimulation } from './banks/bmg/loanLimitSimulation';
 import { RegisterProposalCard } from './banks/bmg/register-proposal-card';
 import { SimulationSettingsProvider } from "../contexts/simulationSettingsContext";
 import { WithdrawalLimitBenefitCard } from './banks/bmg/withdrawal-limit-benefit-card';
+import { LoanLimitSimulationCredcesta } from './banks/master/loanLimitSimulationCredcesta';
+import { LoanLimitSimulationMfacil } from './banks/master/loanLimitSimulationMfacil';
 
 const PageRoutes = () => {
   return (
@@ -45,6 +47,8 @@ const PageRoutes = () => {
             </SimulationSettingsProvider>
           </Private> }
         />
+        <Route path="/banks/master/loanLimitSimulationCredcesta" element={ <Private><LoanLimitSimulationCredcesta /></Private> } />
+        <Route path="/banks/master/loanLimitSimulationMfacil" element={ <Private><LoanLimitSimulationMfacil /></Private> } />
         <Route path="/user" element={ <Private><User /></Private> } />
         <Route path="/chatgpt" element={ <Private><Chatgpt /></Private> } />
         <Route path="/forbidden" element={ <Forbidden /> } />
